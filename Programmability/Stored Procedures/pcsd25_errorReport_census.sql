@@ -4,7 +4,7 @@ USE pocatello
 -- Author:		<Lopez, Michael>
 -- Modder:		<Lopez, Michael>
 -- Create date: <05/21/2019>
--- Update date: <07/07/2021>
+-- Update date: <11/01/2021>
 -- Description:	<Compile all existing census error reports into stored procedure>
 -- =============================================
 
@@ -13,36 +13,42 @@ SET @cDay = GETDATE();
 SET @eYear = CASE WHEN MONTH(@cDay) >= 8 THEN YEAR(DATEADD(YEAR, 1, @cDay)) ELSE YEAR(@cDay) END;
 
 DECLARE @errorReport2 TABLE (
-	searchableField VARCHAR(100)
-	,searchType VARCHAR(100)
-	,searchLocation VARCHAR(100)
-	,verificationID INT
-	,verificationType VARCHAR(50)
-	,localCode VARCHAR(5)
-	,[status] VARCHAR(10)
-	,[type] VARCHAR(50)
-	,calendarID INT
-	,school VARCHAR(5)
-	,[number] VARCHAR (100)
-	,[street] VARCHAR (100)
-	,[apt] VARCHAR (100)
-	,alt INT)
+	searchableField varchar(100)
+	,searchType varchar(100)
+	,searchLocation varchar(100)
+	,verificationID int
+	,verificationType varchar(50)
+	,localCode varchar(5)
+	,[status] varchar(10)
+	,[type] varchar(50)
+	,calendarID int
+	,school varchar(5)
+	,[number] varchar (100)
+	,[street] varchar (100)
+	,[apt] varchar (100)
+	,stateReporting int
+	,alt int)
 
 DECLARE @errorReport TABLE  (
-	searchableField VARCHAR(100)
-	,searchType VARCHAR(100)
-	,searchLocation VARCHAR(100)
-	,verificationID INT
-	,verificationType VARCHAR(50)
-	,localCode VARCHAR(5)
-	,[status] VARCHAR(10)
-	,[type] VARCHAR(50)
-	,calendarID INT
-	,school VARCHAR(5)
-	,alt INT)
+	searchableField varchar(100)
+	,searchType varchar(100)
+	,searchLocation varchar(100)
+	,verificationID int
+	,verificationType varchar(50)
+	,localCode varchar(5)
+	,[status] varchar(10)
+	,[type] varchar(50)
+	,calendarID int
+	,school varchar(5)
+	,stateReporting int
+	,alt int)
 
 DECLARE @nameArray TABLE (
-	 vari VARCHAR(5))
+	 vari varchar(5))
+
+DECLARE @nameArray2 TABLE (
+	 vari varchar(5))
+
 INSERT INTO @nameArray VALUES 
 	('.') 
 	,(',')
@@ -55,7 +61,9 @@ INSERT INTO @nameArray VALUES
 	,('"')
 	,(':')
 	,(';')
-	,(' Jr')
+
+INSERT INTO @nameArray2 VALUES 
+	(' Jr')
 	,(' Sr')
 	,(' I')
 	,(' II')
@@ -84,6 +92,7 @@ SELECT DISTINCT x.searchableField
 	,x.[type]
 	,x.calendarID
 	,x.school
+	,0 AS 'stateReporting'
 	,0 AS 'alt'
 FROM (
 	SELECT RANK() OVER (PARTITION BY p.personID ORDER BY hm.modifiedDate, hm.householdID DESC) AS 'duplicateNumber'
@@ -113,7 +122,7 @@ FROM (
 				OR (@cDay > hm.startDate AND hm.endDate IS NULL))
 	WHERE en.endYear = @eYear
 		AND en.serviceType = 'P'
-		AND en.active = 1
+		AND (en.startDate >= @cDay AND (en.endDate IS NULL OR en.endDate <= @cDay))
 ) AS x
 WHERE x.duplicateNumber != 1
 
@@ -132,6 +141,7 @@ SELECT DISTINCT x.searchableField
 	,x.[type]
 	,x.calendarID
 	,x.school
+	,0 AS 'stateReporting'
 	,0 AS 'alt'
 FROM (
 	SELECT RANK() OVER (PARTITION BY p.personID ORDER BY hl.modifiedDate, hl.addressID DESC) AS 'duplicateNumber'
@@ -166,7 +176,7 @@ FROM (
 				OR (@cDay > hl.startDate AND hl.endDate IS NULL))
 	WHERE en.endYear = @eYear
 		AND en.serviceType = 'P'
-		AND en.active = 1
+		AND (en.startDate >= @cDay AND (en.endDate IS NULL OR en.endDate <= @cDay))
 ) AS x
 WHERE x.duplicateNumber != 1
 
@@ -185,6 +195,7 @@ SELECT DISTINCT x.searchableField
 	,x.[type]
 	,x.calendarID
 	,x.school
+	,0 AS 'stateReporting'
 	,0 AS 'alt'
 FROM (
 	SELECT RANK() OVER (PARTITION BY p.personID ORDER BY hl.modifiedDate, hl.addressID DESC) AS 'duplicateNumber'
@@ -219,7 +230,7 @@ FROM (
 				OR (@cDay > hl.startDate AND hl.endDate IS NULL))
 	WHERE en.endYear = @eYear
 		AND en.serviceType = 'P'
-		AND en.active = 1
+		AND (en.startDate >= @cDay AND (en.endDate IS NULL OR en.endDate <= @cDay))
 ) AS x
 WHERE x.duplicateNumber != 1
 
@@ -245,6 +256,7 @@ SELECT DISTINCT id.lastName + ', ' + id.firstName AS 'searchableField'
 	,'householdNoPrimaryAddress' AS 'type'
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,0 AS 'stateReporting'
 	,0 AS 'alt'
 FROM Enrollment AS en
 	INNER JOIN [Identity] AS id ON id.personID = en.personID
@@ -264,7 +276,7 @@ FROM Enrollment AS en
 WHERE hl.addressID IS NULL
 	AND en.endYear = @eYear
 	AND en.serviceType = 'P'
-	AND en.active = 1
+	AND (en.startDate >= @cDay AND (en.endDate IS NULL OR en.endDate <= @cDay))
 
 
 --Archived For Future use after better cleanups
@@ -316,6 +328,7 @@ SELECT DISTINCT id.lastName + ', ' + id.firstName AS 'searchableField'
 	,'householdMemberNameSyntax' AS 'type'
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,0 AS 'stateReporting'
 	,0 AS 'alt'
 FROM Enrollment AS en
 	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
@@ -344,7 +357,50 @@ FROM Enrollment AS en
 WHERE h.householdID = h2.householdID
 	AND en.endYear = @eYear
 	AND en.serviceType = 'P'
-	AND en.active = 1
+	AND (en.startDate >= @cDay AND (en.endDate IS NULL OR en.endDate <= @cDay))
+
+
+--Error	=================================
+--Code  || Household Member Name Sytax ||
+--HH003	=================================
+INSERT INTO @errorReport
+SELECT DISTINCT id.lastName + ', ' + id.firstName AS 'searchableField'
+	,'studentsHouseholdMemberName' AS 'searchType'
+	,'search>allPeople>demographics' AS 'searchLocation'
+	,rp.personID2 AS 'verificationID'
+	,'HouseholdMemberPersonID' AS 'verificationType'
+	,'HH003' AS 'localCode'
+	,'warning' AS 'status'
+	,'householdMemberNameSyntax' AS 'type'
+	,cal.calendarID
+	,sch.comments AS 'school'
+	,0 AS 'stateReporting'
+	,0 AS 'alt'
+FROM Enrollment AS en
+	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
+		AND cal.endYear = @eYear
+	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN RelatedPair AS rp ON rp.personID1 = en.personID
+	INNER JOIN HouseholdMember AS hm ON hm.personID = rp.personID1
+		AND hm.[private] = 0
+		AND (@cDay BETWEEN hm.startDate AND hm.endDate
+			OR (@cDay > hm.startDate AND hm.endDate IS NULL))
+	INNER JOIN Household AS h ON h.householdID = hm.householdID
+	INNER JOIN HouseholdMember AS hm2 ON hm2.personID = rp.personID2
+		AND hm2.[private] = 0
+		AND (@cDay BETWEEN hm2.startDate AND hm2.endDate
+			OR (@cDay > hm2.startDate AND hm2.endDate IS NULL))
+	INNER JOIN Household AS h2 ON h2.householdID = hm2.householdID
+	INNER JOIN [Identity] AS id ON id.personID = hm2.personID
+	INNER JOIN Person AS p ON p.personID = id.personID
+		AND p.currentIdentityID = id.identityID
+	INNER JOIN @nameArray2 AS na ON id.firstName LIKE '%' + na.vari
+		OR id.middleName LIKE '%' + na.vari
+		OR id.lastName LIKE '%' + na.vari
+WHERE h.householdID = h2.householdID
+	AND en.endYear = @eYear
+	AND en.serviceType = 'P'
+	AND (en.startDate >= @cDay AND (en.endDate IS NULL OR en.endDate <= @cDay))
 
 
 --==============================
@@ -367,6 +423,7 @@ SELECT DISTINCT id.lastName + ', ' + id.firstName AS 'searchableField'
 	,'studentNoBirthdate' AS 'type'
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,1 AS 'stateReporting'
 	,0 AS 'alt'
 FROM Enrollment AS en
 	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
@@ -378,7 +435,6 @@ FROM Enrollment AS en
 WHERE id.birthdate IS NULL
 	AND en.endYear = @eYear
 	AND en.serviceType = 'P'
-	AND en.active = 1
 
 
 --Error	========================
@@ -395,6 +451,7 @@ SELECT DISTINCT id.lastName + ', ' + id.firstName AS 'searchableField'
 	,'studentNameSyntax' AS 'type'
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,0 AS 'stateReporting'
 	,0 AS 'alt'
 FROM Enrollment AS en
 	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
@@ -411,7 +468,38 @@ FROM Enrollment AS en
 		OR LEN(id.lastName) != LEN(REVERSE(id.lastName))
 WHERE en.endYear = @eYear
 	AND en.serviceType = 'P'
-	AND en.active = 1
+	AND (en.startDate >= @cDay AND (en.endDate IS NULL OR en.endDate <= @cDay))
+
+
+--Error	========================
+--Code  || Student Name Syntax||
+--ST002	========================
+INSERT INTO @errorReport
+SELECT DISTINCT id.lastName + ', ' + id.firstName AS 'searchableField'
+	,'studentName' AS 'searchType'
+	,'search>student>demographics' AS 'searchLocation'
+	,p.studentNumber AS 'verificationID'
+	,'studentNumber' AS 'verificationType'
+	,'ST002' AS 'localCode'
+	,'warning' AS 'status'
+	,'studentNameSyntax' AS 'type'
+	,cal.calendarID
+	,sch.comments AS 'school'
+	,0 AS 'stateReporting'
+	,0 AS 'alt'
+FROM Enrollment AS en
+	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
+		AND cal.endYear = @eYear
+	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN [Identity] AS id ON id.personID = en.personID
+	INNER JOIN Person AS p ON p.personID = id.personID
+		AND p.currentIdentityID = id.identityID
+	INNER JOIN @nameArray2 AS na ON id.firstName LIKE '%' + na.vari
+		OR id.middleName LIKE '%' + na.vari
+		OR id.lastName LIKE '%' + na.vari
+WHERE en.endYear = @eYear
+	AND en.serviceType = 'P'
+	AND (en.startDate >= @cDay AND (en.endDate IS NULL OR en.endDate <= @cDay))
 
 
 --Error	=================================
@@ -427,14 +515,15 @@ SELECT DISTINCT id.lastName + ', ' + id.firstName AS 'searchableField'
 	,'incomplete' AS 'status'
 	,CASE
 		WHEN rp.startDate IS NULL 
-			AND (rp.[name] LIKE 'Mother & Father' OR rp.[name] IS NULL) THEN 'noRelationType, noStartDate'
+			AND (rp.[name] LIKE 'Mother & Father' OR rp.[name] IS NULL) THEN 'noRelationType, noRelationStartDate'
 		WHEN rp.startDate IS NULL 
-			AND (rp.[name] NOT LIKE 'Mother & Father' OR rp.[name] IS NOT NULL) THEN 'noStartDate'
+			AND (rp.[name] NOT LIKE 'Mother & Father' OR rp.[name] IS NOT NULL) THEN 'noRelationStartDate'
 		WHEN rp.startDate IS NOT NULL 
 			AND (rp.[name] LIKE 'Mother & Father' OR rp.[name] IS NULL) THEN 'noRelationType'
 	END AS 'type'
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,0 AS 'stateReporting'
 	,0 AS 'alt'
 FROM Enrollment AS en
 	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
@@ -451,7 +540,7 @@ FROM Enrollment AS en
 			OR rp.[name] IS NULL )
 WHERE en.endYear = @eYear
 	AND en.serviceType = 'P'
-	AND en.active = 1
+	AND (en.startDate >= @cDay AND (en.endDate IS NULL OR en.endDate <= @cDay))
 
 
 --Error	=========================
@@ -468,6 +557,7 @@ SELECT DISTINCT id.lastName + ', ' + id.firstName AS 'searchableField'
 	,'studentNoGuardians' AS 'type'
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,0 AS 'stateReporting'
 	,COUNT(*) AS 'alt'
 FROM Enrollment AS en
 	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
@@ -483,7 +573,7 @@ FROM Enrollment AS en
 			OR (@cDay > rp.startDate AND rp.endDate IS NULL))
 WHERE en.endYear = @eYear
 	AND en.serviceType = 'P'
-	AND en.active = 1
+	AND (en.startDate >= @cDay AND (en.endDate IS NULL OR en.endDate <= @cDay))
 	AND rp.personID2 IS NULL
 GROUP BY id.lastName + ', ' + id.firstName
 	,p.studentNumber
@@ -506,6 +596,7 @@ SELECT DISTINCT x.searchableField
 	,x.[type]
 	,x.calendarID
 	,x.school
+	,0 AS 'stateReporting'
 	,0 AS 'alt'
 FROM (
 	SELECT RANK() OVER (PARTITION BY p.personID ORDER BY hm.modifiedDate, hm.householdID DESC) AS 'duplicateNumber'
@@ -531,8 +622,8 @@ FROM (
 			AND (@cDay BETWEEN hm.startDate AND hm.endDate
 				OR (@cDay > hm.startDate AND hm.endDate IS NULL))
 	WHERE en.endYear = @eYear
-	AND en.serviceType = 'P'
-	AND en.active = 1
+		AND en.serviceType = 'P'
+		AND (en.startDate >= @cDay AND (en.endDate IS NULL OR en.endDate <= @cDay))
 ) AS x
 WHERE x.duplicateNumber != 1
 
@@ -551,6 +642,7 @@ SELECT DISTINCT x.searchableField
 	,x.[type]
 	,x.calendarID
 	,x.school
+	,0 AS 'stateReporting'
 	,0 AS 'alt'
 FROM (
 	SELECT RANK() OVER (PARTITION BY p.personID ORDER BY hl.modifiedDate, hl.addressID DESC) AS 'duplicateNumber'
@@ -581,8 +673,8 @@ FROM (
 			AND (@cDay BETWEEN hl.startDate AND hl.endDate
 				OR (@cDay > hl.startDate AND hl.endDate IS NULL))
 	WHERE en.endYear = @eYear
-	AND en.serviceType = 'P'
-	AND en.active = 1
+		AND en.serviceType = 'P'
+		AND (en.startDate >= @cDay AND (en.endDate IS NULL OR en.endDate <= @cDay))
 ) AS x
 WHERE x.duplicateNumber != 1
 
@@ -601,6 +693,7 @@ SELECT DISTINCT x.searchableField
 	,x.[type]
 	,x.calendarID
 	,x.school
+	,0 AS 'stateReporting'
 	,0 AS 'alt'
 FROM (
 	SELECT RANK() OVER (PARTITION BY p.personID ORDER BY hl.modifiedDate, hl.addressID DESC) AS 'duplicateNumber'
@@ -631,8 +724,8 @@ FROM (
 			AND (@cDay BETWEEN hl.startDate AND hl.endDate
 				OR (@cDay > hl.startDate AND hl.endDate IS NULL))
 	WHERE en.endYear = @eYear
-	AND en.serviceType = 'P'
-	AND en.active = 1
+		AND en.serviceType = 'P'
+		AND (en.startDate >= @cDay AND (en.endDate IS NULL OR en.endDate <= @cDay))
 ) AS x
 WHERE x.duplicateNumber != 1
 
@@ -651,6 +744,7 @@ SELECT DISTINCT x.searchableField
 	,x.[type]
 	,x.calendarID
 	,x.school
+	,0 AS 'stateReporting'
 	,0 AS 'alt'
 FROM (
 	SELECT RANK() OVER (PARTITION BY p.personID ORDER BY p.personID, rp.personID2 DESC) AS 'duplicateNumber'
@@ -677,9 +771,7 @@ FROM (
 				OR (@cDay > rp.startDate AND rp.endDate IS NULL))
 	WHERE en.endYear = @eYear
 		AND en.serviceType = 'P'
-		AND en.active = 1
-		AND (@cDay BETWEEN en.startDate AND en.endDate
-			OR (@cDay > en.startDate AND en.endDate IS NULL))
+		AND (en.startDate >= @cDay AND (en.endDate IS NULL OR en.endDate <= @cDay))
 ) AS x
 WHERE x.duplicateNumber >= 3
 
@@ -698,6 +790,7 @@ SELECT DISTINCT id.lastName + ', ' + id.firstName AS 'searchableField'
 	,'studentWithUnderageGuardian' AS 'type'
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,0 AS 'stateReporting'
 	,0 AS 'alt'
 FROM Enrollment AS en
 	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
@@ -715,7 +808,7 @@ FROM Enrollment AS en
 		AND id2.identityID = p2.currentIdentityID
 WHERE en.endYear = @eYear
 	AND en.serviceType = 'P'
-	AND en.active = 1
+	AND (en.startDate >= @cDay AND (en.endDate IS NULL OR en.endDate <= @cDay))
 	AND ((0 + CONVERT(CHAR(8), @cDay, 112) - CONVERT(CHAR(8), id2.birthdate, 112)) / 10000) < 18
 
 
@@ -769,6 +862,7 @@ SELECT id.lastName + ', ' + id.firstName AS 'searchableField'
 	,a.number
 	,a.street
 	,a.apt
+	,0 AS 'stateReporting'
 	,COUNT(*) AS 'alt'
 FROM Enrollment AS en
 	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
@@ -787,9 +881,7 @@ FROM Enrollment AS en
 	INNER JOIN [Address] AS a ON a.addressID = hl.addressID
 WHERE en.endYear = @eYear
 	AND en.serviceType = 'P'
-	AND en.active = 1
-	AND (@cDay BETWEEN en.startDate AND en.endDate
-		OR (@cDay > en.startDate AND en.endDate IS NULL))
+	AND (en.startDate >= @cDay AND (en.endDate IS NULL OR en.endDate <= @cDay))
 GROUP BY id.lastName + ', ' + id.firstName
 	,p.studentNumber
 	,cal.calendarID
@@ -811,6 +903,7 @@ SELECT DISTINCT er2.searchableField
 	,er2.[type]
 	,er2.calendarID
 	,er2.school
+	,er2.stateReporting
 	,er2.alt
 FROM @errorReport2 AS er2
 
@@ -829,14 +922,11 @@ SELECT x.searchableField
 	,x.[type]
 	,x.calendarID
 	,x.school
+	,1 AS 'stateReporting'
 	,0 AS 'alt'
 FROM (
 	SELECT RANK() OVER (PARTITION BY p.personID ORDER BY en.grade DESC, en.startdate DESC) AS 'priority'
 		,CASE en.grade
-			WHEN '23' THEN -2
-			WHEN '24' THEN -1
-			WHEN '25' THEN 0
-			WHEN '00' THEN 0
 			WHEN '01' THEN 1
 			WHEN '02' THEN 2
 			WHEN '03' THEN 3
@@ -852,10 +942,6 @@ FROM (
 		END AS 'grade'
 		,e2.enrollmentID
 		,CASE e2.grade
-			WHEN '23' THEN -2
-			WHEN '24' THEN -1
-			WHEN '25' THEN 0
-			WHEN '00' THEN 0
 			WHEN '01' THEN 1
 			WHEN '02' THEN 2
 			WHEN '03' THEN 3
@@ -891,7 +977,6 @@ FROM (
 			AND p.currentIdentityID = id.identityID
 	WHERE en.endYear = @eYear
 		AND en.serviceType = 'P'
-		AND en.active = 1
 		AND en.grade != 'NG'
 ) AS x
 WHERE x.[priority] = 1
@@ -913,6 +998,7 @@ SELECT DISTINCT id.lastName + ', ' + id.firstName AS 'searchableField'
 	,'studentIncompleteImmigration' AS 'type'
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,1 AS 'stateReporting'
 	,0 AS 'alt'
 FROM Enrollment AS en
 	INNER JOIN Person AS p ON p.personID = en.personID
@@ -923,7 +1009,6 @@ FROM Enrollment AS en
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
 WHERE en.endYear = @eYear
 	AND en.serviceType = 'P'
-	AND en.active = 1
 	AND ((id.immigrant = 1 AND (id.birthCountry IS NULL OR id.dateEnteredUS IS NULL))
 		OR (id.dateEnteredUS IS NOT NULL AND id.immigrant IS NULL))
 
@@ -938,10 +1023,11 @@ SELECT DISTINCT id.lastName + ', ' + id.firstName AS 'searchableField'
 	,p.studentNumber AS 'verificationID'
 	,'studentNumber' AS 'verificationType'
 	,'ST014' AS 'localCode'
-	,'incomplete' AS 'status'
-	,'studentIncompleteImmigration' AS 'type'
+	,'warning' AS 'status'
+	,'studentUSBirthWithImmigrationData' AS 'type'
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,1 AS 'stateReporting'
 	,0 AS 'alt'
 FROM Enrollment AS en
 	INNER JOIN Person AS p ON p.personID = en.personID
@@ -952,11 +1038,68 @@ FROM Enrollment AS en
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
 WHERE en.endYear = @eYear
 	AND en.serviceType = 'P'
-	AND en.active = 1
 	AND (id.birthCountry = 'US' 
 		AND (id.dateEnteredUS IS NOT NULL 
-			OR id.dateEnteredUSSchool IS NOT NULL
-			OR id.immigrant IS NOT NULL))
+			OR id.dateEnteredUSSchool IS NOT NULL))
+
+
+--Error	==========================================================
+--Code  || Student with Immigration Marked but no Home Langague ||
+--ST015	==========================================================
+INSERT INTO @errorReport
+SELECT DISTINCT id.lastName + ', ' + id.firstName AS 'searchableField'
+	,'studentName' AS 'searchType'
+	,'search>allPeople>demographics' AS 'searchLocation'
+	,p.studentNumber AS 'verificationID'
+	,'studentNumber' AS 'verificationType'
+	,'ST015' AS 'localCode'
+	,'incomplete' AS 'status'
+	,'studentImmigrationWithNoHomeLanguage' AS 'type'
+	,cal.calendarID
+	,sch.comments AS 'school'
+	,1 AS 'stateReporting'
+	,0 AS 'alt'
+FROM Enrollment AS en
+	INNER JOIN Person AS p ON p.personID = en.personID
+	INNER JOIN [Identity] AS id ON id.personID = p.personID
+		AND id.identityID = p.currentIdentityID
+	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
+		AND cal.endYear = @eYear
+	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+WHERE en.endYear = @eYear
+	AND en.serviceType = 'P'
+	AND id.immigrant = 1
+	AND id.homePrimaryLanguage IS NULL
+
+
+--Error	==============================================================
+--Code  || Student without Immigration but Immigration Data Entered ||
+--ST016	==============================================================
+INSERT INTO @errorReport
+SELECT DISTINCT id.lastName + ', ' + id.firstName AS 'searchableField'
+	,'studentName' AS 'searchType'
+	,'search>allPeople>demographics' AS 'searchLocation'
+	,p.studentNumber AS 'verificationID'
+	,'studentNumber' AS 'verificationType'
+	,'ST016' AS 'localCode'
+	,'warning' AS 'status'
+	,'studentNoImmigrationWithImmigrationData' AS 'type'
+	,cal.calendarID
+	,sch.comments AS 'school'
+	,1 AS 'stateReporting'
+	,0 AS 'alt'
+FROM Enrollment AS en
+	INNER JOIN Person AS p ON p.personID = en.personID
+	INNER JOIN [Identity] AS id ON id.personID = p.personID
+		AND id.identityID = p.currentIdentityID
+	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
+		AND cal.endYear = @eYear
+	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+WHERE en.endYear = @eYear
+	AND en.serviceType = 'P'
+	AND (id.immigrant = 0 OR id.immigrant IS NULL)
+	AND (id.dateEnteredState IS NOT NULL
+		OR id.birthCountry NOT IN ('US',''))
 			
 
 
@@ -981,6 +1124,7 @@ SELECT DISTINCT id.lastName + ', ' + id.firstName AS 'searchableField'
 	,'relationMailingContactNoAddress' AS 'type'
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,0 AS 'stateReporting'
 	,0 AS 'alt'
 FROM Enrollment AS en
 	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
@@ -999,8 +1143,9 @@ FROM Enrollment AS en
 			OR (@cDay > hm.startDate AND hm.endDate IS NULL))
 WHERE en.endYear = @eYear
 	AND en.serviceType = 'P'
-	AND en.active = 1
+	AND (en.startDate >= @cDay AND (en.endDate IS NULL OR en.endDate <= @cDay))
 	AND hm.householdID IS NULL
+
 
 --Error	=========================================
 --Code  || Relation Mailing Contact No Address ||
@@ -1017,6 +1162,7 @@ SELECT DISTINCT id.lastName + ', ' + id.firstName AS 'searchableField'
 	,'relationMailingContactNoAddress' AS 'type'
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,0 AS 'stateReporting'
 	,0 AS 'alt'
 FROM Enrollment AS en
 	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
@@ -1040,7 +1186,7 @@ FROM Enrollment AS en
 			OR (@cDay > hl.startDate AND hl.endDate IS NULL))
 WHERE en.endYear = @eYear
 	AND en.serviceType = 'P'
-	AND en.active = 1
+	AND (en.startDate >= @cDay AND (en.endDate IS NULL OR en.endDate <= @cDay))
 	AND hl.householdID IS NULL
 
 
@@ -1058,6 +1204,7 @@ SELECT x.searchableField
 	,x.[type]
 	,x.calendarID
 	,x.school
+	,0 AS 'stateReporting'
 	,SUM(x.maskCount) AS 'alt'
 FROM (
 	SELECT DISTINCT id.lastName + ', ' + id.firstName AS 'searchableField'
@@ -1086,8 +1233,8 @@ FROM (
 		LEFT JOIN v_MessengerPhone AS mp ON mp.personID = p.personID
 		LEFT JOIN v_MessengerEmail AS me ON me.personID = p.personID
 	WHERE en.endYear = @eYear
-	AND en.serviceType = 'P'
-	AND en.active = 1
+		AND en.serviceType = 'P'
+		AND (en.startDate >= @cDay AND (en.endDate IS NULL OR en.endDate <= @cDay))
 ) AS x
 GROUP BY x.searchableField
 	,x.searchType
@@ -1113,8 +1260,11 @@ SELECT DISTINCT er.searchableField
 	,er.[type]
 	,er.calendarID
 	,er.school
+	,er.stateReporting
 FROM @errorReport AS er
---ORDER BY er.school
+WHERE
+	status = 'warning'
+
 
 /*
 DROP TABLE @errorReport,

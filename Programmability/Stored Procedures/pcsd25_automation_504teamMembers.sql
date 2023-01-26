@@ -251,7 +251,6 @@ WHERE pl.typeID = 4
 		WHERE tm.staffPersonID = ssh.personID
 			AND tm.module = 'plp' 
 			AND tm.personID = pl.personID
-			AND tm.endDate = te.endDate
 			AND @cDay < tm.endDate)
 
 

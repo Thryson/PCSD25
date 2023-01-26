@@ -4,9 +4,9 @@ USE pocatello
 -- Author:  <Lopez, Michael> 
 -- Modder:  <Lopez, Michael> 
 -- Create date: <08/02/2021> 
--- Update date: <08/02/2021> 
+-- Update date: <01/10/2022> 
 -- Description: <Compile all existing Plan & Team Member error reports into single stored procedure> 
--- =============================================    
+-- =============================================  
 
 DECLARE @eYear int, @cDay date;  
 SET @cDay = GETDATE();  
@@ -73,8 +73,8 @@ SELECT DISTINCT id.lastName + ', ' + id.firstName AS 'searchableField'
 	,p.personID AS 'verificationID'
 	,'personID' AS 'verificationType'
 	,'PL002' AS 'localCode'
-	,'incomplete' AS 'status'
-	,'planUnlocked' AS 'type'
+	,'warning' AS 'status'
+	,'504planUnlocked' AS 'type'
 	,cal.calendarID
 	,sch.comments AS 'school'
 	,1 AS 'alt'
@@ -92,6 +92,33 @@ FROM Enrollment AS en
 WHERE en.serviceType = 'P'
 	AND (en.endDate IS NULL OR @cDay <= en.endDate)
 
+
+--Error ============================= 
+--Code  || Plan with no Enrollment || 
+--PL003 =============================
+SELECT id.lastName + ', ' + id.firstName AS 'searchableField'
+	,'studentName' AS 'searchType'
+	,'allPeople>studentInformation>PLP>General>Documents' AS 'searchLocation'
+	,p.personID AS 'verificationID'
+	,'personID' AS 'verificationType'
+	,'PL003' AS 'localCode'
+	,'error' AS 'status'
+	,'504planUnlocked' AS 'type'
+	,'0' AS calendarID
+	,'UNK' AS 'school'
+	,1 AS 'alt'
+FROM [Plan] AS pl
+	INNER JOIN Person AS p ON p.personID = pl.personID
+	INNER JOIN [Identity] AS id ON id.personID = p.personID
+		AND id.identityID = p.currentIdentityID
+WHERE pl.typeID = 4
+	AND (pl.endDate IS NULL OR @cDay <= pl.endDate)
+	AND pl.personID NOT IN (
+		SELECT DISTINCT en.personID
+		FROM Enrollment AS en
+		WHERE en.endYear = @eYear
+			AND en.serviceType = 'P'
+			AND (en.endDate IS NULL OR @cDay <= en.endDate))
 
 
 --============================== 
@@ -111,7 +138,7 @@ SELECT DISTINCT id.lastName + ', ' + id.firstName AS 'searchableField'
 	,p.personID AS 'verificationID'
 	,'personID' AS 'verificationType'
 	,'TM001' AS 'localCode'
-	,'error' AS 'status'
+	,'incomplete' AS 'status'
 	,'504NoCaseManager' AS 'type'
 	,cal.calendarID
 	,sch.comments AS 'school'
@@ -146,7 +173,7 @@ SELECT DISTINCT id.lastName + ', ' + id.firstName AS 'searchableField'
 	,p.personID AS 'verificationID'
 	,'personID' AS 'verificationType'
 	,'TM002' AS 'localCode'
-	,'warning' AS 'status'
+	,'incomplete' AS 'status'
 	,'studentNoCounselor' AS 'type'
 	,cal.calendarID
 	,sch.comments AS 'school'
@@ -281,6 +308,49 @@ WHERE en.serviceType = 'P'
 	AND (en.endDate IS NULL OR @cDay <= en.endDate)
 
 
+--Error ============================ 
+--Code  || Duplicate Team Members || 
+--TM006 ============================
+INSERT INTO @errorReport
+SELECT DISTINCT id.lastName + ', ' + id.firstName AS 'searchableField'
+	,'studentName' AS 'searchType'
+	,'studentInformation>' + tm.module + '>General>TeamMembers' AS 'searchLocation'
+	,p.personID AS 'verificationID'
+	,'personID' AS 'verificationType'
+	,'TM006' AS 'localCode'
+	,'warning' AS 'status'
+	,'active' + tm.module + 'TeamMembersDuplicates' AS 'type'
+	,cal.calendarID
+	,sch.comments AS 'school'
+	,1 AS 'alt'
+FROM Enrollment AS en
+	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
+		AND cal.endYear = @eYear
+	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN Person AS p ON p.personID = en.personID
+	INNER JOIN [Identity] AS id ON id.personID = p.personID
+		AND id.identityID = p.currentIdentityID
+	INNER JOIN TeamMember AS tm ON tm.personID = en.personID
+	INNER JOIN (SELECT tm.staffPersonID
+					,tm.personID
+					,tm.module
+					,COUNT(*) AS 'alt'
+				FROM TeamMember AS tm
+				WHERE @cDay <= tm.endDate
+					AND @cDay >= tm.startDate
+				GROUP BY tm.staffPersonID
+					,tm.personID
+					,tm.module
+				HAVING COUNT(*) >= 2
+				) AS x ON x.staffPersonID = tm.staffPersonID
+			AND x.personID = tm.personID
+			AND x.module = tm.module
+WHERE en.serviceType = 'P'
+	AND (en.endDate IS NULL OR @cDay <= en.endDate)
+
+
+
+
 SELECT  er.searchableField
 	,er.searchType
 	,er.searchLocation
@@ -292,7 +362,8 @@ SELECT  er.searchableField
 	,er.calendarID
 	,er.school
 FROM @errorReport AS er
---WHERE er.localCode NOT IN ('', '')    
+WHERE er.localCode NOT IN ('PL001')
+--PL001 no longer valid with changes to code archived for future use 
 
 
 /*  
