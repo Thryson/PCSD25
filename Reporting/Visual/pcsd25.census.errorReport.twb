@@ -1,0 +1,1354 @@
+<?xml version='1.0' encoding='utf-8' ?>
+
+<!-- build 20211.21.0320.1853                               -->
+<workbook source-build='2021.1.0 (20211.21.0320.1853)' source-platform='win' version='18.1' xml:base='https://tableau.sd25.us' xmlns:user='http://www.tableausoftware.com/xml/user'>
+  <document-format-change-manifest>
+    <AutoCreateAndUpdateDSDPhoneLayouts />
+    <_.fcp.MarkAnimation.true...MarkAnimation />
+    <_.fcp.ObjectModelEncapsulateLegacy.true...ObjectModelEncapsulateLegacy />
+    <_.fcp.ObjectModelTableType.true...ObjectModelTableType />
+    <_.fcp.SchemaViewerObjectModel.true...SchemaViewerObjectModel />
+    <_.fcp.SetMembershipControl.true...SetMembershipControl />
+    <SheetIdentifierTracking />
+    <SortTagCleanup />
+    <WindowsPersistSimpleIdentifiers />
+  </document-format-change-manifest>
+  <repository-location id='pcsd25_census_errorReport' path='/workbooks' revision='1.7' />
+  <preferences>
+    <preference name='ui.encoding.shelf.height' value='24' />
+    <preference name='ui.shelf.height' value='26' />
+  </preferences>
+  <style>
+    <style-rule element='worksheet'>
+      <format attr='font-family' value='Calibri' />
+      <format attr='font-size' value='10' />
+      <format attr='font-weight' value='normal' />
+    </style-rule>
+    <style-rule element='title'>
+      <format attr='font-weight' value='normal' />
+    </style-rule>
+    <style-rule element='dash-title'>
+      <format attr='font-weight' value='bold' />
+    </style-rule>
+    <style-rule element='tooltip'>
+      <format attr='font-weight' value='normal' />
+    </style-rule>
+  </style>
+  <datasources>
+    <datasource caption='pcsd25_errorReport_census (pocatello)' inline='true' name='federated.094o94j001564i1eppng30ihpe7q' version='18.1'>
+      <connection class='federated'>
+        <named-connections>
+          <named-connection caption='10.100.9.56' name='sqlserver.1p2frza1apqubw1fgj7a81gudb7e'>
+            <connection authentication='sqlserver' class='sqlserver' dbname='pocatello' odbc-native-protocol='yes' one-time-sql='' port='0' server='10.100.9.56' server-oauth='' server-userid='1291' username='lopezmi' workgroup-auth-mode='prompt' />
+          </named-connection>
+        </named-connections>
+        <_.fcp.ObjectModelEncapsulateLegacy.false...relation connection='sqlserver.1p2frza1apqubw1fgj7a81gudb7e' name='pcsd25_errorReport_census' stored-proc='[dbo].[pcsd25_errorReport_census]' type='stored-proc' />
+        <_.fcp.ObjectModelEncapsulateLegacy.true...relation connection='sqlserver.1p2frza1apqubw1fgj7a81gudb7e' name='pcsd25_errorReport_census' stored-proc='[dbo].[pcsd25_errorReport_census]' type='stored-proc' />
+        <metadata-records>
+          <metadata-record class='column'>
+            <remote-name>searchableField</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[searchableField]</local-name>
+            <parent-name>[pcsd25_errorReport_census]</parent-name>
+            <remote-alias>searchableField</remote-alias>
+            <ordinal>1</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <width>100</width>
+            <contains-null>true</contains-null>
+            <padded-semantics>true</padded-semantics>
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_VARCHAR&quot;</attribute>
+              <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_CHAR&quot;</attribute>
+              <attribute datatype='string' name='TypeIsVarchar'>&quot;true&quot;</attribute>
+            </attributes>
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[StoredProcedure_FAB5C82C2F5A4C9B97DB855E19AADB88]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>searchType</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[searchType]</local-name>
+            <parent-name>[pcsd25_errorReport_census]</parent-name>
+            <remote-alias>searchType</remote-alias>
+            <ordinal>2</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <width>100</width>
+            <contains-null>true</contains-null>
+            <padded-semantics>true</padded-semantics>
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_VARCHAR&quot;</attribute>
+              <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_CHAR&quot;</attribute>
+              <attribute datatype='string' name='TypeIsVarchar'>&quot;true&quot;</attribute>
+            </attributes>
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[StoredProcedure_FAB5C82C2F5A4C9B97DB855E19AADB88]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>searchLocation</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[searchLocation]</local-name>
+            <parent-name>[pcsd25_errorReport_census]</parent-name>
+            <remote-alias>searchLocation</remote-alias>
+            <ordinal>3</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <width>100</width>
+            <contains-null>true</contains-null>
+            <padded-semantics>true</padded-semantics>
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_VARCHAR&quot;</attribute>
+              <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_CHAR&quot;</attribute>
+              <attribute datatype='string' name='TypeIsVarchar'>&quot;true&quot;</attribute>
+            </attributes>
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[StoredProcedure_FAB5C82C2F5A4C9B97DB855E19AADB88]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>verificationID</remote-name>
+            <remote-type>3</remote-type>
+            <local-name>[verificationID]</local-name>
+            <parent-name>[pcsd25_errorReport_census]</parent-name>
+            <remote-alias>verificationID</remote-alias>
+            <ordinal>4</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <precision>10</precision>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+              <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+            </attributes>
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[StoredProcedure_FAB5C82C2F5A4C9B97DB855E19AADB88]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>verificationType</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[verificationType]</local-name>
+            <parent-name>[pcsd25_errorReport_census]</parent-name>
+            <remote-alias>verificationType</remote-alias>
+            <ordinal>5</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <width>50</width>
+            <contains-null>true</contains-null>
+            <padded-semantics>true</padded-semantics>
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_VARCHAR&quot;</attribute>
+              <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_CHAR&quot;</attribute>
+              <attribute datatype='string' name='TypeIsVarchar'>&quot;true&quot;</attribute>
+            </attributes>
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[StoredProcedure_FAB5C82C2F5A4C9B97DB855E19AADB88]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>localCode</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[localCode]</local-name>
+            <parent-name>[pcsd25_errorReport_census]</parent-name>
+            <remote-alias>localCode</remote-alias>
+            <ordinal>6</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <width>5</width>
+            <contains-null>true</contains-null>
+            <padded-semantics>true</padded-semantics>
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_VARCHAR&quot;</attribute>
+              <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_CHAR&quot;</attribute>
+              <attribute datatype='string' name='TypeIsVarchar'>&quot;true&quot;</attribute>
+            </attributes>
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[StoredProcedure_FAB5C82C2F5A4C9B97DB855E19AADB88]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>status</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[status]</local-name>
+            <parent-name>[pcsd25_errorReport_census]</parent-name>
+            <remote-alias>status</remote-alias>
+            <ordinal>7</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <width>10</width>
+            <contains-null>true</contains-null>
+            <padded-semantics>true</padded-semantics>
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_VARCHAR&quot;</attribute>
+              <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_CHAR&quot;</attribute>
+              <attribute datatype='string' name='TypeIsVarchar'>&quot;true&quot;</attribute>
+            </attributes>
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[StoredProcedure_FAB5C82C2F5A4C9B97DB855E19AADB88]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>type</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[type]</local-name>
+            <parent-name>[pcsd25_errorReport_census]</parent-name>
+            <remote-alias>type</remote-alias>
+            <ordinal>8</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <width>50</width>
+            <contains-null>true</contains-null>
+            <padded-semantics>true</padded-semantics>
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_VARCHAR&quot;</attribute>
+              <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_CHAR&quot;</attribute>
+              <attribute datatype='string' name='TypeIsVarchar'>&quot;true&quot;</attribute>
+            </attributes>
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[StoredProcedure_FAB5C82C2F5A4C9B97DB855E19AADB88]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>calendarID</remote-name>
+            <remote-type>3</remote-type>
+            <local-name>[calendarID]</local-name>
+            <parent-name>[pcsd25_errorReport_census]</parent-name>
+            <remote-alias>calendarID</remote-alias>
+            <ordinal>9</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <precision>10</precision>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+              <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+            </attributes>
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[StoredProcedure_FAB5C82C2F5A4C9B97DB855E19AADB88]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>school</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[school]</local-name>
+            <parent-name>[pcsd25_errorReport_census]</parent-name>
+            <remote-alias>school</remote-alias>
+            <ordinal>10</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <width>5</width>
+            <contains-null>true</contains-null>
+            <padded-semantics>true</padded-semantics>
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_VARCHAR&quot;</attribute>
+              <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_CHAR&quot;</attribute>
+              <attribute datatype='string' name='TypeIsVarchar'>&quot;true&quot;</attribute>
+            </attributes>
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[StoredProcedure_FAB5C82C2F5A4C9B97DB855E19AADB88]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+        </metadata-records>
+      </connection>
+      <aliases enabled='yes' />
+      <_.fcp.ObjectModelTableType.true...column caption='pcsd25_errorReport_census' datatype='table' name='[__tableau_internal_object_id__].[StoredProcedure_FAB5C82C2F5A4C9B97DB855E19AADB88]' role='measure' type='quantitative' />
+      <column datatype='string' name='[localCode]' role='dimension' type='nominal' />
+      <column datatype='string' name='[school]' role='dimension' type='nominal' />
+      <column datatype='string' name='[searchType]' role='dimension' type='nominal' />
+      <column datatype='string' name='[searchableField]' role='dimension' type='nominal' />
+      <column caption='status full' datatype='string' name='[status (copy)_1080582440249839616]' role='dimension' type='nominal'>
+        <calculation class='tableau' formula='[status]' />
+      </column>
+      <column datatype='string' name='[status]' role='dimension' type='nominal'>
+        <aliases>
+          <alias key='&quot;error&quot;' value='E' />
+          <alias key='&quot;incomplete&quot;' value='I' />
+          <alias key='&quot;warning&quot;' value='W' />
+        </aliases>
+      </column>
+      <column datatype='string' name='[type]' role='dimension' type='nominal' />
+      <column aggregation='Sum' datatype='integer' name='[verificationID]' role='dimension' type='ordinal' />
+      <column datatype='string' name='[verificationType]' role='dimension' type='nominal' />
+      <column-instance column='[localCode]' derivation='None' name='[none:localCode:nk]' pivot='key' type='nominal' />
+      <column-instance column='[school]' derivation='None' name='[none:school:nk]' pivot='key' type='nominal' />
+      <column-instance column='[status]' derivation='None' name='[none:status:nk]' pivot='key' type='nominal' />
+      <group caption='Action (localCode,type)' hidden='true' name='[Action (localCode,type)]' name-style='unqualified' user:auto-column='sheet_link'>
+        <groupfilter function='crossjoin'>
+          <groupfilter function='level-members' level='[localCode]' />
+          <groupfilter function='level-members' level='[type]' />
+        </groupfilter>
+      </group>
+      <group caption='Action (school,searchType,searchableField,status full,status,type,verificationID,verificationType)' hidden='true' name='[Action (school,searchType,searchableField,status full,status,type,verificationID,verificationType)]' name-style='unqualified' user:auto-column='sheet_link'>
+        <groupfilter function='crossjoin'>
+          <groupfilter function='level-members' level='[school]' />
+          <groupfilter function='level-members' level='[searchType]' />
+          <groupfilter function='level-members' level='[searchableField]' />
+          <groupfilter function='level-members' level='[status (copy)_1080582440249839616]' />
+          <groupfilter function='level-members' level='[status]' />
+          <groupfilter function='level-members' level='[type]' />
+          <groupfilter function='level-members' level='[verificationID]' />
+          <groupfilter function='level-members' level='[verificationType]' />
+        </groupfilter>
+      </group>
+      <group caption='Action (school,status full,status)' hidden='true' name='[Action (school,status full,status)]' name-style='unqualified' user:auto-column='sheet_link'>
+        <groupfilter function='crossjoin'>
+          <groupfilter function='level-members' level='[school]' />
+          <groupfilter function='level-members' level='[status (copy)_1080582440249839616]' />
+          <groupfilter function='level-members' level='[status]' />
+        </groupfilter>
+      </group>
+      <group caption='Action (status full)' hidden='true' name='[Action (status full)]' name-style='unqualified' user:auto-column='sheet_link'>
+        <groupfilter function='crossjoin'>
+          <groupfilter function='level-members' level='[status (copy)_1080582440249839616]' />
+        </groupfilter>
+      </group>
+      <group caption='Action (status full,status)' hidden='true' name='[Action (status full,status)]' name-style='unqualified' user:auto-column='sheet_link'>
+        <groupfilter function='crossjoin'>
+          <groupfilter function='level-members' level='[status (copy)_1080582440249839616]' />
+          <groupfilter function='level-members' level='[status]' />
+        </groupfilter>
+      </group>
+      <group caption='Action (status)' hidden='true' name='[Action (status)]' name-style='unqualified' user:auto-column='sheet_link'>
+        <groupfilter function='crossjoin'>
+          <groupfilter function='level-members' level='[status]' />
+        </groupfilter>
+      </group>
+      <layout _.fcp.SchemaViewerObjectModel.false...dim-percentage='0.5' _.fcp.SchemaViewerObjectModel.false...measure-percentage='0.4' dim-ordering='alphabetic' measure-ordering='alphabetic' show-aliased-fields='true' show-structure='true' />
+      <style>
+        <style-rule element='mark'>
+          <encoding attr='shape' field='[none:status:nk]' type='shape'>
+            <map to=':filled/square'>
+              <bucket>&quot;warning&quot;</bucket>
+            </map>
+            <map to=':filled/times'>
+              <bucket>&quot;error&quot;</bucket>
+            </map>
+            <map to=':filled/triangle'>
+              <bucket>&quot;incomplete&quot;</bucket>
+            </map>
+          </encoding>
+          <encoding attr='color' field='[none:status:nk]' palette='superfishel_stone_10_0' type='palette'>
+            <map to='#8cc2ca'>
+              <bucket>&quot;warning&quot;</bucket>
+            </map>
+            <map to='#ef6f6a'>
+              <bucket>&quot;error&quot;</bucket>
+            </map>
+            <map to='#ffae34'>
+              <bucket>&quot;incomplete&quot;</bucket>
+            </map>
+          </encoding>
+          <encoding attr='color' field='[none:localCode:nk]' palette='tableau20_10_0' type='palette'>
+            <map to='#499894'>
+              <bucket>&quot;ST003&quot;</bucket>
+            </map>
+            <map to='#4e79a7'>
+              <bucket>&quot;GU001&quot;</bucket>
+            </map>
+            <map to='#59a14f'>
+              <bucket>&quot;HH003&quot;</bucket>
+            </map>
+            <map to='#79706e'>
+              <bucket>&quot;ST009&quot;</bucket>
+            </map>
+            <map to='#86bcb6'>
+              <bucket>&quot;ST005&quot;</bucket>
+            </map>
+            <map to='#8cd17d'>
+              <bucket>&quot;RE001&quot;</bucket>
+            </map>
+            <map to='#a0cbe8'>
+              <bucket>&quot;GU002&quot;</bucket>
+            </map>
+            <map to='#b6992d'>
+              <bucket>&quot;RE002&quot;</bucket>
+            </map>
+            <map to='#bab0ac'>
+              <bucket>&quot;ST012&quot;</bucket>
+            </map>
+            <map to='#d37295'>
+              <bucket>&quot;ST013&quot;</bucket>
+            </map>
+            <map to='#e15759'>
+              <bucket>&quot;ST006&quot;</bucket>
+            </map>
+            <map to='#f1ce63'>
+              <bucket>&quot;ST002&quot;</bucket>
+            </map>
+            <map to='#f28e2b'>
+              <bucket>&quot;GU003&quot;</bucket>
+            </map>
+            <map to='#fabfd2'>
+              <bucket>&quot;ST014&quot;</bucket>
+            </map>
+            <map to='#ff9d9a'>
+              <bucket>&quot;ST007&quot;</bucket>
+            </map>
+            <map to='#ffbe7d'>
+              <bucket>&quot;HH001&quot;</bucket>
+            </map>
+          </encoding>
+        </style-rule>
+      </style>
+      <semantic-values>
+        <semantic-value key='[Country].[Name]' value='&quot;United States&quot;' />
+      </semantic-values>
+      <default-sorts>
+        <manual-sort column='[none:school:nk]' direction='ASC'>
+          <dictionary>
+            <bucket>&quot;LINC&quot;</bucket>
+            <bucket>&quot;CHUB&quot;</bucket>
+            <bucket>&quot;EDAH&quot;</bucket>
+            <bucket>&quot;ELLI&quot;</bucket>
+            <bucket>&quot;GCTY&quot;</bucket>
+            <bucket>&quot;GREN&quot;</bucket>
+            <bucket>&quot;IHIL&quot;</bucket>
+            <bucket>&quot;JEFF&quot;</bucket>
+            <bucket>&quot;LWCK&quot;</bucket>
+            <bucket>&quot;SYRN&quot;</bucket>
+            <bucket>&quot;TNDY&quot;</bucket>
+            <bucket>&quot;TYHE&quot;</bucket>
+            <bucket>&quot;WASH&quot;</bucket>
+            <bucket>&quot;WLCX&quot;</bucket>
+            <bucket>&quot;AMS&quot;</bucket>
+            <bucket>&quot;FMS&quot;</bucket>
+            <bucket>&quot;HMS&quot;</bucket>
+            <bucket>&quot;IMS&quot;</bucket>
+            <bucket>&quot;JDCR&quot;</bucket>
+            <bucket>&quot;KMS&quot;</bucket>
+            <bucket>&quot;NHC&quot;</bucket>
+            <bucket>&quot;CHS&quot;</bucket>
+            <bucket>&quot;HHS&quot;</bucket>
+            <bucket>&quot;PHS&quot;</bucket>
+          </dictionary>
+        </manual-sort>
+      </default-sorts>
+      <_.fcp.ObjectModelEncapsulateLegacy.true...object-graph>
+        <objects>
+          <object caption='pcsd25_errorReport_census' id='StoredProcedure_FAB5C82C2F5A4C9B97DB855E19AADB88'>
+            <properties context=''>
+              <relation connection='sqlserver.1p2frza1apqubw1fgj7a81gudb7e' name='pcsd25_errorReport_census' stored-proc='[dbo].[pcsd25_errorReport_census]' type='stored-proc' />
+            </properties>
+          </object>
+        </objects>
+      </_.fcp.ObjectModelEncapsulateLegacy.true...object-graph>
+    </datasource>
+  </datasources>
+  <actions>
+    <action caption='Filter 1 (generated)' name='[Action1]'>
+      <activation auto-clear='true' type='on-select' />
+      <source dashboard='Summary Report' type='sheet' worksheet='Status Ratio Circle Counts' />
+      <link caption='Filter 1 (generated)' delimiter=',' escape='\' expression='tsl:Summary%20Report?%5Bfederated.094o94j001564i1eppng30ihpe7q%5D.%5Bstatus%20%28copy%29_1080582440249839616%5D~s0=&lt;[status (copy)_1080582440249839616]~na&gt;' include-null='true' multi-select='true' url-escape='true' />
+      <command command='tsc:tsl-filter'>
+        <param name='exclude' value='Detail Report' />
+        <param name='target' value='Summary Report' />
+      </command>
+    </action>
+    <action caption='Filter 2 (generated)' name='[Action2]'>
+      <activation auto-clear='true' type='on-select' />
+      <source dashboard='Summary Report' type='sheet' worksheet='Bar Counts' />
+      <command command='tsc:tsl-filter'>
+        <param name='special-fields' value='all' />
+        <param name='target' value='Summary Report' />
+      </command>
+    </action>
+    <action caption='Filter 4 (generated)' name='[Action4_A62FC824C15B4746AD28E7EB28703939]'>
+      <activation auto-clear='true' type='on-select' />
+      <source dashboard='Summary Report' type='sheet' worksheet='Type Ratio Circle Counts' />
+      <link caption='Filter 4 (generated)' delimiter=',' escape='\' expression='tsl:Summary%20Report?%5Bfederated.094o94j001564i1eppng30ihpe7q%5D.%5BlocalCode%5D~s0=&lt;[localCode]~na&gt;&amp;%5Bfederated.094o94j001564i1eppng30ihpe7q%5D.%5Btype%5D~s0=&lt;[type]~na&gt;' include-null='true' multi-select='true' url-escape='true' />
+      <command command='tsc:tsl-filter'>
+        <param name='target' value='Summary Report' />
+      </command>
+    </action>
+    <action caption='Filter 3 (generated)' name='[Action4_BCAE717BAE9D4585B98411F06CBF6FA0]'>
+      <activation auto-clear='true' type='on-select' />
+      <source dashboard='Summary Report' type='sheet' worksheet='Detail Report' />
+      <command command='tsc:tsl-filter'>
+        <param name='special-fields' value='all' />
+        <param name='target' value='Summary Report' />
+      </command>
+    </action>
+    <datasources>
+      <datasource caption='pcsd25_errorReport_census (pocatello)' name='federated.094o94j001564i1eppng30ihpe7q' />
+    </datasources>
+    <datasource-dependencies datasource='federated.094o94j001564i1eppng30ihpe7q'>
+      <column datatype='string' name='[localCode]' role='dimension' type='nominal' />
+      <column caption='status full' datatype='string' name='[status (copy)_1080582440249839616]' role='dimension' type='nominal'>
+        <calculation class='tableau' formula='[status]' />
+      </column>
+      <column datatype='string' name='[type]' role='dimension' type='nominal' />
+    </datasource-dependencies>
+  </actions>
+  <worksheets>
+    <worksheet name='Bar Counts'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='pcsd25_errorReport_census (pocatello)' name='federated.094o94j001564i1eppng30ihpe7q' />
+          </datasources>
+          <datasource-dependencies datasource='federated.094o94j001564i1eppng30ihpe7q'>
+            <_.fcp.ObjectModelTableType.true...column caption='pcsd25_errorReport_census' datatype='table' name='[__tableau_internal_object_id__].[StoredProcedure_FAB5C82C2F5A4C9B97DB855E19AADB88]' role='measure' type='quantitative' />
+            <column-instance column='[__tableau_internal_object_id__].[StoredProcedure_FAB5C82C2F5A4C9B97DB855E19AADB88]' derivation='Count' name='[__tableau_internal_object_id__].[cnt:StoredProcedure_FAB5C82C2F5A4C9B97DB855E19AADB88:qk]' pivot='key' type='quantitative' />
+            <column datatype='string' name='[localCode]' role='dimension' type='nominal' />
+            <column-instance column='[school]' derivation='None' name='[none:school:nk]' pivot='key' type='nominal' />
+            <column-instance column='[status (copy)_1080582440249839616]' derivation='None' name='[none:status (copy)_1080582440249839616:nk]' pivot='key' type='nominal' />
+            <column-instance column='[status]' derivation='None' name='[none:status:nk]' pivot='key' type='nominal' />
+            <column datatype='string' name='[school]' role='dimension' type='nominal' />
+            <column caption='status full' datatype='string' name='[status (copy)_1080582440249839616]' role='dimension' type='nominal'>
+              <calculation class='tableau' formula='[status]' />
+            </column>
+            <column datatype='string' name='[status]' role='dimension' type='nominal'>
+              <aliases>
+                <alias key='&quot;error&quot;' value='E' />
+                <alias key='&quot;incomplete&quot;' value='I' />
+                <alias key='&quot;warning&quot;' value='W' />
+              </aliases>
+            </column>
+            <column datatype='string' name='[type]' role='dimension' type='nominal' />
+            <_.fcp.ObjectModelTableType.false...column caption='pcsd25_errorReport_census' datatype='integer' name='[__tableau_internal_object_id__].[StoredProcedure_FAB5C82C2F5A4C9B97DB855E19AADB88]' role='measure' type='quantitative' />
+          </datasource-dependencies>
+          <filter class='categorical' column='[federated.094o94j001564i1eppng30ihpe7q].[Action (localCode,type)]'>
+            <groupfilter function='crossjoin' user:ui-action-filter='[Action4_A62FC824C15B4746AD28E7EB28703939]' user:ui-enumeration='all' user:ui-marker='enumerate'>
+              <groupfilter function='level-members' level='[localCode]' />
+              <groupfilter function='level-members' level='[type]' />
+            </groupfilter>
+          </filter>
+          <filter class='categorical' column='[federated.094o94j001564i1eppng30ihpe7q].[Action (status full)]'>
+            <groupfilter function='level-members' level='[status (copy)_1080582440249839616]' user:ui-action-filter='[Action1]' user:ui-enumeration='all' user:ui-marker='enumerate' />
+          </filter>
+          <slices>
+            <column>[federated.094o94j001564i1eppng30ihpe7q].[Action (localCode,type)]</column>
+            <column>[federated.094o94j001564i1eppng30ihpe7q].[Action (status full)]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style>
+          <style-rule element='axis'>
+            <format attr='display' class='0' field='[federated.094o94j001564i1eppng30ihpe7q].[__tableau_internal_object_id__].[cnt:StoredProcedure_FAB5C82C2F5A4C9B97DB855E19AADB88:qk]' scope='cols' value='false' />
+          </style-rule>
+          <style-rule element='cell'>
+            <format attr='height' field='[federated.094o94j001564i1eppng30ihpe7q].[none:school:nk]' value='44' />
+          </style-rule>
+          <style-rule element='label'>
+            <format attr='font-size' field='[federated.094o94j001564i1eppng30ihpe7q].[none:school:nk]' value='11' />
+            <format attr='font-weight' field='[federated.094o94j001564i1eppng30ihpe7q].[none:school:nk]' value='bold' />
+          </style-rule>
+          <style-rule element='table'>
+            <format attr='background-color' value='#e6e6e6' />
+          </style-rule>
+          <style-rule element='worksheet'>
+            <format attr='display-field-labels' scope='rows' value='false' />
+          </style-rule>
+        </style>
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Bar' />
+            <mark-sizing mark-sizing-setting='marks-scaling-off' />
+            <encodings>
+              <color column='[federated.094o94j001564i1eppng30ihpe7q].[none:status:nk]' />
+              <text column='[federated.094o94j001564i1eppng30ihpe7q].[none:status:nk]' />
+              <lod column='[federated.094o94j001564i1eppng30ihpe7q].[none:status (copy)_1080582440249839616:nk]' />
+            </encodings>
+            <customized-tooltip>
+              <formatted-text>
+                <run fontalignment='1' fontsize='14'><![CDATA[<[federated.094o94j001564i1eppng30ihpe7q].[none:school:nk]>]]></run>
+                <run fontalignment='1'>Æ&#10;</run>
+                <run fontalignment='1' fontsize='12'><![CDATA[<[federated.094o94j001564i1eppng30ihpe7q].[__tableau_internal_object_id__].[cnt:StoredProcedure_FAB5C82C2F5A4C9B97DB855E19AADB88:qk]> ]]></run>
+                <run fontalignment='1' fontcolor='#787878' fontsize='12'><![CDATA[<[federated.094o94j001564i1eppng30ihpe7q].[none:status (copy)_1080582440249839616:nk]>s]]></run>
+              </formatted-text>
+            </customized-tooltip>
+            <style>
+              <style-rule element='datalabel'>
+                <format attr='color-mode' value='auto' />
+                <format attr='font-weight' value='bold' />
+              </style-rule>
+              <style-rule element='mark'>
+                <format attr='size' value='1.6481767892837524' />
+                <format attr='mark-labels-show' value='true' />
+                <format attr='mark-labels-cull' value='true' />
+              </style-rule>
+              <style-rule element='pane'>
+                <format attr='minheight' value='-1' />
+                <format attr='maxheight' value='-1' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows>[federated.094o94j001564i1eppng30ihpe7q].[none:school:nk]</rows>
+        <cols>[federated.094o94j001564i1eppng30ihpe7q].[__tableau_internal_object_id__].[cnt:StoredProcedure_FAB5C82C2F5A4C9B97DB855E19AADB88:qk]</cols>
+      </table>
+      <simple-id uuid='{A3012412-7B48-42A2-B464-BB47CB7C4775}' />
+    </worksheet>
+    <worksheet name='Detail Report'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='pcsd25_errorReport_census (pocatello)' name='federated.094o94j001564i1eppng30ihpe7q' />
+          </datasources>
+          <datasource-dependencies datasource='federated.094o94j001564i1eppng30ihpe7q'>
+            <column datatype='string' name='[localCode]' role='dimension' type='nominal' />
+            <column-instance column='[localCode]' derivation='None' name='[none:localCode:nk]' pivot='key' type='nominal' />
+            <column-instance column='[school]' derivation='None' name='[none:school:nk]' pivot='key' type='nominal' />
+            <column-instance column='[searchType]' derivation='None' name='[none:searchType:nk]' pivot='key' type='nominal' />
+            <column-instance column='[searchableField]' derivation='None' name='[none:searchableField:nk]' pivot='key' type='nominal' />
+            <column-instance column='[status (copy)_1080582440249839616]' derivation='None' name='[none:status (copy)_1080582440249839616:nk]' pivot='key' type='nominal' />
+            <column-instance column='[status]' derivation='None' name='[none:status:nk]' pivot='key' type='nominal' />
+            <column-instance column='[type]' derivation='None' name='[none:type:nk]' pivot='key' type='nominal' />
+            <column-instance column='[verificationID]' derivation='None' name='[none:verificationID:ok]' pivot='key' type='ordinal' />
+            <column-instance column='[verificationType]' derivation='None' name='[none:verificationType:nk]' pivot='key' type='nominal' />
+            <column datatype='string' name='[school]' role='dimension' type='nominal' />
+            <column datatype='string' name='[searchType]' role='dimension' type='nominal' />
+            <column datatype='string' name='[searchableField]' role='dimension' type='nominal' />
+            <column caption='status full' datatype='string' name='[status (copy)_1080582440249839616]' role='dimension' type='nominal'>
+              <calculation class='tableau' formula='[status]' />
+            </column>
+            <column datatype='string' name='[status]' role='dimension' type='nominal'>
+              <aliases>
+                <alias key='&quot;error&quot;' value='E' />
+                <alias key='&quot;incomplete&quot;' value='I' />
+                <alias key='&quot;warning&quot;' value='W' />
+              </aliases>
+            </column>
+            <column datatype='string' name='[type]' role='dimension' type='nominal' />
+            <column aggregation='Sum' datatype='integer' name='[verificationID]' role='dimension' type='ordinal' />
+            <column datatype='string' name='[verificationType]' role='dimension' type='nominal' />
+          </datasource-dependencies>
+          <filter class='categorical' column='[federated.094o94j001564i1eppng30ihpe7q].[Action (localCode,type)]'>
+            <groupfilter function='crossjoin' user:ui-action-filter='[Action4_A62FC824C15B4746AD28E7EB28703939]' user:ui-enumeration='all' user:ui-marker='enumerate'>
+              <groupfilter function='level-members' level='[localCode]' />
+              <groupfilter function='level-members' level='[type]' />
+            </groupfilter>
+          </filter>
+          <filter class='categorical' column='[federated.094o94j001564i1eppng30ihpe7q].[Action (school,status full,status)]'>
+            <groupfilter function='crossjoin' user:ui-action-filter='[Action2]' user:ui-enumeration='all' user:ui-marker='enumerate'>
+              <groupfilter function='level-members' level='[school]' />
+              <groupfilter function='level-members' level='[status (copy)_1080582440249839616]' />
+              <groupfilter function='level-members' level='[status]' />
+            </groupfilter>
+          </filter>
+          <slices>
+            <column>[federated.094o94j001564i1eppng30ihpe7q].[Action (school,status full,status)]</column>
+            <column>[federated.094o94j001564i1eppng30ihpe7q].[Action (localCode,type)]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style>
+          <style-rule element='cell'>
+            <format attr='width' field='[federated.094o94j001564i1eppng30ihpe7q].[none:status:nk]' value='19' />
+            <format attr='height' field='[federated.094o94j001564i1eppng30ihpe7q].[none:school:nk]' value='24' />
+            <format attr='text-align' value='center' />
+            <format attr='text-align' data-class='subtotal' scope='rows' value='auto' />
+          </style-rule>
+          <style-rule element='header'>
+            <format attr='width' field='[federated.094o94j001564i1eppng30ihpe7q].[none:type:nk]' value='220' />
+            <format attr='width' field='[federated.094o94j001564i1eppng30ihpe7q].[none:school:nk]' value='48' />
+          </style-rule>
+          <style-rule element='field-labels'>
+            <format attr='font-size' value='12' />
+            <format attr='font-weight' value='bold' />
+          </style-rule>
+          <style-rule element='field-labels-decoration'>
+            <format attr='font-size' value='11' />
+          </style-rule>
+          <style-rule element='label'>
+            <format attr='text-align' scope='rows' value='left' />
+            <format attr='text-align' scope='cols' value='center' />
+            <format attr='text-align' field='[federated.094o94j001564i1eppng30ihpe7q].[none:status:nk]' value='center' />
+          </style-rule>
+          <style-rule element='table'>
+            <format attr='background-color' value='#e6e6e6' />
+          </style-rule>
+        </style>
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Shape' />
+            <encodings>
+              <color column='[federated.094o94j001564i1eppng30ihpe7q].[none:status:nk]' />
+              <shape column='[federated.094o94j001564i1eppng30ihpe7q].[none:status:nk]' />
+              <lod column='[federated.094o94j001564i1eppng30ihpe7q].[none:status (copy)_1080582440249839616:nk]' />
+              <lod column='[federated.094o94j001564i1eppng30ihpe7q].[none:verificationType:nk]' />
+              <lod column='[federated.094o94j001564i1eppng30ihpe7q].[none:verificationID:ok]' />
+              <lod column='[federated.094o94j001564i1eppng30ihpe7q].[none:localCode:nk]' />
+            </encodings>
+            <customized-tooltip>
+              <formatted-text>
+                <run fontalignment='1' fontcolor='#000000' fontsize='12'><![CDATA[Search <[federated.094o94j001564i1eppng30ihpe7q].[none:school:nk]> for ]]></run>
+                <run fontalignment='1' fontsize='12'><![CDATA[<[federated.094o94j001564i1eppng30ihpe7q].[none:searchableField:nk]>]]></run>
+                <run fontalignment='1'><![CDATA[
+
+with  details of
+(<[federated.094o94j001564i1eppng30ihpe7q].[none:type:nk]>, <[federated.094o94j001564i1eppng30ihpe7q].[none:status (copy)_1080582440249839616:nk]> code <[federated.094o94j001564i1eppng30ihpe7q].[none:localCode:nk]>)
+
+and verfiy with
+(<[federated.094o94j001564i1eppng30ihpe7q].[none:verificationType:nk]>, <[federated.094o94j001564i1eppng30ihpe7q].[none:verificationID:ok]>)]]></run>
+              </formatted-text>
+            </customized-tooltip>
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-cull' value='true' />
+                <format attr='mark-labels-show' value='false' />
+              </style-rule>
+              <style-rule element='pane'>
+                <format attr='minwidth' value='-1' />
+                <format attr='maxwidth' value='-1' />
+                <format attr='minheight' value='-1' />
+                <format attr='maxheight' value='-1' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows>([federated.094o94j001564i1eppng30ihpe7q].[none:searchableField:nk] / ([federated.094o94j001564i1eppng30ihpe7q].[none:searchType:nk] / ([federated.094o94j001564i1eppng30ihpe7q].[none:type:nk] / [federated.094o94j001564i1eppng30ihpe7q].[none:school:nk])))</rows>
+        <cols>[federated.094o94j001564i1eppng30ihpe7q].[none:status:nk]</cols>
+        <tooltip-style tooltip-mode='sticky' />
+      </table>
+      <simple-id uuid='{29B8E57D-82F1-47B8-B88B-D0CFB5DB5AA2}' />
+    </worksheet>
+    <worksheet name='Status Ratio Circle Counts'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='pcsd25_errorReport_census (pocatello)' name='federated.094o94j001564i1eppng30ihpe7q' />
+          </datasources>
+          <datasource-dependencies datasource='federated.094o94j001564i1eppng30ihpe7q'>
+            <_.fcp.ObjectModelTableType.true...column caption='pcsd25_errorReport_census' datatype='table' name='[__tableau_internal_object_id__].[StoredProcedure_FAB5C82C2F5A4C9B97DB855E19AADB88]' role='measure' type='quantitative' />
+            <column-instance column='[__tableau_internal_object_id__].[StoredProcedure_FAB5C82C2F5A4C9B97DB855E19AADB88]' derivation='Count' name='[__tableau_internal_object_id__].[cnt:StoredProcedure_FAB5C82C2F5A4C9B97DB855E19AADB88:qk]' pivot='key' type='quantitative' />
+            <column datatype='string' name='[localCode]' role='dimension' type='nominal' />
+            <column-instance column='[status (copy)_1080582440249839616]' derivation='None' name='[none:status (copy)_1080582440249839616:nk]' pivot='key' type='nominal' />
+            <column-instance column='[status]' derivation='None' name='[none:status:nk]' pivot='key' type='nominal' />
+            <column datatype='string' name='[school]' role='dimension' type='nominal' />
+            <column caption='status full' datatype='string' name='[status (copy)_1080582440249839616]' role='dimension' type='nominal'>
+              <calculation class='tableau' formula='[status]' />
+            </column>
+            <column datatype='string' name='[status]' role='dimension' type='nominal'>
+              <aliases>
+                <alias key='&quot;error&quot;' value='E' />
+                <alias key='&quot;incomplete&quot;' value='I' />
+                <alias key='&quot;warning&quot;' value='W' />
+              </aliases>
+            </column>
+            <column datatype='string' name='[type]' role='dimension' type='nominal' />
+            <_.fcp.ObjectModelTableType.false...column caption='pcsd25_errorReport_census' datatype='integer' name='[__tableau_internal_object_id__].[StoredProcedure_FAB5C82C2F5A4C9B97DB855E19AADB88]' role='measure' type='quantitative' />
+          </datasource-dependencies>
+          <filter class='categorical' column='[federated.094o94j001564i1eppng30ihpe7q].[Action (localCode,type)]'>
+            <groupfilter function='crossjoin' user:ui-action-filter='[Action4_A62FC824C15B4746AD28E7EB28703939]' user:ui-enumeration='all' user:ui-marker='enumerate'>
+              <groupfilter function='level-members' level='[localCode]' />
+              <groupfilter function='level-members' level='[type]' />
+            </groupfilter>
+          </filter>
+          <filter class='categorical' column='[federated.094o94j001564i1eppng30ihpe7q].[Action (school,status full,status)]'>
+            <groupfilter function='crossjoin' user:ui-action-filter='[Action2]' user:ui-enumeration='all' user:ui-marker='enumerate'>
+              <groupfilter function='level-members' level='[school]' />
+              <groupfilter function='level-members' level='[status (copy)_1080582440249839616]' />
+              <groupfilter function='level-members' level='[status]' />
+            </groupfilter>
+          </filter>
+          <slices>
+            <column>[federated.094o94j001564i1eppng30ihpe7q].[Action (school,status full,status)]</column>
+            <column>[federated.094o94j001564i1eppng30ihpe7q].[Action (localCode,type)]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style>
+          <style-rule element='cell'>
+            <format attr='height' value='171' />
+          </style-rule>
+          <style-rule element='table'>
+            <format attr='background-color' value='#e6e6e6' />
+          </style-rule>
+        </style>
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Circle' />
+            <mark-sizing mark-sizing-setting='marks-scaling-off' />
+            <encodings>
+              <color column='[federated.094o94j001564i1eppng30ihpe7q].[none:status:nk]' />
+              <size column='[federated.094o94j001564i1eppng30ihpe7q].[__tableau_internal_object_id__].[cnt:StoredProcedure_FAB5C82C2F5A4C9B97DB855E19AADB88:qk]' />
+              <lod column='[federated.094o94j001564i1eppng30ihpe7q].[none:status (copy)_1080582440249839616:nk]' />
+              <text column='[federated.094o94j001564i1eppng30ihpe7q].[none:status:nk]' />
+            </encodings>
+            <customized-tooltip>
+              <formatted-text>
+                <run>&lt;</run>
+                <run>[federated.094o94j001564i1eppng30ihpe7q].[__tableau_internal_object_id__].[cnt:StoredProcedure_FAB5C82C2F5A4C9B97DB855E19AADB88:qk]</run>
+                <run>&gt; &lt;</run>
+                <run>[federated.094o94j001564i1eppng30ihpe7q].[none:status (copy)_1080582440249839616:nk]</run>
+                <run>&gt;s</run>
+              </formatted-text>
+            </customized-tooltip>
+            <style>
+              <style-rule element='datalabel'>
+                <format attr='color-mode' value='auto' />
+                <format attr='font-weight' value='bold' />
+              </style-rule>
+              <style-rule element='mark'>
+                <format attr='size' value='1' />
+                <format attr='mark-labels-show' value='true' />
+                <format attr='mark-labels-cull' value='true' />
+              </style-rule>
+              <style-rule element='pane'>
+                <format attr='minheight' value='-1' />
+                <format attr='maxheight' value='-1' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows />
+        <cols />
+      </table>
+      <simple-id uuid='{BBC6B607-2CBE-4E11-9CF9-A6CC4C8319BA}' />
+    </worksheet>
+    <worksheet name='Type Ratio Circle Counts'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='pcsd25_errorReport_census (pocatello)' name='federated.094o94j001564i1eppng30ihpe7q' />
+          </datasources>
+          <datasource-dependencies datasource='federated.094o94j001564i1eppng30ihpe7q'>
+            <_.fcp.ObjectModelTableType.true...column caption='pcsd25_errorReport_census' datatype='table' name='[__tableau_internal_object_id__].[StoredProcedure_FAB5C82C2F5A4C9B97DB855E19AADB88]' role='measure' type='quantitative' />
+            <column-instance column='[__tableau_internal_object_id__].[StoredProcedure_FAB5C82C2F5A4C9B97DB855E19AADB88]' derivation='Count' name='[__tableau_internal_object_id__].[cnt:StoredProcedure_FAB5C82C2F5A4C9B97DB855E19AADB88:qk]' pivot='key' type='quantitative' />
+            <column datatype='string' name='[localCode]' role='dimension' type='nominal' />
+            <column-instance column='[localCode]' derivation='None' name='[none:localCode:nk]' pivot='key' type='nominal' />
+            <column-instance column='[status (copy)_1080582440249839616]' derivation='None' name='[none:status (copy)_1080582440249839616:nk]' pivot='key' type='nominal' />
+            <column-instance column='[type]' derivation='None' name='[none:type:nk]' pivot='key' type='nominal' />
+            <column datatype='string' name='[school]' role='dimension' type='nominal' />
+            <column caption='status full' datatype='string' name='[status (copy)_1080582440249839616]' role='dimension' type='nominal'>
+              <calculation class='tableau' formula='[status]' />
+            </column>
+            <column datatype='string' name='[status]' role='dimension' type='nominal'>
+              <aliases>
+                <alias key='&quot;error&quot;' value='E' />
+                <alias key='&quot;incomplete&quot;' value='I' />
+                <alias key='&quot;warning&quot;' value='W' />
+              </aliases>
+            </column>
+            <column datatype='string' name='[type]' role='dimension' type='nominal' />
+            <_.fcp.ObjectModelTableType.false...column caption='pcsd25_errorReport_census' datatype='integer' name='[__tableau_internal_object_id__].[StoredProcedure_FAB5C82C2F5A4C9B97DB855E19AADB88]' role='measure' type='quantitative' />
+          </datasource-dependencies>
+          <filter class='categorical' column='[federated.094o94j001564i1eppng30ihpe7q].[Action (school,status full,status)]'>
+            <groupfilter function='crossjoin' user:ui-action-filter='[Action2]' user:ui-enumeration='all' user:ui-marker='enumerate'>
+              <groupfilter function='level-members' level='[school]' />
+              <groupfilter function='level-members' level='[status (copy)_1080582440249839616]' />
+              <groupfilter function='level-members' level='[status]' />
+            </groupfilter>
+          </filter>
+          <filter class='categorical' column='[federated.094o94j001564i1eppng30ihpe7q].[Action (status full)]'>
+            <groupfilter function='level-members' level='[status (copy)_1080582440249839616]' user:ui-action-filter='[Action1]' user:ui-enumeration='all' user:ui-marker='enumerate' />
+          </filter>
+          <slices>
+            <column>[federated.094o94j001564i1eppng30ihpe7q].[Action (school,status full,status)]</column>
+            <column>[federated.094o94j001564i1eppng30ihpe7q].[Action (status full)]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style>
+          <style-rule element='table'>
+            <format attr='background-color' value='#e6e6e6' />
+          </style-rule>
+        </style>
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Circle' />
+            <encodings>
+              <color column='[federated.094o94j001564i1eppng30ihpe7q].[none:localCode:nk]' />
+              <size column='[federated.094o94j001564i1eppng30ihpe7q].[__tableau_internal_object_id__].[cnt:StoredProcedure_FAB5C82C2F5A4C9B97DB855E19AADB88:qk]' />
+              <text column='[federated.094o94j001564i1eppng30ihpe7q].[none:localCode:nk]' />
+              <lod column='[federated.094o94j001564i1eppng30ihpe7q].[none:type:nk]' />
+              <lod column='[federated.094o94j001564i1eppng30ihpe7q].[none:status (copy)_1080582440249839616:nk]' />
+            </encodings>
+            <customized-tooltip>
+              <formatted-text>
+                <run fontalignment='1' fontsize='11'>Type:</run>
+                <run bold='true' fontalignment='1' fontsize='11'><![CDATA[ <[federated.094o94j001564i1eppng30ihpe7q].[none:type:nk]>]]></run>
+                <run fontalignment='1'>Æ&#10;</run>
+                <run fontalignment='1' fontsize='11'>Code: </run>
+                <run bold='true' fontalignment='1' fontsize='11'><![CDATA[<[federated.094o94j001564i1eppng30ihpe7q].[none:localCode:nk]>]]></run>
+                <run fontalignment='1'>Æ&#10;</run>
+                <run bold='true' fontalignment='1' fontsize='11'><![CDATA[<[federated.094o94j001564i1eppng30ihpe7q].[__tableau_internal_object_id__].[cnt:StoredProcedure_FAB5C82C2F5A4C9B97DB855E19AADB88:qk]> <[federated.094o94j001564i1eppng30ihpe7q].[none:status (copy)_1080582440249839616:nk]>s]]></run>
+              </formatted-text>
+            </customized-tooltip>
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-show' value='true' />
+                <format attr='mark-labels-cull' value='true' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows />
+        <cols />
+      </table>
+      <simple-id uuid='{FEF565AF-79FB-4B34-8313-7EB8F8F20795}' />
+    </worksheet>
+  </worksheets>
+  <dashboards>
+    <dashboard name='Summary Report'>
+      <style>
+        <style-rule element='table'>
+          <format attr='background-color' value='#e6e6e6' />
+        </style-rule>
+      </style>
+      <size sizing-mode='automatic' />
+      <zones>
+        <zone _.fcp.SetMembershipControl.false...type='layout-basic' _.fcp.SetMembershipControl.true...type-v2='layout-basic' h='100000' id='4' w='100000' x='0' y='0'>
+          <zone _.fcp.SetMembershipControl.false...type='layout-flow' _.fcp.SetMembershipControl.true...type-v2='layout-flow' h='98938' id='44' param='horz' w='99400' x='300' y='531'>
+            <zone _.fcp.SetMembershipControl.false...type='layout-basic' _.fcp.SetMembershipControl.true...type-v2='layout-basic' h='98938' id='42' w='99400' x='300' y='531'>
+              <zone _.fcp.SetMembershipControl.false...type='layout-flow' _.fcp.SetMembershipControl.true...type-v2='layout-flow' h='87503' id='10' param='horz' w='53411' x='300' y='11966'>
+                <zone _.fcp.SetMembershipControl.false...type='layout-basic' _.fcp.SetMembershipControl.true...type-v2='layout-basic' h='87503' id='5' w='53411' x='300' y='11966'>
+                  <zone h='63174' id='8' name='Bar Counts' show-title='false' w='53411' x='300' y='36295'>
+                    <zone-style>
+                      <format attr='border-color' value='#000000' />
+                      <format attr='border-style' value='none' />
+                      <format attr='border-width' value='0' />
+                      <format attr='margin' value='4' />
+                    </zone-style>
+                  </zone>
+                  <zone h='24329' id='12' name='Status Ratio Circle Counts' show-title='false' w='26704' x='300' y='11966'>
+                    <zone-style>
+                      <format attr='border-color' value='#000000' />
+                      <format attr='border-style' value='none' />
+                      <format attr='border-width' value='0' />
+                      <format attr='margin' value='4' />
+                    </zone-style>
+                  </zone>
+                  <zone h='24329' id='41' name='Type Ratio Circle Counts' show-title='false' w='26707' x='27004' y='11966'>
+                    <zone-style>
+                      <format attr='border-color' value='#000000' />
+                      <format attr='border-style' value='none' />
+                      <format attr='border-width' value='0' />
+                      <format attr='margin' value='4' />
+                    </zone-style>
+                  </zone>
+                </zone>
+              </zone>
+              <zone _.fcp.SetMembershipControl.false...type='text' _.fcp.SetMembershipControl.true...type-v2='text' forceUpdate='true' h='11435' id='15' w='43000' x='10711' y='531'>
+                <formatted-text>
+                  <run bold='true' fontalignment='1' fontname='MrEavesModOTHeavy' fontsize='28'>Error Report - Census</run>
+                  <run fontalignment='2'>Æ&#10;</run>
+                  <run fontalignment='2' fontname='MrEavesModOT'>Powered By: PCSD25 Data Team</run>
+                  <run fontalignment='2'>Æ&#10;</run>
+                  <run fontalignment='2' fontname='MrEavesModOT'>Current Status: 08/12/2021 beta v0.1</run>
+                </formatted-text>
+                <zone-style>
+                  <format attr='border-color' value='#000000' />
+                  <format attr='border-style' value='none' />
+                  <format attr='border-width' value='0' />
+                  <format attr='margin' value='4' />
+                </zone-style>
+              </zone>
+              <zone _.fcp.SetMembershipControl.false...type='bitmap' _.fcp.SetMembershipControl.true...type-v2='bitmap' h='11435' id='22' is-scaled='1' param='C:/Users/lopezmi/Pictures/Presentations/SD25_Logo_RGB-01.png' w='10411' x='300' y='531'>
+                <zone-style>
+                  <format attr='border-color' value='#000000' />
+                  <format attr='border-style' value='none' />
+                  <format attr='border-width' value='0' />
+                  <format attr='margin' value='4' />
+                </zone-style>
+              </zone>
+              <zone h='98938' id='3' name='Detail Report' show-title='false' w='45989' x='53711' y='531'>
+                <zone-style>
+                  <format attr='border-color' value='#000000' />
+                  <format attr='border-style' value='none' />
+                  <format attr='border-width' value='0' />
+                  <format attr='margin' value='4' />
+                </zone-style>
+              </zone>
+            </zone>
+          </zone>
+          <zone-style>
+            <format attr='border-color' value='#000000' />
+            <format attr='border-style' value='none' />
+            <format attr='border-width' value='0' />
+            <format attr='margin' value='8' />
+          </zone-style>
+        </zone>
+      </zones>
+      <devicelayouts>
+        <devicelayout auto-generated='true' name='Phone'>
+          <size maxheight='1150' minheight='1150' sizing-mode='vscroll' />
+          <zones>
+            <zone _.fcp.SetMembershipControl.false...type='layout-basic' _.fcp.SetMembershipControl.true...type-v2='layout-basic' h='100000' id='66' w='100000' x='0' y='0'>
+              <zone _.fcp.SetMembershipControl.false...type='layout-flow' _.fcp.SetMembershipControl.true...type-v2='layout-flow' h='98938' id='65' param='vert' w='99400' x='300' y='531'>
+                <zone _.fcp.SetMembershipControl.false...type='bitmap' _.fcp.SetMembershipControl.true...type-v2='bitmap' fixed-size='84' h='11435' id='22' is-fixed='true' is-scaled='1' param='C:/Users/lopezmi/Pictures/Presentations/SD25_Logo_RGB-01.png' w='10411' x='300' y='531'>
+                  <zone-style>
+                    <format attr='border-color' value='#000000' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='margin' value='4' />
+                    <format attr='padding' value='0' />
+                  </zone-style>
+                </zone>
+                <zone _.fcp.SetMembershipControl.false...type='text' _.fcp.SetMembershipControl.true...type-v2='text' forceUpdate='true' h='11435' id='15' w='43000' x='10711' y='531'>
+                  <formatted-text>
+                    <run bold='true' fontalignment='1' fontname='MrEavesModOTHeavy' fontsize='28'>Error Report - Census</run>
+                    <run fontalignment='2'>Æ&#10;</run>
+                    <run fontalignment='2' fontname='MrEavesModOT'>Powered By: PCSD25 Data Team</run>
+                    <run fontalignment='2'>Æ&#10;</run>
+                    <run fontalignment='2' fontname='MrEavesModOT'>Current Status: 08/12/2021 beta v0.1</run>
+                  </formatted-text>
+                  <zone-style>
+                    <format attr='border-color' value='#000000' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='margin' value='4' />
+                    <format attr='padding' value='0' />
+                  </zone-style>
+                </zone>
+                <zone fixed-size='280' h='98938' id='3' is-fixed='true' name='Detail Report' show-title='false' w='45989' x='53711' y='531'>
+                  <zone-style>
+                    <format attr='border-color' value='#000000' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='margin' value='4' />
+                    <format attr='padding' value='0' />
+                  </zone-style>
+                </zone>
+                <zone fixed-size='186' h='24329' id='12' is-fixed='true' name='Status Ratio Circle Counts' show-title='false' w='26704' x='300' y='11966'>
+                  <zone-style>
+                    <format attr='border-color' value='#000000' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='margin' value='4' />
+                    <format attr='padding' value='0' />
+                  </zone-style>
+                </zone>
+                <zone fixed-size='186' h='24329' id='41' is-fixed='true' name='Type Ratio Circle Counts' show-title='false' w='26707' x='27004' y='11966'>
+                  <zone-style>
+                    <format attr='border-color' value='#000000' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='margin' value='4' />
+                    <format attr='padding' value='0' />
+                  </zone-style>
+                </zone>
+                <zone fixed-size='280' h='63174' id='8' is-fixed='true' name='Bar Counts' show-title='false' w='53411' x='300' y='36295'>
+                  <zone-style>
+                    <format attr='border-color' value='#000000' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='margin' value='4' />
+                    <format attr='padding' value='0' />
+                  </zone-style>
+                </zone>
+              </zone>
+              <zone-style>
+                <format attr='border-color' value='#000000' />
+                <format attr='border-style' value='none' />
+                <format attr='border-width' value='0' />
+                <format attr='margin' value='8' />
+              </zone-style>
+            </zone>
+          </zones>
+        </devicelayout>
+      </devicelayouts>
+      <simple-id uuid='{394306F7-DCDB-4605-9A97-2DFE7BE8F1D6}' />
+    </dashboard>
+  </dashboards>
+  <windows source-height='30'>
+    <window class='worksheet' name='Detail Report'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+        </edge>
+        <edge name='right'>
+          <strip size='160'>
+            <card pane-specification-id='0' param='[federated.094o94j001564i1eppng30ihpe7q].[none:status:nk]' type='color' />
+            <card pane-specification-id='0' param='[federated.094o94j001564i1eppng30ihpe7q].[none:status:nk]' type='shape' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{097ACBC6-8E31-43C5-8C8B-17496AE169EC}' />
+    </window>
+    <window class='worksheet' name='Bar Counts'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+        </edge>
+        <edge name='right'>
+          <strip size='160'>
+            <card pane-specification-id='0' param='[federated.094o94j001564i1eppng30ihpe7q].[none:status:nk]' type='color' />
+          </strip>
+        </edge>
+      </cards>
+      <viewpoint>
+        <zoom type='entire-view' />
+      </viewpoint>
+      <simple-id uuid='{EA5AEC31-25DB-4E44-B37D-26B718E2EAC7}' />
+    </window>
+    <window class='worksheet' name='Status Ratio Circle Counts'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+        </edge>
+        <edge name='right'>
+          <strip size='160'>
+            <card pane-specification-id='0' param='[federated.094o94j001564i1eppng30ihpe7q].[none:status:nk]' type='color' />
+          </strip>
+        </edge>
+      </cards>
+      <viewpoint>
+        <zoom type='entire-view' />
+      </viewpoint>
+      <simple-id uuid='{E9421B99-D4F5-42AB-9966-6F1296CCF204}' />
+    </window>
+    <window class='worksheet' name='Type Ratio Circle Counts'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+        </edge>
+        <edge name='right'>
+          <strip size='160'>
+            <card pane-specification-id='0' param='[federated.094o94j001564i1eppng30ihpe7q].[none:localCode:nk]' type='color' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{F1DDFF31-6579-41C2-97A1-4E981B73C06C}' />
+    </window>
+    <window class='dashboard' maximized='true' name='Summary Report'>
+      <viewpoints>
+        <viewpoint name='Bar Counts'>
+          <zoom type='entire-view' />
+        </viewpoint>
+        <viewpoint name='Detail Report'>
+          <zoom type='fit-width' />
+        </viewpoint>
+        <viewpoint name='Status Ratio Circle Counts'>
+          <zoom type='entire-view' />
+        </viewpoint>
+        <viewpoint name='Type Ratio Circle Counts'>
+          <zoom type='entire-view' />
+        </viewpoint>
+      </viewpoints>
+      <active id='15' />
+      <simple-id uuid='{F9CE88C8-2755-48F1-90DC-0AE776C88F2B}' />
+    </window>
+  </windows>
+  <thumbnails>
+    <thumbnail height='192' name='Summary Report' width='192'>
+      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
+      FcH/B6aDq9n/z/FoAAAAAElFTkSuQmCC
+    </thumbnail>
+  </thumbnails>
+</workbook>

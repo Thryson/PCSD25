@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<SqlWorkbenchSqlProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="Achieve3000">
+  <Items>
+    <LogicalFolder Name="Connections" Type="2" Sorted="true">
+      <Items>
+        <ConnectionNode Name="10.100.9.56:lopezmi">
+          <Created>2019-08-01T08:08:04.9278581-06:00</Created>
+          <Type>SQL</Type>
+          <Server>10.100.9.56</Server>
+          <UserName>lopezmi</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName />
+        </ConnectionNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Queries" Type="0" Sorted="true">
+      <Items>
+        <FileNode Name="School.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:10.100.9.56:False:lopezmi</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>10.100.9.56</AssociatedConnSrvName>
+          <AssociatedConnUserName>lopezmi</AssociatedConnUserName>
+          <FullPath>School.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Student.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:10.100.9.56:False:lopezmi</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>10.100.9.56</AssociatedConnSrvName>
+          <AssociatedConnUserName>lopezmi</AssociatedConnUserName>
+          <FullPath>Student.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Teacher.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:10.100.9.56:False:lopezmi</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>10.100.9.56</AssociatedConnSrvName>
+          <AssociatedConnUserName>lopezmi</AssociatedConnUserName>
+          <FullPath>Teacher.sql</FullPath>
+        </FileNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Miscellaneous" Type="3" Sorted="true">
+      <Items />
+    </LogicalFolder>
+  </Items>
+</SqlWorkbenchSqlProject>

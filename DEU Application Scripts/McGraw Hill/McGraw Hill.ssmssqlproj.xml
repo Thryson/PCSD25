@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<SqlWorkbenchSqlProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="McGraw Hill">
+  <Items>
+    <LogicalFolder Name="Connections" Type="2" Sorted="true">
+      <Items>
+        <ConnectionNode Name="10.100.9.56:lopezmi">
+          <Created>2019-07-29T09:29:45.775317-06:00</Created>
+          <Type>SQL</Type>
+          <Server>10.100.9.56</Server>
+          <UserName>lopezmi</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName />
+        </ConnectionNode>
+        <ConnectionNode Name="10.100.9.56:mulletja">
+          <Created>2021-05-20T14:01:02.0220871-06:00</Created>
+          <Type>SQL</Type>
+          <Server>10.100.9.56</Server>
+          <UserName>mulletja</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Queries" Type="0" Sorted="true">
+      <Items>
+        <FileNode Name="Academic Sessions.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:10.100.9.56:False:mulletja</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>10.100.9.56</AssociatedConnSrvName>
+          <AssociatedConnUserName>mulletja</AssociatedConnUserName>
+          <FullPath>Academic Sessions.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Classes.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:10.100.9.56:False:mulletja</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>10.100.9.56</AssociatedConnSrvName>
+          <AssociatedConnUserName>mulletja</AssociatedConnUserName>
+          <FullPath>Classes.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Courses.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:10.100.9.56:False:mulletja</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>10.100.9.56</AssociatedConnSrvName>
+          <AssociatedConnUserName>mulletja</AssociatedConnUserName>
+          <FullPath>Courses.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Enrollments.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:10.100.9.56:False:mulletja</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>10.100.9.56</AssociatedConnSrvName>
+          <AssociatedConnUserName>mulletja</AssociatedConnUserName>
+          <FullPath>Enrollments.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Manifest.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:10.100.9.56:False:mulletja</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>10.100.9.56</AssociatedConnSrvName>
+          <AssociatedConnUserName>mulletja</AssociatedConnUserName>
+          <FullPath>Manifest.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Organizations.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:10.100.9.56:False:mulletja</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>10.100.9.56</AssociatedConnSrvName>
+          <AssociatedConnUserName>mulletja</AssociatedConnUserName>
+          <FullPath>Organizations.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Users.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:10.100.9.56:False:mulletja</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>10.100.9.56</AssociatedConnSrvName>
+          <AssociatedConnUserName>mulletja</AssociatedConnUserName>
+          <FullPath>Users.sql</FullPath>
+        </FileNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="Miscellaneous" Type="3" Sorted="true">
+      <Items />
+    </LogicalFolder>
+  </Items>
+</SqlWorkbenchSqlProject>
