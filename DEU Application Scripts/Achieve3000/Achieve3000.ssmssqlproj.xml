@@ -15,26 +15,38 @@
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
           <ApplicationName />
         </ConnectionNode>
+        <ConnectionNode Name="10.100.9.56:mulletja">
+          <Created>2021-11-29T09:03:16.6809949-07:00</Created>
+          <Type>SQL</Type>
+          <Server>10.100.9.56</Server>
+          <UserName>mulletja</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
       </Items>
     </LogicalFolder>
     <LogicalFolder Name="Queries" Type="0" Sorted="true">
       <Items>
         <FileNode Name="School.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:10.100.9.56:False:lopezmi</AssociatedConnectionMoniker>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:10.100.9.56:False:mulletja</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>10.100.9.56</AssociatedConnSrvName>
-          <AssociatedConnUserName>lopezmi</AssociatedConnUserName>
+          <AssociatedConnUserName>mulletja</AssociatedConnUserName>
           <FullPath>School.sql</FullPath>
         </FileNode>
         <FileNode Name="Student.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:10.100.9.56:False:lopezmi</AssociatedConnectionMoniker>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:10.100.9.56:False:mulletja</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>10.100.9.56</AssociatedConnSrvName>
-          <AssociatedConnUserName>lopezmi</AssociatedConnUserName>
+          <AssociatedConnUserName>mulletja</AssociatedConnUserName>
           <FullPath>Student.sql</FullPath>
         </FileNode>
         <FileNode Name="Teacher.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:10.100.9.56:False:lopezmi</AssociatedConnectionMoniker>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:10.100.9.56:False:mulletja</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>10.100.9.56</AssociatedConnSrvName>
-          <AssociatedConnUserName>lopezmi</AssociatedConnUserName>
+          <AssociatedConnUserName>mulletja</AssociatedConnUserName>
           <FullPath>Teacher.sql</FullPath>
         </FileNode>
       </Items>

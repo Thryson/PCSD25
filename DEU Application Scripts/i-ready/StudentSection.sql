@@ -4,6 +4,7 @@
 --				DEU
 --Author:		Jacob Mullett
 --Date:			04/14/2021
+--File:			StudentSection.sql
 --------------------------------------------------------------
 USE pocatello
 
@@ -31,7 +32,7 @@ FROM Roster AS rs
 	INNER JOIN Course AS c ON c.courseID = se.courseID
 		AND c.[name] LIKE 'Acceleration%'
 	INNER JOIN Department AS dep ON dep.departmentID = c.departmentID
-		AND dep.[name] IN ('Language Arts','Math')
+		AND dep.[name] IN ('English','Language Arts','Math')
 	INNER JOIN Calendar AS cal ON cal.calendarID = c.calendarID 
 		AND cal.endYear = @eYear
 		AND cal.schoolID IN (15,16,17,21,28)
@@ -46,7 +47,7 @@ FROM Roster AS rs
 		AND ((@cDay BETWEEN te.startDate AND te.endDate AND te.[name] NOT IN ('T1','B1')) 
 			OR (@cDay BETWEEN DATEADD(DD, -30, te.startDate) AND te.endDate AND te.[name] IN ('T1','B1'))
 			OR (@cDay BETWEEN DATEADD(DD, -14, te.startDate) AND te.endDate AND te.[name] IN ('T2','T3','B2','B3','B4','B5','B6'))
-			AND (@cDay BETWEEN te.startDate AND DATEADD(DD, +4, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
+			OR (@cDay BETWEEN te.startDate AND DATEADD(DD, 7, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
 	INNER JOIN Person AS p ON p.personID = rs.personID
 	INNER JOIN [Identity] AS id ON id.identityID = p.currentIdentityID 
 		AND id.personID = p.personID

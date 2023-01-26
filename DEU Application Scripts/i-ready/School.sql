@@ -4,6 +4,7 @@
 --				DEU
 --Author:		Jacob Mullett
 --Date:			11/15/2019
+--File:			schoo.sql
 --------------------------------------------------------------
 USE pocatello
 
@@ -38,7 +39,7 @@ FROM Roster AS rs
 	INNER JOIN Course AS c ON c.courseID = se.courseID
 		AND c.[name] LIKE 'Acceleration%'
 	INNER JOIN Department AS dep ON dep.departmentID = c.departmentID
-		AND dep.[name] IN ('Language Arts','Math')
+		AND dep.[name] IN ('English','Language Arts','Math')
 	INNER JOIN Calendar AS cal ON cal.calendarID = c.calendarID
 		AND cal.endYear = @eYear
 		AND cal.schoolID IN (15,16,17,21,28)

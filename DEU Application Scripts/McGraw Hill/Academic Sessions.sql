@@ -8,7 +8,7 @@ USE pocatello
 -- Description:	<File 1/17 for McGraw Hill products, used to create roster of terms>
 -- Note 1:	<Force Rostered to Core Schools, may require rewrite if changes take place>
 -- Note 2:	<This file is the query template, it is saved as a stored procedure in the database and must be updated accordingly>
--- File Name:  <DEU_mcgrawHill_enrollments>
+-- File Name:  <DEU_mcgrawHill_academicSessions.sql>
 -- =============================================
 
 DECLARE @eYear INT, @cDay DATE;
@@ -45,4 +45,4 @@ FROM Section AS se
 		AND ((@cDay BETWEEN te.startDate AND te.endDate AND te.[name] NOT IN ('T1','B1')) 
 			OR (@cDay BETWEEN DATEADD(DD, -30, te.startDate) AND te.endDate AND te.[name] IN ('T1','B1'))
 			OR (@cDay BETWEEN DATEADD(DD, -14, te.startDate) AND te.endDate AND te.[name] IN ('T2','T3','B2','B3','B4','B5','B6'))
-			AND (@cDay BETWEEN te.startDate AND DATEADD(DD, +4, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
+			OR (@cDay BETWEEN te.startDate AND DATEADD(DD, 7, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))

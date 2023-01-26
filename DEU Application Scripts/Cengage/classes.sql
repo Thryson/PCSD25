@@ -59,7 +59,7 @@ FROM Section AS se
 		AND ((@cDay BETWEEN te.startDate AND te.endDate AND te.[name] NOT IN ('T1','B1')) 
 			OR (@cDay BETWEEN DATEADD(DD, -30, te.startDate) AND te.endDate AND te.[name] IN ('T1','B1'))
 			OR (@cDay BETWEEN DATEADD(DD, -14, te.startDate) AND te.endDate AND te.[name] IN ('T2','T3','B2','B3','B4','B5','B6'))
-			AND (@cDay BETWEEN te.startDate AND DATEADD(DD, +4, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
+			OR (@cDay BETWEEN te.startDate AND DATEADD(DD, 7, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
 	INNER JOIN [Period] AS pd ON pd.periodID = sp.periodID
 
 INSERT INTO #classes
@@ -70,7 +70,7 @@ VALUES
 SELECT *
 FROM #classes
 ORDER BY 
-	title
+	sourcedId
 DROP TABLE #classes
 
 

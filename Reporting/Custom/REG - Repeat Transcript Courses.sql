@@ -4,26 +4,6 @@ DECLARE @eYear INT, @cDay DATETIME;
 SET @cDay = GETDATE();
 SET @eYear = CASE WHEN MONTH(@cDay) >= 8 THEN YEAR(DATEADD(YEAR, 1, @cDay)) ELSE YEAR(@cDay) END;
 
---This report id's courses that have already been transcripted 
---SELECT DISTINCT tc1.personID
---	,tc1.courseNumber
---	,tc1.courseName
---	,tc1.score
---	,tc2.courseNumber
---	,tc2.courseName
---	,tc2.score
---FROM TranscriptCourse AS tc1
---	INNER JOIN TranscriptCourse AS tc2 ON tc2.personID = tc1.personID
---		AND tc2.endYear BETWEEN @eYear - 3 AND @eYear
---		AND tc2.transcriptID > tc1.transcriptID
---		AND (tc2.courseName = tc1.courseName
---			OR tc2.courseNumber = tc1.courseNumber)
---WHERE tc1.repeatCourse = 0
---	AND tc2.repeatCourse = 0
---	AND tc1.score IN ('A','B','C','D','P')
---	AND tc1.honorsCode != 'B'
---	AND tc1.grade IN ('09','10','11','12')
-
 
 --This report id's courses that are on the schedule and already on the transcript (must be run prior to term ending)
 SELECT DISTINCT p.personID,
@@ -62,5 +42,10 @@ FROM Person AS p
 		AND tc.grade IN ('09','10','11','12')
 ORDER BY sch.comments,
 	studentName
+
+
+
+
+
 
 

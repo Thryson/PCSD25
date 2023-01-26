@@ -22,6 +22,7 @@ SET @eYear = CASE WHEN MONTH(@cDay) >= 8 THEN YEAR(DATEADD(YEAR, 1, @cDay)) ELSE
 
 --This TempTable removed the dependence on UNION's
 CREATE TABLE #mcgrawHillClasses (
+	[priority] INT,
 	sourcedId INT,
 	[status] VARCHAR(4),
 	dateLastModified VARCHAR(4),
@@ -41,7 +42,9 @@ CREATE TABLE #mcgrawHillClasses (
 
 --EL Core Science and Building Blocks Sections
 INSERT INTO #mcgrawHillClasses
-SELECT se.sectionID AS 'sourcedId',
+SELECT DISTINCT 
+	DENSE_RANK() OVER(PARTITION BY se.sectionID ORDER BY te.termID) AS 'priority',
+	se.sectionID AS 'sourcedId',
 	'' AS 'status',
 	'' AS 'dateLastModified',
 	sch.comments + ' ' + c.[name] + '-' + CONVERT(VARCHAR(8), se.number) AS 'title',
@@ -79,14 +82,16 @@ FROM Roster AS rs
 		AND ((@cDay BETWEEN te.startDate AND te.endDate AND te.[name] NOT IN ('T1','B1')) 
 			OR (@cDay BETWEEN DATEADD(DD, -30, te.startDate) AND te.endDate AND te.[name] IN ('T1','B1'))
 			OR (@cDay BETWEEN DATEADD(DD, -14, te.startDate) AND te.endDate AND te.[name] IN ('T2','T3','B2','B3','B4','B5','B6'))
-			AND (@cDay BETWEEN te.startDate AND DATEADD(DD, +4, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
+			OR (@cDay BETWEEN te.startDate AND DATEADD(DD, 7, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
 WHERE c.number = 7100
 	OR (c.homeroom = 1 AND dep.[name] = 'Attendance')
 
 
 --MS Basic Math Courses
 INSERT INTO #mcgrawHillClasses
-SELECT se.sectionID AS 'sourcedId',
+SELECT DISTINCT 
+	DENSE_RANK() OVER(PARTITION BY se.sectionID ORDER BY te.termID) AS 'priority',
+	se.sectionID AS 'sourcedId',
 	'' AS 'status',
 	'' AS 'dateLastModified',
 	sch.comments + ' ' + c.number + '-' + CONVERT(VARCHAR(8), se.number) AS 'title',
@@ -125,11 +130,13 @@ FROM Roster AS rs
 		AND ((@cDay BETWEEN te.startDate AND te.endDate AND te.[name] NOT IN ('T1','B1')) 
 			OR (@cDay BETWEEN DATEADD(DD, -30, te.startDate) AND te.endDate AND te.[name] IN ('T1','B1'))
 			OR (@cDay BETWEEN DATEADD(DD, -14, te.startDate) AND te.endDate AND te.[name] IN ('T2','T3','B2','B3','B4','B5','B6'))
-			AND (@cDay BETWEEN te.startDate AND DATEADD(DD, +4, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
+			OR (@cDay BETWEEN te.startDate AND DATEADD(DD, 7, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
 
 --MS Geography
 INSERT INTO #mcgrawHillClasses
-SELECT se.sectionID AS 'sourcedId',
+SELECT DISTINCT 
+	DENSE_RANK() OVER(PARTITION BY se.sectionID ORDER BY te.termID) AS 'priority',
+	se.sectionID AS 'sourcedId',
 	'' AS 'status',
 	'' AS 'dateLastModified',
 	sch.comments + ' ' + c.number + '-' + CONVERT(VARCHAR(8), se.number) AS 'title',
@@ -169,11 +176,13 @@ FROM Roster AS rs
 		AND ((@cDay BETWEEN te.startDate AND te.endDate AND te.[name] NOT IN ('T1','B1')) 
 			OR (@cDay BETWEEN DATEADD(DD, -30, te.startDate) AND te.endDate AND te.[name] IN ('T1','B1'))
 			OR (@cDay BETWEEN DATEADD(DD, -14, te.startDate) AND te.endDate AND te.[name] IN ('T2','T3','B2','B3','B4','B5','B6'))
-			AND (@cDay BETWEEN te.startDate AND DATEADD(DD, +4, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
+			OR (@cDay BETWEEN te.startDate AND DATEADD(DD, 7, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
 
 --HS Basic Math Courses
 INSERT INTO #mcgrawHillClasses
-SELECT se.sectionID AS 'sourcedId',
+SELECT DISTINCT 
+	DENSE_RANK() OVER(PARTITION BY se.sectionID ORDER BY te.termID) AS 'priority',
+	se.sectionID AS 'sourcedId',
 	'' AS 'status',
 	'' AS 'dateLastModified',
 	sch.comments + ' ' + c.number + '-' + CONVERT(VARCHAR(8), se.number) AS 'title',
@@ -212,12 +221,14 @@ FROM Roster AS rs
 		AND ((@cDay BETWEEN te.startDate AND te.endDate AND te.[name] NOT IN ('T1','B1')) 
 			OR (@cDay BETWEEN DATEADD(DD, -30, te.startDate) AND te.endDate AND te.[name] IN ('T1','B1'))
 			OR (@cDay BETWEEN DATEADD(DD, -14, te.startDate) AND te.endDate AND te.[name] IN ('T2','T3','B2','B3','B4','B5','B6'))
-			AND (@cDay BETWEEN te.startDate AND DATEADD(DD, +4, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
+			OR (@cDay BETWEEN te.startDate AND DATEADD(DD, 7, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
 
 
 --HS Core Math Courses
 INSERT INTO #mcgrawHillClasses
-SELECT se.sectionID AS 'sourcedId',
+SELECT DISTINCT 
+	DENSE_RANK() OVER(PARTITION BY se.sectionID ORDER BY te.termID) AS 'priority',
+	se.sectionID AS 'sourcedId',
 	'' AS 'status',
 	'' AS 'dateLastModified',
 	sch.comments + ' ' + c.number + '-' + CONVERT(VARCHAR(8), se.number) AS 'title',
@@ -257,11 +268,13 @@ FROM Roster AS rs
 		AND ((@cDay BETWEEN te.startDate AND te.endDate AND te.[name] NOT IN ('T1','B1')) 
 			OR (@cDay BETWEEN DATEADD(DD, -30, te.startDate) AND te.endDate AND te.[name] IN ('T1','B1'))
 			OR (@cDay BETWEEN DATEADD(DD, -14, te.startDate) AND te.endDate AND te.[name] IN ('T2','T3','B2','B3','B4','B5','B6'))
-			AND (@cDay BETWEEN te.startDate AND DATEADD(DD, +4, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
+			OR (@cDay BETWEEN te.startDate AND DATEADD(DD, 7, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
 
 --HS Economics
 INSERT INTO #mcgrawHillClasses
-SELECT se.sectionID AS 'sourcedId',
+SELECT DISTINCT 
+	DENSE_RANK() OVER(PARTITION BY se.sectionID ORDER BY te.termID) AS 'priority',
+	se.sectionID AS 'sourcedId',
 	'' AS 'status',
 	'' AS 'dateLastModified',
 	sch.comments + ' ' + c.number + '-' + CONVERT(VARCHAR(8), se.number) AS 'title',
@@ -300,11 +313,28 @@ FROM Roster AS rs
 		AND ((@cDay BETWEEN te.startDate AND te.endDate AND te.[name] NOT IN ('T1','B1')) 
 			OR (@cDay BETWEEN DATEADD(DD, -30, te.startDate) AND te.endDate AND te.[name] IN ('T1','B1'))
 			OR (@cDay BETWEEN DATEADD(DD, -14, te.startDate) AND te.endDate AND te.[name] IN ('T2','T3','B2','B3','B4','B5','B6'))
-			AND (@cDay BETWEEN te.startDate AND DATEADD(DD, +4, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
+			OR (@cDay BETWEEN te.startDate AND DATEADD(DD, 7, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
 
 
-SELECT DISTINCT *
+SELECT DISTINCT 
+	sourcedId,
+	[status],
+	dateLastModified,
+	title,
+	grades,
+	courseSourcedId,
+	classCode,
+	classType,
+	[location],
+	schoolSourcedId,
+	termSourcedIds,
+	subjects,
+	subjectCodes,
+	[periods]
 FROM #mcgrawHillClasses AS mhc
+WHERE [priority] = 1
+
+
 
 
 

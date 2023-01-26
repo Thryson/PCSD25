@@ -1,16 +1,3 @@
-USE pocatello
-
--- =============================================
--- Author:		<Lopez, Michael>
--- Create date: <08/16/2019>
--- Updater:		<Lopez, Michael>
--- Update date: <08/16/2019>
--- Description:	<File 1/1 for Apex, used to create roster of students, teachers and schools to be assigned manually>
--- Note 1:	<Seperated by person type for overrides>
--- Note 2:	<This file is the query template, it is saved as a stored procedure in the database and must be updated accordingly>
--- File Name:  <DEU_apex_1file>
--- =============================================
-
 DECLARE @eYear INT, @cDay DATETIME;
 
 --Replaces duplicate use of GETDATE()
@@ -52,7 +39,7 @@ FROM roster AS rs
 	INNER JOIN Section AS se ON se.sectionID = rs.sectionID
 	INNER JOIN Course AS c ON c.courseID = se.courseID
 		AND c.[name] LIKE 'Credit%'
-		OR c.[name] LIKE 'Online learning%'
+		OR c.[name] LIKE 'independent learning%'
 	INNER JOIN Calendar AS cal ON cal.calendarID = c.calendarID
 		AND cal.endYear = @eYear
 		AND cal.schoolID IN (15,16,17,18,19,20,21,22,28,29,31,34)
@@ -91,7 +78,7 @@ FROM roster AS rs
 	INNER JOIN Section AS se ON se.sectionID = rs.sectionID
 	INNER JOIN Course AS c ON c.courseID = se.courseID
 		AND c.[name] LIKE 'Credit%'
-		OR c.[name] LIKE 'Online learning%'
+		OR c.[name] LIKE 'independent learning%'
 	INNER JOIN Calendar AS cal ON cal.calendarID = c.calendarID
 		AND cal.endYear = @eYear
 		AND cal.schoolID IN (15,16,17,18,19,20,21,22,28,29,31,34)
@@ -103,7 +90,7 @@ FROM roster AS rs
 		AND sp.trialID = tl.trialID
 	INNER JOIN Term AS te ON te.termID = sp.termID
 		AND ((@cDay BETWEEN te.startDate AND te.endDate AND te.[name] NOT IN ('T1','B1')) 
-			OR (@cDay BETWEEN DATEADD(DD, -7, te.startDate) AND te.endDate AND te.[name] IN ('T1','B1')))
+			OR (@cDay BETWEEN DATEADD(DD, -30, te.startDate) AND te.endDate AND te.[name] IN ('T1','B1')))
 --			OR (@cDay BETWEEN DATEADD(DD, -14, te.startDate) AND te.endDate AND te.[name] IN ('T2','T3','B2','B3','B4','B5','B6')))
 	INNER JOIN SectionStaffHistory AS ssh ON se.sectionID = ssh.sectionID 
 		AND ((ssh.endDate IS NULL OR @cDay <= ssh.endDate)

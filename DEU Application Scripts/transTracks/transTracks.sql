@@ -25,7 +25,7 @@ CREATE TABLE #transTracks(
 	,FatherWorkPhone VARCHAR(50)
 	,MotherWorkPhone VARCHAR(50)
 	,Birthdate VARCHAR(20)
-	,Grade VARCHAR(2)
+	,Grade VARCHAR(5)
 	,School CHAR(5)
 	,Prog VARCHAR(15)
 	,EthnicCode VARCHAR(25)
@@ -103,7 +103,7 @@ SELECT DISTINCT
 	 END
 	,''
 	,id.gender
-	,id.homePrimaryLanguage
+	,''
 	,0
 FROM Person AS p
 	INNER JOIN [Identity] AS id ON id.personID = p.personID

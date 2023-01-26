@@ -106,7 +106,7 @@ FROM Roster AS rs
 		AND ((@cDay BETWEEN te.startDate AND te.endDate AND te.[name] NOT IN ('T1','B1')) 
 			OR (@cDay BETWEEN DATEADD(DD, -30, te.startDate) AND te.endDate AND te.[name] IN ('T1','B1'))
 			OR (@cDay BETWEEN DATEADD(DD, -14, te.startDate) AND te.endDate AND te.[name] IN ('T2','T3','B2','B3','B4','B5','B6'))
-			AND (@cDay BETWEEN te.startDate AND DATEADD(DD, +4, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
+			OR (@cDay BETWEEN te.startDate AND DATEADD(DD, 7, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
 	INNER JOIN [Identity] AS id ON id.personID = rs.personID
 	INNER JOIN Person AS p ON p.personID = id.personID
 		AND p.currentIdentityID = id.identityID
@@ -158,7 +158,7 @@ FROM Roster AS rs
 		AND ((@cDay BETWEEN te.startDate AND te.endDate AND te.[name] NOT IN ('T1','B1')) 
 			OR (@cDay BETWEEN DATEADD(DD, -30, te.startDate) AND te.endDate AND te.[name] IN ('T1','B1'))
 			OR (@cDay BETWEEN DATEADD(DD, -14, te.startDate) AND te.endDate AND te.[name] IN ('T2','T3','B2','B3','B4','B5','B6'))
-			AND (@cDay BETWEEN te.startDate AND DATEADD(DD, +4, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
+			OR (@cDay BETWEEN te.startDate AND DATEADD(DD, 7, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
 	INNER JOIN [Identity] AS id ON id.personID = rs.personID
 	INNER JOIN Person AS p ON p.personID = id.personID
 		AND p.currentIdentityID = id.identityID
@@ -208,7 +208,7 @@ FROM Roster AS rs
 		AND ((@cDay BETWEEN te.startDate AND te.endDate AND te.[name] NOT IN ('T1','B1')) 
 			OR (@cDay BETWEEN DATEADD(DD, -30, te.startDate) AND te.endDate AND te.[name] IN ('T1','B1'))
 			OR (@cDay BETWEEN DATEADD(DD, -14, te.startDate) AND te.endDate AND te.[name] IN ('T2','T3','B2','B3','B4','B5','B6'))
-			AND (@cDay BETWEEN te.startDate AND DATEADD(DD, +4, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
+			OR (@cDay BETWEEN te.startDate AND DATEADD(DD, 7, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
 	INNER JOIN [Identity] AS id ON id.personID = rs.personID
 	INNER JOIN Person AS p ON p.personID = id.personID
 		AND p.currentIdentityID = id.identityID
@@ -258,7 +258,7 @@ FROM Roster AS rs
 		AND ((@cDay BETWEEN te.startDate AND te.endDate AND te.[name] NOT IN ('T1','B1')) 
 			OR (@cDay BETWEEN DATEADD(DD, -30, te.startDate) AND te.endDate AND te.[name] IN ('T1','B1'))
 			OR (@cDay BETWEEN DATEADD(DD, -14, te.startDate) AND te.endDate AND te.[name] IN ('T2','T3','B2','B3','B4','B5','B6'))
-			AND (@cDay BETWEEN te.startDate AND DATEADD(DD, +4, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
+			OR (@cDay BETWEEN te.startDate AND DATEADD(DD, 7, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
 	INNER JOIN [Identity] AS id ON id.personID = rs.personID
 	INNER JOIN Person AS p ON p.personID = id.personID
 		AND p.currentIdentityID = id.identityID
@@ -308,7 +308,7 @@ FROM Roster AS rs
 		AND ((@cDay BETWEEN te.startDate AND te.endDate AND te.[name] NOT IN ('T1','B1')) 
 			OR (@cDay BETWEEN DATEADD(DD, -30, te.startDate) AND te.endDate AND te.[name] IN ('T1','B1'))
 			OR (@cDay BETWEEN DATEADD(DD, -14, te.startDate) AND te.endDate AND te.[name] IN ('T2','T3','B2','B3','B4','B5','B6'))
-			AND (@cDay BETWEEN te.startDate AND DATEADD(DD, +4, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
+			OR (@cDay BETWEEN te.startDate AND DATEADD(DD, 7, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
 	INNER JOIN [Identity] AS id ON id.personID = rs.personID
 	INNER JOIN Person AS p ON p.personID = id.personID
 		AND p.currentIdentityID = id.identityID
@@ -357,7 +357,7 @@ FROM Roster AS rs
 		AND ((@cDay BETWEEN te.startDate AND te.endDate AND te.[name] NOT IN ('T1','B1')) 
 			OR (@cDay BETWEEN DATEADD(DD, -30, te.startDate) AND te.endDate AND te.[name] IN ('T1','B1'))
 			OR (@cDay BETWEEN DATEADD(DD, -14, te.startDate) AND te.endDate AND te.[name] IN ('T2','T3','B2','B3','B4','B5','B6'))
-			AND (@cDay BETWEEN te.startDate AND DATEADD(DD, +4, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
+			OR (@cDay BETWEEN te.startDate AND DATEADD(DD, 7, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
 	INNER JOIN [Identity] AS id ON id.personID = rs.personID
 	INNER JOIN Person AS p ON p.personID = id.personID
 		AND p.currentIdentityID = id.identityID
@@ -405,7 +405,7 @@ FROM Roster AS rs
 		AND ((@cDay BETWEEN te.startDate AND te.endDate AND te.[name] NOT IN ('T1','B1')) 
 			OR (@cDay BETWEEN DATEADD(DD, -30, te.startDate) AND te.endDate AND te.[name] IN ('T1','B1'))
 			OR (@cDay BETWEEN DATEADD(DD, -14, te.startDate) AND te.endDate AND te.[name] IN ('T2','T3','B2','B3','B4','B5','B6'))
-			AND (@cDay BETWEEN te.startDate AND DATEADD(DD, +4, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
+			OR (@cDay BETWEEN te.startDate AND DATEADD(DD, 7, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
 	INNER JOIN SectionStaffHistory AS ssh ON se.sectionID = ssh.sectionID 
 		AND ((ssh.endDate IS NULL OR @cDay <= ssh.endDate)
 				AND (@cDay >= ssh.startDate OR ssh.startDate IS NULL))
@@ -463,7 +463,7 @@ FROM Roster AS rs
 		AND ((@cDay BETWEEN te.startDate AND te.endDate AND te.[name] NOT IN ('T1','B1')) 
 			OR (@cDay BETWEEN DATEADD(DD, -30, te.startDate) AND te.endDate AND te.[name] IN ('T1','B1'))
 			OR (@cDay BETWEEN DATEADD(DD, -14, te.startDate) AND te.endDate AND te.[name] IN ('T2','T3','B2','B3','B4','B5','B6'))
-			AND (@cDay BETWEEN te.startDate AND DATEADD(DD, +4, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
+			OR (@cDay BETWEEN te.startDate AND DATEADD(DD, 7, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
 	INNER JOIN SectionStaffHistory AS ssh ON se.sectionID = ssh.sectionID 
 		AND ((ssh.endDate IS NULL OR @cDay <= ssh.endDate)
 				AND (@cDay >= ssh.startDate OR ssh.startDate IS NULL))
@@ -519,7 +519,63 @@ FROM Roster AS rs
 		AND ((@cDay BETWEEN te.startDate AND te.endDate AND te.[name] NOT IN ('T1','B1')) 
 			OR (@cDay BETWEEN DATEADD(DD, -30, te.startDate) AND te.endDate AND te.[name] IN ('T1','B1'))
 			OR (@cDay BETWEEN DATEADD(DD, -14, te.startDate) AND te.endDate AND te.[name] IN ('T2','T3','B2','B3','B4','B5','B6'))
-			AND (@cDay BETWEEN te.startDate AND DATEADD(DD, +4, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
+			OR (@cDay BETWEEN te.startDate AND DATEADD(DD, 7, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
+	INNER JOIN SectionStaffHistory AS ssh ON se.sectionID = ssh.sectionID 
+		AND ((ssh.endDate IS NULL OR @cDay <= ssh.endDate)
+				AND (@cDay >= ssh.startDate OR ssh.startDate IS NULL))
+	INNER JOIN staffMember AS sm ON ssh.personID = sm.personID
+		AND ISNUMERIC(sm.staffNumber) = 1
+		AND ((sm.endDate IS NULL OR @cDay <= sm.endDate)
+				AND (@cDay >= sm.startDate OR sm.startDate IS NULL))
+	INNER JOIN UserAccount AS ua ON ua.personID = sm.personID 
+		AND ua.ldapConfigurationID = '2'
+WHERE sm.teacher = 1 
+	AND ssh.[role] != 'C'
+
+
+--HS Basic Math Teachers
+INSERT INTO #mcgrawHillUsers
+SELECT RANK() OVER(PARTITION BY ssh.sectionID ORDER BY ssh.sectionID, ssh.assignmentID DESC) AS 'priority', 
+	sm.personID AS 'sourcedId',
+	'' AS 'status',
+	'' AS 'dateLastModified',
+	'YES' AS 'enabledUser',
+	sch.schoolID AS 'orgSourcedIds',
+	'teacher' AS 'role',
+	ua.username + '@sd25.us' AS 'username',
+	sm.staffNumber AS 'userIds',
+	sm.firstName AS 'givenName',
+	sm.lastName AS 'familyName',
+	ISNULL(LEFT(sm.middleName, 1), '') AS 'middleName',
+	'' AS 'identifier',
+	ua.username + '@sd25.us' AS 'email',
+	'' AS 'sms',
+	'' AS 'phone',
+	'' AS 'agentSourcedIds',
+	'' AS 'grades',
+	'' AS 'password'
+FROM Roster AS rs
+	INNER JOIN Section AS se ON se.sectionID = rs.sectionID
+	INNER JOIN Course AS c ON c.CourseID = se.courseID
+		AND c.[name] IN('LifeSklsMath')
+	INNER JOIN Department AS dep ON dep.departmentID = c.departmentID
+		AND dep.[name] = 'Special Education'
+	INNER JOIN Calendar AS cal ON cal.calendarID = c.calendarID
+		AND cal.endYear = @eYear
+		AND cal.schoolID IN (18,19,20,22)
+		AND @cDay BETWEEN cal.startDate - 14 AND cal.endDate
+	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN ScheduleStructure AS ss ON ss.calendarID = cal.calendarID
+	INNER JOIN Trial AS tl ON tl.structureID = ss.structureID
+		AND tl.trialID = se.trialID
+		AND tl.active = 1
+	INNER JOIN SectionPlacement AS sp ON sp.trialID = tl.trialID 
+		AND sp.sectionID = se.sectionID
+	INNER JOIN Term AS te ON te.termID = sp.termID 
+		AND ((@cDay BETWEEN te.startDate AND te.endDate AND te.[name] NOT IN ('T1','B1')) 
+			OR (@cDay BETWEEN DATEADD(DD, -30, te.startDate) AND te.endDate AND te.[name] IN ('T1','B1'))
+			OR (@cDay BETWEEN DATEADD(DD, -14, te.startDate) AND te.endDate AND te.[name] IN ('T2','T3','B2','B3','B4','B5','B6'))
+			OR (@cDay BETWEEN te.startDate AND DATEADD(DD, 7, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
 	INNER JOIN SectionStaffHistory AS ssh ON se.sectionID = ssh.sectionID 
 		AND ((ssh.endDate IS NULL OR @cDay <= ssh.endDate)
 				AND (@cDay >= ssh.startDate OR ssh.startDate IS NULL))
@@ -576,7 +632,7 @@ FROM Roster AS rs
 		AND ((@cDay BETWEEN te.startDate AND te.endDate AND te.[name] NOT IN ('T1','B1')) 
 			OR (@cDay BETWEEN DATEADD(DD, -30, te.startDate) AND te.endDate AND te.[name] IN ('T1','B1'))
 			OR (@cDay BETWEEN DATEADD(DD, -14, te.startDate) AND te.endDate AND te.[name] IN ('T2','T3','B2','B3','B4','B5','B6'))
-			AND (@cDay BETWEEN te.startDate AND DATEADD(DD, +4, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
+			OR (@cDay BETWEEN te.startDate AND DATEADD(DD, 7, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
 	INNER JOIN SectionStaffHistory AS ssh ON se.sectionID = ssh.sectionID 
 		AND ((ssh.endDate IS NULL OR @cDay <= ssh.endDate)
 				AND (@cDay >= ssh.startDate OR ssh.startDate IS NULL))
@@ -631,7 +687,7 @@ FROM Roster AS rs
 		AND ((@cDay BETWEEN te.startDate AND te.endDate AND te.[name] NOT IN ('T1','B1')) 
 			OR (@cDay BETWEEN DATEADD(DD, -30, te.startDate) AND te.endDate AND te.[name] IN ('T1','B1'))
 			OR (@cDay BETWEEN DATEADD(DD, -14, te.startDate) AND te.endDate AND te.[name] IN ('T2','T3','B2','B3','B4','B5','B6'))
-			AND (@cDay BETWEEN te.startDate AND DATEADD(DD, +4, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
+			OR (@cDay BETWEEN te.startDate AND DATEADD(DD, 7, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
 	INNER JOIN SectionStaffHistory AS ssh ON se.sectionID = ssh.sectionID 
 		AND ((ssh.endDate IS NULL OR @cDay <= ssh.endDate)
 				AND (@cDay >= ssh.startDate OR ssh.startDate IS NULL))

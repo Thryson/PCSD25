@@ -37,7 +37,7 @@ CREATE TABLE #mcgrawHillEnrollments (
 
 --EL Core Science and Building Blocks Students
 INSERT INTO #mcgrawHillEnrollments
-SELECT 1 AS 'priority',
+SELECT DISTINCT DENSE_RANK() OVER(PARTITION BY p.personID ORDER BY te.termID) AS 'priority',
 	rs.rosterID AS 'sourcedId',
 	'' AS 'status',
 	'' AS 'dateLastModified',
@@ -66,7 +66,7 @@ FROM Roster AS rs
 		AND ((@cDay BETWEEN te.startDate AND te.endDate AND te.[name] NOT IN ('T1','B1')) 
 			OR (@cDay BETWEEN DATEADD(DD, -30, te.startDate) AND te.endDate AND te.[name] IN ('T1','B1'))
 			OR (@cDay BETWEEN DATEADD(DD, -14, te.startDate) AND te.endDate AND te.[name] IN ('T2','T3','B2','B3','B4','B5','B6'))
-			AND (@cDay BETWEEN te.startDate AND DATEADD(DD, +4, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
+			OR (@cDay BETWEEN te.startDate AND DATEADD(DD, 7, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
 	INNER JOIN [Identity] AS id ON id.personID = rs.personID
 	INNER JOIN Person AS p ON p.personID = id.personID
 		AND p.currentIdentityID = id.identityID
@@ -78,7 +78,7 @@ WHERE (rs.endDate IS NULL
 
 --MS Basic Math Courses
 INSERT INTO #mcgrawHillEnrollments
-SELECT 1 AS 'priority',
+SELECT DISTINCT DENSE_RANK() OVER(PARTITION BY p.personID ORDER BY te.termID) AS 'priority',
 	rs.rosterID AS 'sourcedId',
 	'' AS 'status',
 	'' AS 'dateLastModified',
@@ -109,16 +109,16 @@ FROM Roster AS rs
 		AND ((@cDay BETWEEN te.startDate AND te.endDate AND te.[name] NOT IN ('T1','B1')) 
 			OR (@cDay BETWEEN DATEADD(DD, -30, te.startDate) AND te.endDate AND te.[name] IN ('T1','B1'))
 			OR (@cDay BETWEEN DATEADD(DD, -14, te.startDate) AND te.endDate AND te.[name] IN ('T2','T3','B2','B3','B4','B5','B6'))
-			AND (@cDay BETWEEN te.startDate AND DATEADD(DD, +4, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
+			OR (@cDay BETWEEN te.startDate AND DATEADD(DD, 7, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
 	INNER JOIN [Identity] AS id ON id.personID = rs.personID
 	INNER JOIN Person AS p ON p.personID = id.personID
 		AND p.currentIdentityID = id.identityID
 WHERE rs.endDate IS NULL
 		OR @cDay <= rs.endDate
-
+	
 --MS Geography Courses
 INSERT INTO #mcgrawHillEnrollments
-SELECT 1 AS 'priority',
+SELECT DISTINCT DENSE_RANK() OVER(PARTITION BY p.personID ORDER BY te.termID) AS 'priority',
 	rs.rosterID AS 'sourcedId',
 	'' AS 'status',
 	'' AS 'dateLastModified',
@@ -150,7 +150,7 @@ FROM Roster AS rs
 		AND ((@cDay BETWEEN te.startDate AND te.endDate AND te.[name] NOT IN ('T1','B1')) 
 			OR (@cDay BETWEEN DATEADD(DD, -30, te.startDate) AND te.endDate AND te.[name] IN ('T1','B1'))
 			OR (@cDay BETWEEN DATEADD(DD, -14, te.startDate) AND te.endDate AND te.[name] IN ('T2','T3','B2','B3','B4','B5','B6'))
-			AND (@cDay BETWEEN te.startDate AND DATEADD(DD, +4, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
+			OR (@cDay BETWEEN te.startDate AND DATEADD(DD, 7, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
 	INNER JOIN [Identity] AS id ON id.personID = rs.personID
 	INNER JOIN Person AS p ON p.personID = id.personID
 		AND p.currentIdentityID = id.identityID
@@ -160,7 +160,7 @@ WHERE rs.endDate IS NULL
 
 --HS Basic Math Courses
 INSERT INTO #mcgrawHillEnrollments
-SELECT 1 AS 'priority',
+SELECT DISTINCT DENSE_RANK() OVER(PARTITION BY p.personID ORDER BY te.termID) AS 'priority',
 	rs.rosterID AS 'sourcedId',
 	'' AS 'status',
 	'' AS 'dateLastModified',
@@ -191,7 +191,7 @@ FROM Roster AS rs
 		AND ((@cDay BETWEEN te.startDate AND te.endDate AND te.[name] NOT IN ('T1','B1')) 
 			OR (@cDay BETWEEN DATEADD(DD, -30, te.startDate) AND te.endDate AND te.[name] IN ('T1','B1'))
 			OR (@cDay BETWEEN DATEADD(DD, -14, te.startDate) AND te.endDate AND te.[name] IN ('T2','T3','B2','B3','B4','B5','B6'))
-			AND (@cDay BETWEEN te.startDate AND DATEADD(DD, +4, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
+			OR (@cDay BETWEEN te.startDate AND DATEADD(DD, 7, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
 	INNER JOIN [Identity] AS id ON id.personID = rs.personID
 	INNER JOIN Person AS p ON p.personID = id.personID
 		AND p.currentIdentityID = id.identityID
@@ -200,7 +200,7 @@ WHERE rs.endDate IS NULL
 
 --HS Core Math Courses
 INSERT INTO #mcgrawHillEnrollments
-SELECT 1 AS 'priority',
+SELECT  DISTINCT DENSE_RANK() OVER(PARTITION BY p.personID ORDER BY te.termID) AS 'priority',
 	rs.rosterID AS 'sourcedId',
 	'' AS 'status',
 	'' AS 'dateLastModified',
@@ -232,7 +232,7 @@ FROM Roster AS rs
 		AND ((@cDay BETWEEN te.startDate AND te.endDate AND te.[name] NOT IN ('T1','B1')) 
 			OR (@cDay BETWEEN DATEADD(DD, -30, te.startDate) AND te.endDate AND te.[name] IN ('T1','B1'))
 			OR (@cDay BETWEEN DATEADD(DD, -14, te.startDate) AND te.endDate AND te.[name] IN ('T2','T3','B2','B3','B4','B5','B6'))
-			AND (@cDay BETWEEN te.startDate AND DATEADD(DD, +4, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
+			OR (@cDay BETWEEN te.startDate AND DATEADD(DD, 7, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
 	INNER JOIN [Identity] AS id ON id.personID = rs.personID
 	INNER JOIN Person AS p ON p.personID = id.personID
 		AND p.currentIdentityID = id.identityID
@@ -241,7 +241,7 @@ WHERE rs.endDate IS NULL
 
 --HS Economics courses
 INSERT INTO #mcgrawHillEnrollments
-SELECT 1 AS 'priority',
+SELECT DISTINCT DENSE_RANK() OVER(PARTITION BY p.personID ORDER BY te.termID) AS 'priority',
 	rs.rosterID AS 'sourcedId',
 	'' AS 'status',
 	'' AS 'dateLastModified',
@@ -272,7 +272,7 @@ FROM Roster AS rs
 		AND ((@cDay BETWEEN te.startDate AND te.endDate AND te.[name] NOT IN ('T1','B1')) 
 			OR (@cDay BETWEEN DATEADD(DD, -30, te.startDate) AND te.endDate AND te.[name] IN ('T1','B1'))
 			OR (@cDay BETWEEN DATEADD(DD, -14, te.startDate) AND te.endDate AND te.[name] IN ('T2','T3','B2','B3','B4','B5','B6'))
-			AND (@cDay BETWEEN te.startDate AND DATEADD(DD, +4, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
+			OR (@cDay BETWEEN te.startDate AND DATEADD(DD, 7, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
 	INNER JOIN [Identity] AS id ON id.personID = rs.personID
 	INNER JOIN Person AS p ON p.personID = id.personID
 		AND p.currentIdentityID = id.identityID
@@ -282,7 +282,7 @@ WHERE rs.endDate IS NULL
 
 --EL Core Science and Building Blocks Teachers
 INSERT INTO #mcgrawHillEnrollments
-SELECT RANK() OVER(PARTITION BY ssh.sectionID ORDER BY ssh.sectionID, ssh.assignmentID DESC) AS 'priority', 
+SELECT DISTINCT DENSE_RANK() OVER(PARTITION BY ssh.historyID ORDER BY te.termID, ssh.assignmentID) AS 'priority',--RANK() OVER(PARTITION BY ssh.sectionID ORDER BY ssh.sectionID, ssh.assignmentID DESC) AS 'priority', 
 	ssh.historyID AS 'sourcedId',
 	'' AS 'status',
 	'' AS 'dateLastModified',
@@ -311,7 +311,7 @@ FROM Roster AS rs
 		AND ((@cDay BETWEEN te.startDate AND te.endDate AND te.[name] NOT IN ('T1','B1')) 
 			OR (@cDay BETWEEN DATEADD(DD, -30, te.startDate) AND te.endDate AND te.[name] IN ('T1','B1'))
 			OR (@cDay BETWEEN DATEADD(DD, -14, te.startDate) AND te.endDate AND te.[name] IN ('T2','T3','B2','B3','B4','B5','B6'))
-			AND (@cDay BETWEEN te.startDate AND DATEADD(DD, +4, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
+			OR (@cDay BETWEEN te.startDate AND DATEADD(DD, 7, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
 	INNER JOIN SectionStaffHistory AS ssh ON se.sectionID = ssh.sectionID
 		AND ((ssh.endDate IS NULL OR @cDay <= ssh.endDate)
 				AND (@cDay >= ssh.startDate OR ssh.startDate IS NULL))
@@ -329,7 +329,7 @@ WHERE sm.teacher = 1
 
 --MS Basic Math Teachers
 INSERT INTO #mcgrawHillEnrollments
-SELECT RANK() OVER(PARTITION BY ssh.sectionID ORDER BY ssh.sectionID, ssh.assignmentID DESC) AS 'priority', 
+SELECT DISTINCT DENSE_RANK() OVER(PARTITION BY ssh.historyID ORDER BY te.termID, ssh.assignmentID) AS 'priority',--RANK() OVER(PARTITION BY ssh.sectionID ORDER BY ssh.sectionID, ssh.assignmentID DESC) AS 'priority', 
 	ssh.historyID AS 'sourcedId',
 	'' AS 'status',
 	'' AS 'dateLastModified',
@@ -360,7 +360,7 @@ FROM Roster AS rs
 		AND ((@cDay BETWEEN te.startDate AND te.endDate AND te.[name] NOT IN ('T1','B1')) 
 			OR (@cDay BETWEEN DATEADD(DD, -30, te.startDate) AND te.endDate AND te.[name] IN ('T1','B1'))
 			OR (@cDay BETWEEN DATEADD(DD, -14, te.startDate) AND te.endDate AND te.[name] IN ('T2','T3','B2','B3','B4','B5','B6'))
-			AND (@cDay BETWEEN te.startDate AND DATEADD(DD, +4, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
+			OR (@cDay BETWEEN te.startDate AND DATEADD(DD, 7, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
 	INNER JOIN SectionStaffHistory AS ssh ON se.sectionID = ssh.sectionID 
 		AND ((ssh.endDate IS NULL OR @cDay <= ssh.endDate)
 				AND (@cDay >= ssh.startDate OR ssh.startDate IS NULL))
@@ -375,7 +375,7 @@ WHERE sm.teacher = 1
 
 --MS Geography Teachers
 INSERT INTO #mcgrawHillEnrollments
-SELECT RANK() OVER(PARTITION BY ssh.sectionID ORDER BY ssh.sectionID, ssh.assignmentID DESC) AS 'priority', 
+SELECT DISTINCT DENSE_RANK() OVER(PARTITION BY ssh.historyID ORDER BY te.termID, ssh.assignmentID) AS 'priority',--RANK() OVER(PARTITION BY ssh.sectionID ORDER BY ssh.sectionID, ssh.assignmentID DESC) AS 'priority', 
 	ssh.historyID AS 'sourcedId',
 	'' AS 'status',
 	'' AS 'dateLastModified',
@@ -407,7 +407,7 @@ FROM Roster AS rs
 		AND ((@cDay BETWEEN te.startDate AND te.endDate AND te.[name] NOT IN ('T1','B1')) 
 			OR (@cDay BETWEEN DATEADD(DD, -30, te.startDate) AND te.endDate AND te.[name] IN ('T1','B1'))
 			OR (@cDay BETWEEN DATEADD(DD, -14, te.startDate) AND te.endDate AND te.[name] IN ('T2','T3','B2','B3','B4','B5','B6'))
-			AND (@cDay BETWEEN te.startDate AND DATEADD(DD, +4, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
+			OR (@cDay BETWEEN te.startDate AND DATEADD(DD, 7, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
 	INNER JOIN SectionStaffHistory AS ssh ON se.sectionID = ssh.sectionID 
 		AND ((ssh.endDate IS NULL OR @cDay <= ssh.endDate)
 				AND (@cDay >= ssh.startDate OR ssh.startDate IS NULL))
@@ -423,7 +423,7 @@ WHERE sm.teacher = 1
 
 --HS Core Math Teachers
 INSERT INTO #mcgrawHillEnrollments
-SELECT RANK() OVER(PARTITION BY ssh.sectionID ORDER BY ssh.sectionID, ssh.assignmentID DESC) AS 'priority', 
+SELECT DISTINCT DENSE_RANK() OVER(PARTITION BY ssh.historyID ORDER BY te.termID, ssh.assignmentID) AS 'priority',--RANK() OVER(PARTITION BY ssh.sectionID ORDER BY ssh.sectionID, ssh.assignmentID DESC) AS 'priority', 
 	ssh.historyID AS 'sourcedId',
 	'' AS 'status',
 	'' AS 'dateLastModified',
@@ -455,7 +455,7 @@ FROM Roster AS rs
 		AND ((@cDay BETWEEN te.startDate AND te.endDate AND te.[name] NOT IN ('T1','B1')) 
 			OR (@cDay BETWEEN DATEADD(DD, -30, te.startDate) AND te.endDate AND te.[name] IN ('T1','B1'))
 			OR (@cDay BETWEEN DATEADD(DD, -14, te.startDate) AND te.endDate AND te.[name] IN ('T2','T3','B2','B3','B4','B5','B6'))
-			AND (@cDay BETWEEN te.startDate AND DATEADD(DD, +4, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
+			OR (@cDay BETWEEN te.startDate AND DATEADD(DD, 7, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
 	INNER JOIN SectionStaffHistory AS ssh ON se.sectionID = ssh.sectionID 
 		AND ((ssh.endDate IS NULL OR @cDay <= ssh.endDate)
 				AND (@cDay >= ssh.startDate OR ssh.startDate IS NULL))
@@ -470,7 +470,7 @@ WHERE sm.teacher = 1
 
 --HS Economics Teachers
 INSERT INTO #mcgrawHillEnrollments
-SELECT RANK() OVER(PARTITION BY ssh.sectionID ORDER BY ssh.sectionID, ssh.assignmentID DESC) AS 'priority', 
+SELECT DISTINCT DENSE_RANK() OVER(PARTITION BY ssh.historyID ORDER BY te.termID, ssh.assignmentID) AS 'priority',--RANK() OVER(PARTITION BY ssh.sectionID ORDER BY ssh.sectionID, ssh.assignmentID DESC) AS 'priority', !!!!UPDATE 2021/18/11
 	ssh.historyID AS 'sourcedId',
 	'' AS 'status',
 	'' AS 'dateLastModified',
@@ -501,7 +501,7 @@ FROM Roster AS rs
 		AND ((@cDay BETWEEN te.startDate AND te.endDate AND te.[name] NOT IN ('T1','B1')) 
 			OR (@cDay BETWEEN DATEADD(DD, -30, te.startDate) AND te.endDate AND te.[name] IN ('T1','B1'))
 			OR (@cDay BETWEEN DATEADD(DD, -14, te.startDate) AND te.endDate AND te.[name] IN ('T2','T3','B2','B3','B4','B5','B6'))
-			AND (@cDay BETWEEN te.startDate AND DATEADD(DD, +4, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
+			OR (@cDay BETWEEN te.startDate AND DATEADD(DD, 7, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
 	INNER JOIN SectionStaffHistory AS ssh ON se.sectionID = ssh.sectionID 
 		AND ((ssh.endDate IS NULL OR @cDay <= ssh.endDate)
 				AND (@cDay >= ssh.startDate OR ssh.startDate IS NULL))
@@ -534,4 +534,5 @@ FROM #mcgrawHillEnrollments AS mhe
 WHERE mhe.[priority] = 1
 ORDER BY
 	sourcedId
+	,classSourcedId
 DROP TABLE #mcgrawHillEnrollments

@@ -27,16 +27,16 @@ CREATE TABLE #courses(
 
 INSERT INTO #courses
 SELECT DISTINCT
-	c.courseID,
-	NULL,
-	NULL,
-	cal.calendarID,
-	NULL,
-	c.[name] + ' - Period ' + pd.[name] + ' - Term ' + te.[name],
-	NULL,
-	c.grade,
-	NULL,
-	NULL
+	c.courseID
+	,NULL
+	,NULL
+	,cal.calendarID
+	,NULL
+	,c.[name] --+ ' - Period ' + pd.[name] + ' - Term ' + te.[name],
+	,NULL
+	,c.grade
+	,NULL
+	,NULL
 FROM Section AS se
 	INNER JOIN Course AS c ON c.courseID = se.courseID 
 		 AND c.[name] IN ('AP US History A',
@@ -58,13 +58,13 @@ FROM Section AS se
 		AND ((@cDay BETWEEN te.startDate AND te.endDate AND te.[name] NOT IN ('T1','B1')) 
 			OR (@cDay BETWEEN DATEADD(DD, -30, te.startDate) AND te.endDate AND te.[name] IN ('T1','B1'))
 			OR (@cDay BETWEEN DATEADD(DD, -14, te.startDate) AND te.endDate AND te.[name] IN ('T2','T3','B2','B3','B4','B5','B6'))
-			AND (@cDay BETWEEN te.startDate AND DATEADD(DD, +4, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
-	INNER JOIN [Period] AS pd ON pd.periodID = sp.periodID
+			OR (@cDay BETWEEN te.startDate AND DATEADD(DD, 7, te.endDate) AND te.[name] IN ('T1','T2','T3','B1','B2','B3','B4','B5','B6')))
+--	INNER JOIN [Period] AS pd ON pd.periodID = sp.periodID
 
 INSERT INTO #courses
 VALUES
-	(1,NULL,NULL,1,NULL,'Test History - Term T1',NULL,NULL,NULL,NULL),
-	(2,NULL,NULL,2,NULL,'Test Speech - Term T1',NULL,NULL,NULL,NULL)
+	(1,NULL,NULL,1,NULL,'Test History',NULL,NULL,NULL,NULL),
+	(2,NULL,NULL,2,NULL,'Test Speech',NULL,NULL,NULL,NULL)
 
 SELECT 
 	sourcedId,
@@ -78,6 +78,8 @@ SELECT
 	orgSourcedId,
 	subjects 
 FROM #courses
+ORDER BY
+	sourcedId
 DROP 
 TABLE #courses
 

@@ -1,0 +1,2801 @@
+<?xml version='1.0' encoding='utf-8' ?>
+
+<!-- build 20211.21.0320.1853                               -->
+<workbook original-version='18.1' source-build='2021.1.0 (20211.21.0320.1853)' source-platform='win' version='18.1' xml:base='https://tableau.sd25.us' xmlns:user='http://www.tableausoftware.com/xml/user'>
+  <document-format-change-manifest>
+    <AutoCreateAndUpdateDSDPhoneLayouts />
+    <_.fcp.MarkAnimation.true...MarkAnimation />
+    <_.fcp.ObjectModelEncapsulateLegacy.true...ObjectModelEncapsulateLegacy />
+    <_.fcp.ObjectModelTableType.true...ObjectModelTableType />
+    <_.fcp.SchemaViewerObjectModel.true...SchemaViewerObjectModel />
+    <_.fcp.SetMembershipControl.true...SetMembershipControl />
+    <SheetIdentifierTracking />
+    <SortTagCleanup />
+    <WindowsPersistSimpleIdentifiers />
+    <ZoneBackgroundTransparency />
+  </document-format-change-manifest>
+  <repository-location id='pcsd25_studentInformation_enrollmentSummary' path='/workbooks' revision='1.9' />
+  <preferences>
+    <preference name='ui.encoding.shelf.height' value='24' />
+    <preference name='ui.shelf.height' value='26' />
+  </preferences>
+  <datasources>
+    <datasource hasconnection='false' inline='true' name='Parameters' version='18.1'>
+      <aliases enabled='yes' />
+      <column caption='paramCalendarID' datatype='real' datatype-customized='true' name='[Parameter 1]' param-domain-type='any' role='measure' type='quantitative' value='-2022.0'>
+        <calculation class='tableau' formula='-2022.' />
+      </column>
+    </datasource>
+    <datasource caption='v_pcsd25EnrollmentSummary+ (pocatello)' inline='true' name='federated.0bqo72r0wzrt9u1dchk4o1nifzvm' version='18.1'>
+      <connection class='federated'>
+        <named-connections>
+          <named-connection caption='10.100.9.56' name='sqlserver.13ddsp40om9xio1fn6z0v05n3jg4'>
+            <connection authentication='sqlserver' class='sqlserver' dbname='pocatello' odbc-native-protocol='yes' one-time-sql='' server='10.100.9.56' server-oauth='' server-userid='1291' username='lopezmi' workgroup-auth-mode='prompt' />
+          </named-connection>
+        </named-connections>
+        <_.fcp.ObjectModelEncapsulateLegacy.false...relation connection='sqlserver.13ddsp40om9xio1fn6z0v05n3jg4' name='Custom SQL Query' type='text'><![CDATA[select calendarID from dbo.CCS_Tableau_getCalendarID(<[Parameters].[Parameter 1]>)]]></_.fcp.ObjectModelEncapsulateLegacy.false...relation>
+        <_.fcp.ObjectModelEncapsulateLegacy.true...relation type='collection'>
+          <relation connection='sqlserver.13ddsp40om9xio1fn6z0v05n3jg4' name='Custom SQL Query2' type='text'>SELECT [v_pcsd25EnrollmentSummary].[personID] AS [personID],
+  [v_pcsd25EnrollmentSummary].[enrollmentID] AS [enrollmentID],
+  [v_pcsd25EnrollmentSummary].[grade] AS [grade],
+  [v_pcsd25EnrollmentSummary].[school] AS [school],
+  [v_pcsd25EnrollmentSummary].[range] AS [range],
+  [v_pcsd25EnrollmentSummary].[calendarID] AS [calendarID],
+  [v_pcsd25EnrollmentSummary].[endYear] AS [endYear],
+  [v_pcsd25EnrollmentSummary].[enrollmentStartDate] AS [enrollmentStartDate],
+  [v_pcsd25EnrollmentSummary].[enrollmentEndDate] AS [enrollmentEndDate],
+  [v_pcsd25EnrollmentSummary].[enrolledInstructionDays] AS [enrolledInstructionDays],
+  [v_pcsd25EnrollmentSummary].[totalInstructionDays] AS [totalInstructionDays],
+  [v_pcsd25EnrollmentSummary].[averageDailyMembership] AS [averageDailyMembership]
+FROM [dbo].[v_pcsd25EnrollmentSummary] [v_pcsd25EnrollmentSummary]&#13;
+WHERE [v_pcsd25EnrollmentSummary].[endYear] &gt;&gt;= YEAR(GETDATE()) - 6&#13;
+    AND [v_pcsd25EnrollmentSummary].[range] IN (&apos;EL&apos;,&apos;MS&apos;,&apos;HS&apos;)</relation>
+          <relation connection='sqlserver.13ddsp40om9xio1fn6z0v05n3jg4' name='Custom SQL Query' type='text'><![CDATA[select calendarID from dbo.CCS_Tableau_getCalendarID(<[Parameters].[Parameter 1]>)]]></relation>
+          <relation connection='sqlserver.13ddsp40om9xio1fn6z0v05n3jg4' name='Custom SQL Query1' type='text'>SELECT csm.sectionID&#13;
+	,csm.school&#13;
+	,csm.[range]&#13;
+	,csm.courseName&#13;
+	,csm.sectionNumber&#13;
+	,csm.calendarID&#13;
+	,csm.endYear&#13;
+	,csm.logicalGrade&#13;
+	,COUNT(*) AS &apos;studentCount&apos;&#13;
+FROM v_pcsd25ClassSummary AS csm&#13;
+WHERE ((csm.homeroom = 1 AND csm.[range] = &apos;EL&apos;) &#13;
+    OR csm.[range] != &apos;EL&apos;)&#13;
+    AND csm.endYear &gt;&gt;= YEAR(GETDATE()) - 6&#13;
+GROUP BY csm.sectionID&#13;
+	,csm.school&#13;
+	,csm.[range]&#13;
+	,csm.courseName&#13;
+	,csm.sectionNumber&#13;
+	,csm.calendarID&#13;
+	,csm.endYear&#13;
+	,csm.logicalGrade</relation>
+        </_.fcp.ObjectModelEncapsulateLegacy.true...relation>
+        <cols>
+          <map key='[averageDailyMembership]' value='[Custom SQL Query2].[averageDailyMembership]' />
+          <map key='[calendarID (Custom SQL Query)]' value='[Custom SQL Query].[calendarID]' />
+          <map key='[calendarID (Custom SQL Query1)]' value='[Custom SQL Query1].[calendarID]' />
+          <map key='[calendarID]' value='[Custom SQL Query2].[calendarID]' />
+          <map key='[courseName]' value='[Custom SQL Query1].[courseName]' />
+          <map key='[endYear (Custom SQL Query1)]' value='[Custom SQL Query1].[endYear]' />
+          <map key='[endYear]' value='[Custom SQL Query2].[endYear]' />
+          <map key='[enrolledInstructionDays]' value='[Custom SQL Query2].[enrolledInstructionDays]' />
+          <map key='[enrollmentEndDate]' value='[Custom SQL Query2].[enrollmentEndDate]' />
+          <map key='[enrollmentID]' value='[Custom SQL Query2].[enrollmentID]' />
+          <map key='[enrollmentStartDate]' value='[Custom SQL Query2].[enrollmentStartDate]' />
+          <map key='[grade]' value='[Custom SQL Query2].[grade]' />
+          <map key='[logicalGrade]' value='[Custom SQL Query1].[logicalGrade]' />
+          <map key='[personID]' value='[Custom SQL Query2].[personID]' />
+          <map key='[range (Custom SQL Query1)]' value='[Custom SQL Query1].[range]' />
+          <map key='[range]' value='[Custom SQL Query2].[range]' />
+          <map key='[school (Custom SQL Query1)]' value='[Custom SQL Query1].[school]' />
+          <map key='[school]' value='[Custom SQL Query2].[school]' />
+          <map key='[sectionID]' value='[Custom SQL Query1].[sectionID]' />
+          <map key='[sectionNumber]' value='[Custom SQL Query1].[sectionNumber]' />
+          <map key='[studentCount]' value='[Custom SQL Query1].[studentCount]' />
+          <map key='[totalInstructionDays]' value='[Custom SQL Query2].[totalInstructionDays]' />
+        </cols>
+        <metadata-records>
+          <metadata-record class='column'>
+            <remote-name>personID</remote-name>
+            <remote-type>3</remote-type>
+            <local-name>[personID]</local-name>
+            <parent-name>[Custom SQL Query2]</parent-name>
+            <remote-alias>personID</remote-alias>
+            <ordinal>1</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <precision>10</precision>
+            <contains-null>false</contains-null>
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+              <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+            </attributes>
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>enrollmentID</remote-name>
+            <remote-type>3</remote-type>
+            <local-name>[enrollmentID]</local-name>
+            <parent-name>[Custom SQL Query2]</parent-name>
+            <remote-alias>enrollmentID</remote-alias>
+            <ordinal>2</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <precision>10</precision>
+            <contains-null>false</contains-null>
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+              <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+            </attributes>
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>grade</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[grade]</local-name>
+            <parent-name>[Custom SQL Query2]</parent-name>
+            <remote-alias>grade</remote-alias>
+            <ordinal>3</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <width>4</width>
+            <contains-null>true</contains-null>
+            <padded-semantics>true</padded-semantics>
+            <collation flag='2147483649' name='LEN_RUS_S2_VWIN' />
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_VARCHAR&quot;</attribute>
+              <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_CHAR&quot;</attribute>
+              <attribute datatype='string' name='TypeIsVarchar'>&quot;true&quot;</attribute>
+            </attributes>
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>school</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[school]</local-name>
+            <parent-name>[Custom SQL Query2]</parent-name>
+            <remote-alias>school</remote-alias>
+            <ordinal>4</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <width>255</width>
+            <contains-null>true</contains-null>
+            <padded-semantics>true</padded-semantics>
+            <collation flag='2147483649' name='LEN_RUS_S2_VWIN' />
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_VARCHAR&quot;</attribute>
+              <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_CHAR&quot;</attribute>
+              <attribute datatype='string' name='TypeIsVarchar'>&quot;true&quot;</attribute>
+            </attributes>
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>range</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[range]</local-name>
+            <parent-name>[Custom SQL Query2]</parent-name>
+            <remote-alias>range</remote-alias>
+            <ordinal>5</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <width>256</width>
+            <contains-null>true</contains-null>
+            <padded-semantics>true</padded-semantics>
+            <collation flag='2147483649' name='LEN_RUS_S2_VWIN' />
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_VARCHAR&quot;</attribute>
+              <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_CHAR&quot;</attribute>
+              <attribute datatype='string' name='TypeIsVarchar'>&quot;true&quot;</attribute>
+            </attributes>
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>calendarID</remote-name>
+            <remote-type>3</remote-type>
+            <local-name>[calendarID]</local-name>
+            <parent-name>[Custom SQL Query2]</parent-name>
+            <remote-alias>calendarID</remote-alias>
+            <ordinal>6</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <precision>10</precision>
+            <contains-null>false</contains-null>
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+              <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+            </attributes>
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>endYear</remote-name>
+            <remote-type>2</remote-type>
+            <local-name>[endYear]</local-name>
+            <parent-name>[Custom SQL Query2]</parent-name>
+            <remote-alias>endYear</remote-alias>
+            <ordinal>7</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <precision>5</precision>
+            <contains-null>false</contains-null>
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_SMALLINT&quot;</attribute>
+              <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SSHORT&quot;</attribute>
+            </attributes>
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>enrollmentStartDate</remote-name>
+            <remote-type>7</remote-type>
+            <local-name>[enrollmentStartDate]</local-name>
+            <parent-name>[Custom SQL Query2]</parent-name>
+            <remote-alias>enrollmentStartDate</remote-alias>
+            <ordinal>8</ordinal>
+            <local-type>datetime</local-type>
+            <aggregation>Year</aggregation>
+            <contains-null>false</contains-null>
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_TYPE_TIMESTAMP&quot;</attribute>
+              <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_TYPE_TIMESTAMP&quot;</attribute>
+            </attributes>
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>enrollmentEndDate</remote-name>
+            <remote-type>7</remote-type>
+            <local-name>[enrollmentEndDate]</local-name>
+            <parent-name>[Custom SQL Query2]</parent-name>
+            <remote-alias>enrollmentEndDate</remote-alias>
+            <ordinal>9</ordinal>
+            <local-type>datetime</local-type>
+            <aggregation>Year</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_TYPE_TIMESTAMP&quot;</attribute>
+              <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_TYPE_TIMESTAMP&quot;</attribute>
+            </attributes>
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>enrolledInstructionDays</remote-name>
+            <remote-type>3</remote-type>
+            <local-name>[enrolledInstructionDays]</local-name>
+            <parent-name>[Custom SQL Query2]</parent-name>
+            <remote-alias>enrolledInstructionDays</remote-alias>
+            <ordinal>10</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <precision>10</precision>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+              <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+            </attributes>
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>totalInstructionDays</remote-name>
+            <remote-type>3</remote-type>
+            <local-name>[totalInstructionDays]</local-name>
+            <parent-name>[Custom SQL Query2]</parent-name>
+            <remote-alias>totalInstructionDays</remote-alias>
+            <ordinal>11</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <precision>10</precision>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+              <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+            </attributes>
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>averageDailyMembership</remote-name>
+            <remote-type>131</remote-type>
+            <local-name>[averageDailyMembership]</local-name>
+            <parent-name>[Custom SQL Query2]</parent-name>
+            <remote-alias>averageDailyMembership</remote-alias>
+            <ordinal>12</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <precision>38</precision>
+            <scale>19</scale>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_DECIMAL&quot;</attribute>
+              <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_NUMERIC&quot;</attribute>
+            </attributes>
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>calendarID</remote-name>
+            <remote-type>3</remote-type>
+            <local-name>[calendarID (Custom SQL Query)]</local-name>
+            <parent-name>[Custom SQL Query]</parent-name>
+            <remote-alias>calendarID</remote-alias>
+            <ordinal>14</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <precision>10</precision>
+            <contains-null>false</contains-null>
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+              <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+            </attributes>
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[_7E6034611EC84AA1B21ABA5A92E345DC]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>sectionID</remote-name>
+            <remote-type>3</remote-type>
+            <local-name>[sectionID]</local-name>
+            <parent-name>[Custom SQL Query1]</parent-name>
+            <remote-alias>sectionID</remote-alias>
+            <ordinal>16</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <precision>10</precision>
+            <contains-null>false</contains-null>
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+              <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+            </attributes>
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[v_pcsd25ClassSummary_E03660AFBD5E491FA01451296876CBB6]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>school</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[school (Custom SQL Query1)]</local-name>
+            <parent-name>[Custom SQL Query1]</parent-name>
+            <remote-alias>school</remote-alias>
+            <ordinal>17</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <width>255</width>
+            <contains-null>true</contains-null>
+            <padded-semantics>true</padded-semantics>
+            <collation flag='2147483649' name='LEN_RUS_S2_VWIN' />
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_VARCHAR&quot;</attribute>
+              <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_CHAR&quot;</attribute>
+              <attribute datatype='string' name='TypeIsVarchar'>&quot;true&quot;</attribute>
+            </attributes>
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[v_pcsd25ClassSummary_E03660AFBD5E491FA01451296876CBB6]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>range</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[range (Custom SQL Query1)]</local-name>
+            <parent-name>[Custom SQL Query1]</parent-name>
+            <remote-alias>range</remote-alias>
+            <ordinal>18</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <width>256</width>
+            <contains-null>true</contains-null>
+            <padded-semantics>true</padded-semantics>
+            <collation flag='2147483649' name='LEN_RUS_S2_VWIN' />
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_VARCHAR&quot;</attribute>
+              <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_CHAR&quot;</attribute>
+              <attribute datatype='string' name='TypeIsVarchar'>&quot;true&quot;</attribute>
+            </attributes>
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[v_pcsd25ClassSummary_E03660AFBD5E491FA01451296876CBB6]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>courseName</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[courseName]</local-name>
+            <parent-name>[Custom SQL Query1]</parent-name>
+            <remote-alias>courseName</remote-alias>
+            <ordinal>19</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <width>30</width>
+            <contains-null>false</contains-null>
+            <padded-semantics>true</padded-semantics>
+            <collation flag='2147483649' name='LEN_RUS_S2_VWIN' />
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_VARCHAR&quot;</attribute>
+              <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_CHAR&quot;</attribute>
+              <attribute datatype='string' name='TypeIsVarchar'>&quot;true&quot;</attribute>
+            </attributes>
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[v_pcsd25ClassSummary_E03660AFBD5E491FA01451296876CBB6]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>sectionNumber</remote-name>
+            <remote-type>2</remote-type>
+            <local-name>[sectionNumber]</local-name>
+            <parent-name>[Custom SQL Query1]</parent-name>
+            <remote-alias>sectionNumber</remote-alias>
+            <ordinal>20</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <precision>5</precision>
+            <contains-null>false</contains-null>
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_SMALLINT&quot;</attribute>
+              <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SSHORT&quot;</attribute>
+            </attributes>
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[v_pcsd25ClassSummary_E03660AFBD5E491FA01451296876CBB6]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>calendarID</remote-name>
+            <remote-type>3</remote-type>
+            <local-name>[calendarID (Custom SQL Query1)]</local-name>
+            <parent-name>[Custom SQL Query1]</parent-name>
+            <remote-alias>calendarID</remote-alias>
+            <ordinal>21</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <precision>10</precision>
+            <contains-null>false</contains-null>
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+              <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+            </attributes>
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[v_pcsd25ClassSummary_E03660AFBD5E491FA01451296876CBB6]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>endYear</remote-name>
+            <remote-type>2</remote-type>
+            <local-name>[endYear (Custom SQL Query1)]</local-name>
+            <parent-name>[Custom SQL Query1]</parent-name>
+            <remote-alias>endYear</remote-alias>
+            <ordinal>22</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <precision>5</precision>
+            <contains-null>false</contains-null>
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_SMALLINT&quot;</attribute>
+              <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SSHORT&quot;</attribute>
+            </attributes>
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[v_pcsd25ClassSummary_E03660AFBD5E491FA01451296876CBB6]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>logicalGrade</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[logicalGrade]</local-name>
+            <parent-name>[Custom SQL Query1]</parent-name>
+            <remote-alias>logicalGrade</remote-alias>
+            <ordinal>23</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <width>256</width>
+            <contains-null>true</contains-null>
+            <padded-semantics>true</padded-semantics>
+            <collation flag='2147483649' name='LEN_RUS_S2_VWIN' />
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_VARCHAR&quot;</attribute>
+              <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_CHAR&quot;</attribute>
+              <attribute datatype='string' name='TypeIsVarchar'>&quot;true&quot;</attribute>
+            </attributes>
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[v_pcsd25ClassSummary_E03660AFBD5E491FA01451296876CBB6]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>studentCount</remote-name>
+            <remote-type>3</remote-type>
+            <local-name>[studentCount]</local-name>
+            <parent-name>[Custom SQL Query1]</parent-name>
+            <remote-alias>studentCount</remote-alias>
+            <ordinal>24</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <precision>10</precision>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='string' name='DebugRemoteType'>&quot;SQL_INTEGER&quot;</attribute>
+              <attribute datatype='string' name='DebugWireType'>&quot;SQL_C_SLONG&quot;</attribute>
+            </attributes>
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[v_pcsd25ClassSummary_E03660AFBD5E491FA01451296876CBB6]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+        </metadata-records>
+      </connection>
+      <aliases enabled='yes' />
+      <column caption='1-10' datatype='integer' name='[Calculation_1816920993152266240]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='iif([studentCount] &gt; 0 and [studentCount] &lt;=10,1,0)' />
+      </column>
+      <column caption='&gt;30' datatype='integer' name='[Calculation_1816920993152475137]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='iif([studentCount] &gt; 30,1,0)' />
+      </column>
+      <column caption='11-15' datatype='integer' name='[Calculation_1816920993152581634]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='iif([studentCount] &gt; 10 and [studentCount] &lt;=15,1,0)' />
+      </column>
+      <column caption='16-20' datatype='integer' name='[Calculation_1816920993152663555]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='iif([studentCount] &gt; 15 and [studentCount] &lt;=20,1,0)' />
+      </column>
+      <column caption='21-25' datatype='integer' name='[Calculation_1816920993152765956]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='iif([studentCount] &gt; 20 and [studentCount] &lt;=25,1,0)' />
+      </column>
+      <column caption='26-30' datatype='integer' name='[Calculation_1816920993152827397]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='iif([studentCount] &gt; 25 and [studentCount] &lt;=30,1,0)' />
+      </column>
+      <column caption='YoYEnrollmentCounts' datatype='integer' name='[Calculation_1816920993182380040]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='COUNTD(&#13;&#10;IF NOW() &gt;= [enrollmentStartDate] AND (NOW() &lt;= [enrollmentEndDate] OR ISNULL([enrollmentEndDate]) = TRUE)&#13;&#10;    THEN [enrollmentID]&#13;&#10;ELSEIF DATEADD(&apos;day&apos;,-364,NOW()) &gt;= [enrollmentStartDate] AND DATEADD(&apos;day&apos;,-364,NOW()) &lt;= [enrollmentEndDate]&#13;&#10;    THEN [enrollmentID]&#13;&#10;ELSEIF DATEADD(&apos;day&apos;,-728,NOW()) &gt;= [enrollmentStartDate] AND DATEADD(&apos;day&apos;,-728,NOW()) &lt;= [enrollmentEndDate]&#13;&#10;    THEN [enrollmentID]&#13;&#10;ELSEIF DATEADD(&apos;day&apos;,-1092,NOW()) &gt;= [enrollmentStartDate] AND DATEADD(&apos;day&apos;,-1092,NOW()) &lt;= [enrollmentEndDate]&#13;&#10;    THEN [enrollmentID]&#13;&#10;ELSEIF DATEADD(&apos;day&apos;,-1456,NOW()) &gt;= [enrollmentStartDate] AND DATEADD(&apos;day&apos;,-1456,NOW()) &lt;= [enrollmentEndDate]&#13;&#10;    THEN [enrollmentID]&#13;&#10;END)' />
+      </column>
+      <column caption='InnerJoinCalendarID' datatype='boolean' name='[Calculation_736338556898148352]' role='dimension' type='nominal'>
+        <calculation class='tableau' formula='[calendarID] = [calendarID (Custom SQL Query)]' />
+      </column>
+      <column caption='Active Enrolled Today' datatype='integer' name='[Calculation_736338556908015619]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='SUM(IF([enrollmentStartDate] &lt;= NOW() AND (NOW() &lt;= [enrollmentEndDate] OR ISNULL([enrollmentEndDate]) = TRUE)) &#13;&#10;THEN 1 &#13;&#10;ELSE 0 END)' />
+      </column>
+      <column caption='Total Enrollments' datatype='integer' name='[Calculation_736338556908396548]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='COUNT([personID])' />
+      </column>
+      <column caption='StudentCount' datatype='integer' name='[Calculation_736338556913532933]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='{ FIXED ([sectionID]): COUNTD([personID (v_pcsd25ClassSummary)])}' />
+      </column>
+      <column caption='Grade Level' datatype='string' name='[Logical Grade (copy)_1816920993168220166]' role='dimension' type='nominal'>
+        <calculation class='tableau' formula='[logicalGrade]' />
+        <aliases>
+          <alias key='&quot;01&quot;' value='Grade 1' />
+          <alias key='&quot;02&quot;' value='Grade 2' />
+          <alias key='&quot;03&quot;' value='Grade 3' />
+          <alias key='&quot;04&quot;' value='Grade 4' />
+          <alias key='&quot;05&quot;' value='Grade 5' />
+          <alias key='&quot;KG&quot;' value='Kindergarten' />
+        </aliases>
+      </column>
+      <_.fcp.ObjectModelTableType.true...column caption='getCalendarID' datatype='table' name='[__tableau_internal_object_id__].[_7E6034611EC84AA1B21ABA5A92E345DC]' role='measure' type='quantitative' />
+      <_.fcp.ObjectModelTableType.true...column caption='ClassSummary' datatype='table' name='[__tableau_internal_object_id__].[v_pcsd25ClassSummary_E03660AFBD5E491FA01451296876CBB6]' role='measure' type='quantitative' />
+      <_.fcp.ObjectModelTableType.true...column caption='EnrollmentSummary' datatype='table' name='[__tableau_internal_object_id__].[v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13]' role='measure' type='quantitative' />
+      <column caption='Average Daily Membership' datatype='real' name='[averageDailyMembership]' role='measure' type='quantitative' />
+      <column caption='Calendar ID' datatype='integer' name='[calendarID]' role='dimension' type='ordinal' />
+      <column caption='Course Name' datatype='string' name='[courseName]' role='dimension' type='nominal' />
+      <column caption='End Year' datatype='integer' name='[endYear]' role='dimension' type='quantitative' />
+      <column caption='Enrolled Instruction Days' datatype='integer' name='[enrolledInstructionDays]' role='measure' type='quantitative' />
+      <column caption='Enrollment End Date' datatype='datetime' name='[enrollmentEndDate]' role='dimension' type='ordinal' />
+      <column caption='Enrollment ID' datatype='integer' name='[enrollmentID]' role='dimension' type='ordinal' />
+      <column caption='Enrollment Start Date' datatype='datetime' name='[enrollmentStartDate]' role='dimension' type='ordinal' />
+      <column caption='Grade' datatype='string' name='[grade]' role='dimension' type='nominal' />
+      <column caption='Logical Grade' datatype='string' name='[logicalGrade]' role='dimension' type='nominal' />
+      <column caption='Person ID' datatype='integer' name='[personID]' role='dimension' type='ordinal' />
+      <column caption='Range' datatype='string' name='[range]' role='dimension' type='nominal' />
+      <column caption='School' datatype='string' name='[school]' role='dimension' type='nominal' />
+      <column caption='Section ID' datatype='integer' name='[sectionID]' role='dimension' type='ordinal' />
+      <column caption='Section Number' datatype='integer' name='[sectionNumber]' role='dimension' type='ordinal' />
+      <column caption='Total Instruction Days' datatype='integer' name='[totalInstructionDays]' role='measure' type='quantitative' />
+      <column-instance column='[grade]' derivation='None' name='[none:grade:nk]' pivot='key' type='nominal' />
+      <column-instance column='[range]' derivation='None' name='[none:range:nk]' pivot='key' type='nominal' />
+      <group caption='Action (Grade,Range)' hidden='true' name='[Action (Grade,Range)]' name-style='unqualified' user:auto-column='sheet_link'>
+        <groupfilter function='crossjoin'>
+          <groupfilter function='level-members' level='[grade]' />
+          <groupfilter function='level-members' level='[range]' />
+        </groupfilter>
+      </group>
+      <group caption='Action (Range,School)' hidden='true' name='[Action (Range,School)]' name-style='unqualified' user:auto-column='sheet_link'>
+        <groupfilter function='crossjoin'>
+          <groupfilter function='level-members' level='[range]' />
+          <groupfilter function='level-members' level='[school]' />
+        </groupfilter>
+      </group>
+      <layout _.fcp.SchemaViewerObjectModel.false...dim-percentage='0.5' _.fcp.SchemaViewerObjectModel.false...measure-percentage='0.4' dim-ordering='alphabetic' measure-ordering='alphabetic' show-aliased-fields='true' show-structure='true' />
+      <style>
+        <style-rule element='mark'>
+          <encoding attr='color' field='[none:grade:nk]' type='palette'>
+            <map to='#2a5783'>
+              <bucket>&quot;KG&quot;</bucket>
+            </map>
+            <map to='#3e6c99'>
+              <bucket>&quot;KM&quot;</bucket>
+            </map>
+            <map to='#5081ae'>
+              <bucket>&quot;01&quot;</bucket>
+            </map>
+            <map to='#6798c1'>
+              <bucket>&quot;02&quot;</bucket>
+            </map>
+            <map to='#7eaed3'>
+              <bucket>&quot;03&quot;</bucket>
+            </map>
+            <map to='#9ac6e4'>
+              <bucket>&quot;04&quot;</bucket>
+            </map>
+            <map to='#b9ddf1'>
+              <bucket>&quot;05&quot;</bucket>
+            </map>
+            <map to='#ca5422'>
+              <bucket>&quot;06&quot;</bucket>
+            </map>
+            <map to='#e74545'>
+              <bucket>&quot;09&quot;</bucket>
+            </map>
+            <map to='#f07e27'>
+              <bucket>&quot;07&quot;</bucket>
+            </map>
+            <map to='#f36754'>
+              <bucket>&quot;10&quot;</bucket>
+            </map>
+            <map to='#f59c3c'>
+              <bucket>&quot;08&quot;</bucket>
+            </map>
+            <map to='#f9856e'>
+              <bucket>&quot;11&quot;</bucket>
+            </map>
+            <map to='#fca290'>
+              <bucket>&quot;12&quot;</bucket>
+            </map>
+            <map to='#ffbeb2'>
+              <bucket>&quot;SCE&quot;</bucket>
+            </map>
+          </encoding>
+          <encoding attr='color' field='[none:range:nk]' type='palette'>
+            <map to='#4e79a7'>
+              <bucket>&quot;EL&quot;</bucket>
+            </map>
+            <map to='#e15759'>
+              <bucket>&quot;HS&quot;</bucket>
+            </map>
+            <map to='#f28e2b'>
+              <bucket>&quot;MS&quot;</bucket>
+            </map>
+          </encoding>
+        </style-rule>
+      </style>
+      <semantic-values>
+        <semantic-value key='[Country].[Name]' value='&quot;United States&quot;' />
+      </semantic-values>
+      <datasource-dependencies datasource='Parameters'>
+        <column caption='paramCalendarID' datatype='real' datatype-customized='true' name='[Parameter 1]' param-domain-type='any' role='measure' type='quantitative' value='-2022.0'>
+          <calculation class='tableau' formula='-2022.' />
+        </column>
+      </datasource-dependencies>
+      <_.fcp.ObjectModelEncapsulateLegacy.true...object-graph>
+        <objects>
+          <object caption='getCalendarID' id='_7E6034611EC84AA1B21ABA5A92E345DC'>
+            <properties context=''>
+              <relation connection='sqlserver.13ddsp40om9xio1fn6z0v05n3jg4' name='Custom SQL Query' type='text'><![CDATA[select calendarID from dbo.CCS_Tableau_getCalendarID(<[Parameters].[Parameter 1]>)]]></relation>
+            </properties>
+          </object>
+          <object caption='ClassSummary' id='v_pcsd25ClassSummary_E03660AFBD5E491FA01451296876CBB6'>
+            <properties context=''>
+              <relation connection='sqlserver.13ddsp40om9xio1fn6z0v05n3jg4' name='Custom SQL Query1' type='text'>SELECT csm.sectionID&#13;
+	,csm.school&#13;
+	,csm.[range]&#13;
+	,csm.courseName&#13;
+	,csm.sectionNumber&#13;
+	,csm.calendarID&#13;
+	,csm.endYear&#13;
+	,csm.logicalGrade&#13;
+	,COUNT(*) AS &apos;studentCount&apos;&#13;
+FROM v_pcsd25ClassSummary AS csm&#13;
+WHERE ((csm.homeroom = 1 AND csm.[range] = &apos;EL&apos;) &#13;
+    OR csm.[range] != &apos;EL&apos;)&#13;
+    AND csm.endYear &gt;&gt;= YEAR(GETDATE()) - 6&#13;
+GROUP BY csm.sectionID&#13;
+	,csm.school&#13;
+	,csm.[range]&#13;
+	,csm.courseName&#13;
+	,csm.sectionNumber&#13;
+	,csm.calendarID&#13;
+	,csm.endYear&#13;
+	,csm.logicalGrade</relation>
+            </properties>
+          </object>
+          <object caption='EnrollmentSummary' id='v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13'>
+            <properties context=''>
+              <relation connection='sqlserver.13ddsp40om9xio1fn6z0v05n3jg4' name='Custom SQL Query2' type='text'>SELECT [v_pcsd25EnrollmentSummary].[personID] AS [personID],
+  [v_pcsd25EnrollmentSummary].[enrollmentID] AS [enrollmentID],
+  [v_pcsd25EnrollmentSummary].[grade] AS [grade],
+  [v_pcsd25EnrollmentSummary].[school] AS [school],
+  [v_pcsd25EnrollmentSummary].[range] AS [range],
+  [v_pcsd25EnrollmentSummary].[calendarID] AS [calendarID],
+  [v_pcsd25EnrollmentSummary].[endYear] AS [endYear],
+  [v_pcsd25EnrollmentSummary].[enrollmentStartDate] AS [enrollmentStartDate],
+  [v_pcsd25EnrollmentSummary].[enrollmentEndDate] AS [enrollmentEndDate],
+  [v_pcsd25EnrollmentSummary].[enrolledInstructionDays] AS [enrolledInstructionDays],
+  [v_pcsd25EnrollmentSummary].[totalInstructionDays] AS [totalInstructionDays],
+  [v_pcsd25EnrollmentSummary].[averageDailyMembership] AS [averageDailyMembership]
+FROM [dbo].[v_pcsd25EnrollmentSummary] [v_pcsd25EnrollmentSummary]&#13;
+WHERE [v_pcsd25EnrollmentSummary].[endYear] &gt;&gt;= YEAR(GETDATE()) - 6&#13;
+    AND [v_pcsd25EnrollmentSummary].[range] IN (&apos;EL&apos;,&apos;MS&apos;,&apos;HS&apos;)</relation>
+            </properties>
+          </object>
+        </objects>
+        <relationships>
+          <relationship>
+            <expression op='='>
+              <expression op='[calendarID]' />
+              <expression op='[calendarID (Custom SQL Query)]' />
+            </expression>
+            <first-end-point object-id='v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13' />
+            <second-end-point object-id='_7E6034611EC84AA1B21ABA5A92E345DC' />
+          </relationship>
+          <relationship>
+            <expression op='='>
+              <expression op='[calendarID]' />
+              <expression op='[calendarID (Custom SQL Query1)]' />
+            </expression>
+            <first-end-point object-id='v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13' />
+            <second-end-point object-id='v_pcsd25ClassSummary_E03660AFBD5E491FA01451296876CBB6' />
+          </relationship>
+        </relationships>
+      </_.fcp.ObjectModelEncapsulateLegacy.true...object-graph>
+    </datasource>
+  </datasources>
+  <actions>
+    <action caption='Filter 1 (generated)' name='[Action1_0EABE69DA41640219F1CEBEE71FD033C]'>
+      <activation auto-clear='true' type='on-select' />
+      <source dashboard='Enrollment Summary' type='sheet' worksheet='Enrollment by School' />
+      <command command='tsc:tsl-filter'>
+        <param name='special-fields' value='all' />
+        <param name='target' value='Enrollment Summary' />
+      </command>
+    </action>
+    <action caption='Filter 2 (generated)' name='[Action2_25916F4A322344DA874E468EB24D3C49]'>
+      <activation auto-clear='true' type='on-select' />
+      <source dashboard='Enrollment Summary' type='sheet' worksheet='Enrollment by Grade &amp; Range' />
+      <command command='tsc:tsl-filter'>
+        <param name='special-fields' value='all' />
+        <param name='target' value='Enrollment Summary' />
+      </command>
+    </action>
+    <action caption='Filter 3 (generated)' name='[Action3_956565A8D9354FFC9A8E6D8B85A6D902]'>
+      <activation auto-clear='true' type='on-select' />
+      <source dashboard='Enrollment Summary' type='sheet' worksheet='Enrollment Counts by Range' />
+      <command command='tsc:tsl-filter'>
+        <param name='special-fields' value='all' />
+        <param name='target' value='Enrollment Summary' />
+      </command>
+    </action>
+  </actions>
+  <worksheets>
+    <worksheet name='Class Size Buckets'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='v_pcsd25EnrollmentSummary+ (pocatello)' name='federated.0bqo72r0wzrt9u1dchk4o1nifzvm' />
+          </datasources>
+          <datasource-dependencies datasource='federated.0bqo72r0wzrt9u1dchk4o1nifzvm'>
+            <column caption='1-10' datatype='integer' name='[Calculation_1816920993152266240]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='iif([studentCount] &gt; 0 and [studentCount] &lt;=10,1,0)' />
+            </column>
+            <column caption='&gt;30' datatype='integer' name='[Calculation_1816920993152475137]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='iif([studentCount] &gt; 30,1,0)' />
+            </column>
+            <column caption='11-15' datatype='integer' name='[Calculation_1816920993152581634]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='iif([studentCount] &gt; 10 and [studentCount] &lt;=15,1,0)' />
+            </column>
+            <column caption='16-20' datatype='integer' name='[Calculation_1816920993152663555]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='iif([studentCount] &gt; 15 and [studentCount] &lt;=20,1,0)' />
+            </column>
+            <column caption='21-25' datatype='integer' name='[Calculation_1816920993152765956]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='iif([studentCount] &gt; 20 and [studentCount] &lt;=25,1,0)' />
+            </column>
+            <column caption='26-30' datatype='integer' name='[Calculation_1816920993152827397]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='iif([studentCount] &gt; 25 and [studentCount] &lt;=30,1,0)' />
+            </column>
+            <column caption='InnerJoinCalendarID' datatype='boolean' name='[Calculation_736338556898148352]' role='dimension' type='nominal'>
+              <calculation class='tableau' formula='[calendarID] = [calendarID (Custom SQL Query)]' />
+            </column>
+            <column datatype='integer' name='[calendarID (Custom SQL Query)]' role='measure' type='quantitative' />
+            <column caption='Calendar ID' datatype='integer' name='[calendarID]' role='dimension' type='ordinal' />
+            <column caption='Grade' datatype='string' name='[grade]' role='dimension' type='nominal' />
+            <column-instance column='[Calculation_736338556898148352]' derivation='None' name='[none:Calculation_736338556898148352:nk]' pivot='key' type='nominal' />
+            <column-instance column='[range (Custom SQL Query1)]' derivation='None' name='[none:range (Custom SQL Query1):nk]' pivot='key' type='nominal' />
+            <column datatype='string' name='[range (Custom SQL Query1)]' role='dimension' type='nominal' />
+            <column caption='Range' datatype='string' name='[range]' role='dimension' type='nominal' />
+            <column caption='School' datatype='string' name='[school]' role='dimension' type='nominal' />
+            <column datatype='integer' name='[studentCount]' role='measure' type='quantitative' />
+            <column-instance column='[Calculation_1816920993152266240]' derivation='Sum' name='[sum:Calculation_1816920993152266240:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[Calculation_1816920993152475137]' derivation='Sum' name='[sum:Calculation_1816920993152475137:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[Calculation_1816920993152581634]' derivation='Sum' name='[sum:Calculation_1816920993152581634:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[Calculation_1816920993152663555]' derivation='Sum' name='[sum:Calculation_1816920993152663555:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[Calculation_1816920993152765956]' derivation='Sum' name='[sum:Calculation_1816920993152765956:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[Calculation_1816920993152827397]' derivation='Sum' name='[sum:Calculation_1816920993152827397:qk]' pivot='key' type='quantitative' />
+          </datasource-dependencies>
+          <filter class='categorical' column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[:Measure Names]'>
+            <groupfilter function='union' user:op='manual'>
+              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[sum:Calculation_1816920993152266240:qk]&quot;' />
+              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[sum:Calculation_1816920993152581634:qk]&quot;' />
+              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[sum:Calculation_1816920993152663555:qk]&quot;' />
+              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[sum:Calculation_1816920993152765956:qk]&quot;' />
+              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[sum:Calculation_1816920993152827397:qk]&quot;' />
+              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[sum:Calculation_1816920993152475137:qk]&quot;' />
+            </groupfilter>
+          </filter>
+          <filter class='categorical' column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[Action (Grade,Range)]'>
+            <groupfilter function='crossjoin' user:ui-action-filter='[Action2_25916F4A322344DA874E468EB24D3C49]' user:ui-enumeration='all' user:ui-marker='enumerate'>
+              <groupfilter function='level-members' level='[grade]' />
+              <groupfilter function='level-members' level='[range]' />
+            </groupfilter>
+          </filter>
+          <filter class='categorical' column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[Action (Range,School)]'>
+            <groupfilter function='crossjoin' user:ui-action-filter='[Action1_0EABE69DA41640219F1CEBEE71FD033C]' user:ui-enumeration='all' user:ui-marker='enumerate'>
+              <groupfilter function='level-members' level='[range]' />
+              <groupfilter function='level-members' level='[school]' />
+            </groupfilter>
+          </filter>
+          <filter class='categorical' column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:Calculation_736338556898148352:nk]' filter-group='3'>
+            <groupfilter function='member' level='[none:Calculation_736338556898148352:nk]' member='true' user:ui-domain='relevant' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+          </filter>
+          <slices>
+            <column>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:Calculation_736338556898148352:nk]</column>
+            <column>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[:Measure Names]</column>
+            <column>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[Action (Range,School)]</column>
+            <column>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[Action (Grade,Range)]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style>
+          <style-rule element='cell'>
+            <format attr='text-align' value='center' />
+            <format attr='vertical-align' value='center' />
+            <format attr='text-format' field='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[sum:Calculation_1816920993152266240:qk]' value='n#,##0;-#,##0' />
+            <format attr='text-format' field='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[sum:Calculation_1816920993152827397:qk]' value='n#,##0;-#,##0' />
+            <format attr='text-format' field='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[sum:Calculation_1816920993152475137:qk]' value='n#,##0;-#,##0' />
+            <format attr='text-format' field='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[sum:Calculation_1816920993152581634:qk]' value='n#,##0;-#,##0' />
+            <format attr='text-format' field='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[sum:Calculation_1816920993152663555:qk]' value='n#,##0;-#,##0' />
+            <format attr='text-format' field='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[sum:Calculation_1816920993152765956:qk]' value='n#,##0;-#,##0' />
+          </style-rule>
+          <style-rule element='label'>
+            <format attr='vertical-align' value='center' />
+          </style-rule>
+          <style-rule element='table'>
+            <format attr='background-color' value='#e6e6e6' />
+          </style-rule>
+          <style-rule element='worksheet'>
+            <format attr='display-field-labels' scope='rows' value='false' />
+          </style-rule>
+        </style>
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+            <encodings>
+              <text column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[Multiple Values]' />
+            </encodings>
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-show' value='true' />
+                <format attr='mark-labels-cull' value='true' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:range (Custom SQL Query1):nk]</rows>
+        <cols>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[:Measure Names]</cols>
+        <tooltip-style tooltip-mode='none' />
+      </table>
+      <simple-id uuid='{75CA0966-229E-49F3-B77D-E1D8B4036D26}' />
+    </worksheet>
+    <worksheet name='EL Class Size'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='v_pcsd25EnrollmentSummary+ (pocatello)' name='federated.0bqo72r0wzrt9u1dchk4o1nifzvm' />
+          </datasources>
+          <datasource-dependencies datasource='federated.0bqo72r0wzrt9u1dchk4o1nifzvm'>
+            <column caption='InnerJoinCalendarID' datatype='boolean' name='[Calculation_736338556898148352]' role='dimension' type='nominal'>
+              <calculation class='tableau' formula='[calendarID] = [calendarID (Custom SQL Query)]' />
+            </column>
+            <column caption='Grade Level' datatype='string' name='[Logical Grade (copy)_1816920993168220166]' role='dimension' type='nominal'>
+              <calculation class='tableau' formula='[logicalGrade]' />
+              <aliases>
+                <alias key='&quot;01&quot;' value='Grade 1' />
+                <alias key='&quot;02&quot;' value='Grade 2' />
+                <alias key='&quot;03&quot;' value='Grade 3' />
+                <alias key='&quot;04&quot;' value='Grade 4' />
+                <alias key='&quot;05&quot;' value='Grade 5' />
+                <alias key='&quot;KG&quot;' value='Kindergarten' />
+              </aliases>
+            </column>
+            <column-instance column='[courseName]' derivation='Attribute' name='[attr:courseName:nk]' pivot='key' type='nominal' />
+            <column datatype='integer' name='[calendarID (Custom SQL Query)]' role='measure' type='quantitative' />
+            <column caption='Calendar ID' datatype='integer' name='[calendarID]' role='dimension' type='ordinal' />
+            <column caption='Course Name' datatype='string' name='[courseName]' role='dimension' type='nominal' />
+            <column caption='Logical Grade' datatype='string' name='[logicalGrade]' role='dimension' type='nominal' />
+            <column-instance column='[Calculation_736338556898148352]' derivation='None' name='[none:Calculation_736338556898148352:nk]' pivot='key' type='nominal' />
+            <column-instance column='[Logical Grade (copy)_1816920993168220166]' derivation='None' name='[none:Logical Grade (copy)_1816920993168220166:nk]' pivot='key' type='nominal' />
+            <column-instance column='[range (Custom SQL Query1)]' derivation='None' name='[none:range (Custom SQL Query1):nk]' pivot='key' type='nominal' />
+            <column-instance column='[school (Custom SQL Query1)]' derivation='None' name='[none:school (Custom SQL Query1):nk]' pivot='key' type='nominal' />
+            <column-instance column='[sectionID]' derivation='None' name='[none:sectionID:ok]' pivot='key' type='ordinal' />
+            <column datatype='string' name='[range (Custom SQL Query1)]' role='dimension' type='nominal' />
+            <column datatype='string' name='[school (Custom SQL Query1)]' role='dimension' type='nominal' />
+            <column caption='Section ID' datatype='integer' name='[sectionID]' role='dimension' type='ordinal' />
+            <column datatype='integer' name='[studentCount]' role='measure' type='quantitative' />
+            <column-instance column='[studentCount]' derivation='Sum' name='[sum:studentCount:qk]' pivot='key' type='quantitative' />
+          </datasource-dependencies>
+          <filter class='categorical' column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:Calculation_736338556898148352:nk]' filter-group='3'>
+            <groupfilter function='member' level='[none:Calculation_736338556898148352:nk]' member='true' user:ui-domain='relevant' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+          </filter>
+          <manual-sort column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:Logical Grade (copy)_1816920993168220166:nk]' direction='ASC'>
+            <dictionary>
+              <bucket>&quot;KG&quot;</bucket>
+              <bucket>&quot;01&quot;</bucket>
+              <bucket>&quot;02&quot;</bucket>
+              <bucket>&quot;03&quot;</bucket>
+              <bucket>&quot;04&quot;</bucket>
+              <bucket>&quot;05&quot;</bucket>
+            </dictionary>
+          </manual-sort>
+          <filter class='categorical' column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:range (Custom SQL Query1):nk]'>
+            <groupfilter function='member' level='[none:range (Custom SQL Query1):nk]' member='&quot;EL&quot;' user:ui-domain='relevant' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+          </filter>
+          <slices>
+            <column>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:Calculation_736338556898148352:nk]</column>
+            <column>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:range (Custom SQL Query1):nk]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style>
+          <style-rule element='cell'>
+            <format attr='text-align' value='center' />
+            <format attr='vertical-align' value='center' />
+          </style-rule>
+          <style-rule element='label'>
+            <format attr='text-align' value='center' />
+            <format attr='vertical-align' value='center' />
+          </style-rule>
+          <style-rule element='table'>
+            <format attr='background-color' value='#e6e6e6' />
+          </style-rule>
+          <style-rule element='worksheet'>
+            <format attr='display-field-labels' scope='rows' value='false' />
+          </style-rule>
+        </style>
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-disallow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+            <encodings>
+              <tooltip column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[attr:courseName:nk]' />
+              <text column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[sum:studentCount:qk]' />
+              <lod column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:sectionID:ok]' />
+            </encodings>
+            <customized-tooltip show-buttons='false'>
+              <formatted-text>
+                <run bold='true'><![CDATA[<[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[attr:courseName:nk]>]]></run>
+                <run>Æ&#10;</run>
+              </formatted-text>
+            </customized-tooltip>
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-show' value='true' />
+                <format attr='mark-labels-cull' value='true' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows onTop='true'>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:school (Custom SQL Query1):nk]</rows>
+        <cols>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:Logical Grade (copy)_1816920993168220166:nk]</cols>
+      </table>
+      <simple-id uuid='{5F8B9A89-9D6E-4C78-8DDD-8CBA4E4DEEE7}' />
+    </worksheet>
+    <worksheet name='Enrollment Counts by Range'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='v_pcsd25EnrollmentSummary+ (pocatello)' name='federated.0bqo72r0wzrt9u1dchk4o1nifzvm' />
+          </datasources>
+          <datasource-dependencies datasource='federated.0bqo72r0wzrt9u1dchk4o1nifzvm'>
+            <column caption='InnerJoinCalendarID' datatype='boolean' name='[Calculation_736338556898148352]' role='dimension' type='nominal'>
+              <calculation class='tableau' formula='[calendarID] = [calendarID (Custom SQL Query)]' />
+            </column>
+            <_.fcp.ObjectModelTableType.false...column caption='EnrollmentSummary' datatype='integer' name='[__tableau_internal_object_id__].[v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13]' role='measure' type='quantitative' />
+            <column-instance column='[__tableau_internal_object_id__].[v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13]' derivation='Count' name='[__tableau_internal_object_id__].[cnt:v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13:qk]' pivot='key' type='quantitative' />
+            <_.fcp.ObjectModelTableType.true...column caption='EnrollmentSummary' datatype='table' name='[__tableau_internal_object_id__].[v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13]' role='measure' type='quantitative' />
+            <column datatype='integer' name='[calendarID (Custom SQL Query)]' role='measure' type='quantitative' />
+            <column caption='Calendar ID' datatype='integer' name='[calendarID]' role='dimension' type='ordinal' />
+            <column caption='Grade' datatype='string' name='[grade]' role='dimension' type='nominal' />
+            <column-instance column='[Calculation_736338556898148352]' derivation='None' name='[none:Calculation_736338556898148352:nk]' pivot='key' type='nominal' />
+            <column-instance column='[range]' derivation='None' name='[none:range:nk]' pivot='key' type='nominal' />
+            <column-instance column='[__tableau_internal_object_id__].[v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13]' derivation='Count' name='[pcto:cnt:v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13:qk:2]' pivot='key' type='quantitative'>
+              <table-calc ordering-type='Rows' type='PctTotal' />
+            </column-instance>
+            <column caption='Range' datatype='string' name='[range]' role='dimension' type='nominal' />
+            <column caption='School' datatype='string' name='[school]' role='dimension' type='nominal' />
+          </datasource-dependencies>
+          <filter class='categorical' column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[Action (Grade,Range)]'>
+            <groupfilter function='crossjoin' user:ui-action-filter='[Action2_25916F4A322344DA874E468EB24D3C49]' user:ui-enumeration='all' user:ui-marker='enumerate'>
+              <groupfilter function='level-members' level='[grade]' />
+              <groupfilter function='level-members' level='[range]' />
+            </groupfilter>
+          </filter>
+          <filter class='categorical' column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[Action (Range,School)]'>
+            <groupfilter function='crossjoin' user:ui-action-filter='[Action1_0EABE69DA41640219F1CEBEE71FD033C]' user:ui-enumeration='all' user:ui-marker='enumerate'>
+              <groupfilter function='level-members' level='[range]' />
+              <groupfilter function='level-members' level='[school]' />
+            </groupfilter>
+          </filter>
+          <filter class='categorical' column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:Calculation_736338556898148352:nk]' filter-group='3'>
+            <groupfilter function='member' level='[none:Calculation_736338556898148352:nk]' member='true' user:ui-domain='relevant' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+          </filter>
+          <manual-sort column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:range:nk]' direction='ASC'>
+            <dictionary>
+              <bucket>&quot;HS&quot;</bucket>
+              <bucket>&quot;MS&quot;</bucket>
+              <bucket>&quot;EL&quot;</bucket>
+            </dictionary>
+          </manual-sort>
+          <slices>
+            <column>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:Calculation_736338556898148352:nk]</column>
+            <column>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[Action (Range,School)]</column>
+            <column>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[Action (Grade,Range)]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style>
+          <style-rule element='axis'>
+            <encoding attr='space' class='0' field='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[pcto:cnt:v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13:qk:2]' field-type='quantitative' max='1.0' min='0.0' range-type='fixed' scope='cols' type='space' />
+            <format attr='display' class='0' field='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[pcto:cnt:v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13:qk:2]' scope='cols' value='false' />
+          </style-rule>
+          <style-rule element='cell'>
+            <format attr='text-align' value='center' />
+          </style-rule>
+          <style-rule element='table'>
+            <format attr='background-color' value='#e6e6e6' />
+          </style-rule>
+        </style>
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+            <encodings>
+              <color column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:range:nk]' />
+              <text column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[__tableau_internal_object_id__].[cnt:v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13:qk]' />
+              <text column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[pcto:cnt:v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13:qk:2]' />
+            </encodings>
+            <customized-tooltip>
+              <formatted-text>
+                <run bold='true'><![CDATA[<[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:range:nk]> ]]></run>
+                <run>has</run>
+                <run bold='true'><![CDATA[ <[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[pcto:cnt:v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13:qk:2]> ]]></run>
+                <run>of the currently selected enrollments.
+</run>
+              </formatted-text>
+            </customized-tooltip>
+            <customized-label>
+              <formatted-text>
+                <run bold='true'><![CDATA[<[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[__tableau_internal_object_id__].[cnt:v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13:qk]>]]></run>
+                <run>Æ&#10;</run>
+                <run bold='true'><![CDATA[<[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[pcto:cnt:v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13:qk:2]>]]></run>
+              </formatted-text>
+            </customized-label>
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-show' value='true' />
+                <format attr='mark-labels-cull' value='true' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows />
+        <cols>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[pcto:cnt:v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13:qk:2]</cols>
+      </table>
+      <simple-id uuid='{0A1371B5-A6A4-4D6C-9EF4-DABDB1AADA9D}' />
+    </worksheet>
+    <worksheet name='Enrollment by Grade &amp; Range'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='v_pcsd25EnrollmentSummary+ (pocatello)' name='federated.0bqo72r0wzrt9u1dchk4o1nifzvm' />
+          </datasources>
+          <datasource-dependencies datasource='federated.0bqo72r0wzrt9u1dchk4o1nifzvm'>
+            <column caption='InnerJoinCalendarID' datatype='boolean' name='[Calculation_736338556898148352]' role='dimension' type='nominal'>
+              <calculation class='tableau' formula='[calendarID] = [calendarID (Custom SQL Query)]' />
+            </column>
+            <column-instance column='[__tableau_internal_object_id__].[v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13]' derivation='Count' name='[__tableau_internal_object_id__].[cnt:v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13:qk]' pivot='key' type='quantitative' />
+            <_.fcp.ObjectModelTableType.false...column caption='EnrollmentSummary' datatype='integer' name='[__tableau_internal_object_id__].[v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13]' role='measure' type='quantitative' />
+            <column-instance column='[__tableau_internal_object_id__].[v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13]' derivation='Count' name='[__tableau_internal_object_id__].[pcto:cnt:v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13:qk]' pivot='key' type='quantitative'>
+              <table-calc ordering-type='Columns' type='PctTotal' />
+            </column-instance>
+            <_.fcp.ObjectModelTableType.true...column caption='EnrollmentSummary' datatype='table' name='[__tableau_internal_object_id__].[v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13]' role='measure' type='quantitative' />
+            <column datatype='integer' name='[calendarID (Custom SQL Query)]' role='measure' type='quantitative' />
+            <column caption='Calendar ID' datatype='integer' name='[calendarID]' role='dimension' type='ordinal' />
+            <column caption='Grade' datatype='string' name='[grade]' role='dimension' type='nominal' />
+            <column-instance column='[Calculation_736338556898148352]' derivation='None' name='[none:Calculation_736338556898148352:nk]' pivot='key' type='nominal' />
+            <column-instance column='[grade]' derivation='None' name='[none:grade:nk]' pivot='key' type='nominal' />
+            <column-instance column='[range]' derivation='None' name='[none:range:nk]' pivot='key' type='nominal' />
+            <column caption='Range' datatype='string' name='[range]' role='dimension' type='nominal' />
+            <column caption='School' datatype='string' name='[school]' role='dimension' type='nominal' />
+          </datasource-dependencies>
+          <filter class='categorical' column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[Action (Range,School)]'>
+            <groupfilter function='crossjoin' user:ui-action-filter='[Action1_0EABE69DA41640219F1CEBEE71FD033C]' user:ui-enumeration='all' user:ui-marker='enumerate'>
+              <groupfilter function='level-members' level='[range]' />
+              <groupfilter function='level-members' level='[school]' />
+            </groupfilter>
+          </filter>
+          <filter class='categorical' column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:Calculation_736338556898148352:nk]' filter-group='3'>
+            <groupfilter function='member' level='[none:Calculation_736338556898148352:nk]' member='true' user:ui-domain='relevant' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+          </filter>
+          <manual-sort column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:grade:nk]' direction='ASC'>
+            <dictionary>
+              <bucket>&quot;05&quot;</bucket>
+              <bucket>&quot;04&quot;</bucket>
+              <bucket>&quot;03&quot;</bucket>
+              <bucket>&quot;02&quot;</bucket>
+              <bucket>&quot;01&quot;</bucket>
+              <bucket>&quot;KM&quot;</bucket>
+              <bucket>&quot;KG&quot;</bucket>
+              <bucket>&quot;08&quot;</bucket>
+              <bucket>&quot;07&quot;</bucket>
+              <bucket>&quot;06&quot;</bucket>
+              <bucket>&quot;SCE&quot;</bucket>
+              <bucket>&quot;12&quot;</bucket>
+              <bucket>&quot;11&quot;</bucket>
+              <bucket>&quot;10&quot;</bucket>
+              <bucket>&quot;09&quot;</bucket>
+            </dictionary>
+          </manual-sort>
+          <manual-sort column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:range:nk]' direction='ASC'>
+            <dictionary>
+              <bucket>&quot;EL&quot;</bucket>
+              <bucket>&quot;MS&quot;</bucket>
+              <bucket>&quot;HS&quot;</bucket>
+            </dictionary>
+          </manual-sort>
+          <slices>
+            <column>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:Calculation_736338556898148352:nk]</column>
+            <column>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[Action (Range,School)]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style>
+          <style-rule element='axis'>
+            <format attr='display' class='0' field='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[__tableau_internal_object_id__].[cnt:v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13:qk]' scope='cols' value='false' />
+          </style-rule>
+          <style-rule element='cell'>
+            <format attr='text-format' field='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[__tableau_internal_object_id__].[pcto:cnt:v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13:qk]' value='p0.00%' />
+          </style-rule>
+          <style-rule element='table'>
+            <format attr='background-color' value='#e6e6e6' />
+          </style-rule>
+          <style-rule element='worksheet'>
+            <format attr='display-field-labels' scope='rows' value='false' />
+          </style-rule>
+        </style>
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+            <encodings>
+              <color column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:grade:nk]' />
+              <text column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[__tableau_internal_object_id__].[cnt:v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13:qk]' />
+              <text column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[__tableau_internal_object_id__].[pcto:cnt:v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13:qk]' />
+            </encodings>
+            <customized-tooltip>
+              <formatted-text>
+                <run>Grade </run>
+                <run bold='true'><![CDATA[<[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:grade:nk]>]]></run>
+                <run> has </run>
+                <run bold='true'><![CDATA[<[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[__tableau_internal_object_id__].[cnt:v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13:qk]>]]></run>
+                <run> student, which is </run>
+                <run bold='true'><![CDATA[<[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[__tableau_internal_object_id__].[pcto:cnt:v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13:qk]>]]></run>
+                <run> of the currently selected population.</run>
+              </formatted-text>
+            </customized-tooltip>
+            <customized-label>
+              <formatted-text>
+                <run bold='true'><![CDATA[<[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[__tableau_internal_object_id__].[cnt:v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13:qk]>]]></run>
+                <run>Æ&#10;</run>
+                <run bold='true'><![CDATA[<[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[__tableau_internal_object_id__].[pcto:cnt:v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13:qk]>]]></run>
+              </formatted-text>
+            </customized-label>
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-show' value='true' />
+                <format attr='mark-labels-cull' value='true' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:range:nk]</rows>
+        <cols>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[__tableau_internal_object_id__].[cnt:v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13:qk]</cols>
+      </table>
+      <simple-id uuid='{CD9E70A5-95D5-422F-9AFB-7A61C69A26EB}' />
+    </worksheet>
+    <worksheet name='Enrollment by School'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='v_pcsd25EnrollmentSummary+ (pocatello)' name='federated.0bqo72r0wzrt9u1dchk4o1nifzvm' />
+          </datasources>
+          <datasource-dependencies datasource='federated.0bqo72r0wzrt9u1dchk4o1nifzvm'>
+            <column caption='InnerJoinCalendarID' datatype='boolean' name='[Calculation_736338556898148352]' role='dimension' type='nominal'>
+              <calculation class='tableau' formula='[calendarID] = [calendarID (Custom SQL Query)]' />
+            </column>
+            <column-instance column='[__tableau_internal_object_id__].[v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13]' derivation='Count' name='[__tableau_internal_object_id__].[cnt:v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13:qk]' pivot='key' type='quantitative' />
+            <_.fcp.ObjectModelTableType.false...column caption='EnrollmentSummary' datatype='integer' name='[__tableau_internal_object_id__].[v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13]' role='measure' type='quantitative' />
+            <column-instance column='[__tableau_internal_object_id__].[v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13]' derivation='Count' name='[__tableau_internal_object_id__].[pcto:cnt:v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13:qk]' pivot='key' type='quantitative'>
+              <table-calc ordering-type='Columns' type='PctTotal' />
+            </column-instance>
+            <_.fcp.ObjectModelTableType.true...column caption='EnrollmentSummary' datatype='table' name='[__tableau_internal_object_id__].[v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13]' role='measure' type='quantitative' />
+            <column datatype='integer' name='[calendarID (Custom SQL Query)]' role='measure' type='quantitative' />
+            <column caption='Calendar ID' datatype='integer' name='[calendarID]' role='dimension' type='ordinal' />
+            <column caption='Grade' datatype='string' name='[grade]' role='dimension' type='nominal' />
+            <column-instance column='[Calculation_736338556898148352]' derivation='None' name='[none:Calculation_736338556898148352:nk]' pivot='key' type='nominal' />
+            <column-instance column='[range]' derivation='None' name='[none:range:nk]' pivot='key' type='nominal' />
+            <column-instance column='[school]' derivation='None' name='[none:school:nk]' pivot='key' type='nominal' />
+            <column caption='Range' datatype='string' name='[range]' role='dimension' type='nominal' />
+            <column caption='School' datatype='string' name='[school]' role='dimension' type='nominal' />
+          </datasource-dependencies>
+          <filter class='categorical' column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[Action (Grade,Range)]'>
+            <groupfilter function='crossjoin' user:ui-action-filter='[Action2_25916F4A322344DA874E468EB24D3C49]' user:ui-enumeration='all' user:ui-marker='enumerate'>
+              <groupfilter function='level-members' level='[grade]' />
+              <groupfilter function='level-members' level='[range]' />
+            </groupfilter>
+          </filter>
+          <filter class='categorical' column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:Calculation_736338556898148352:nk]' filter-group='3'>
+            <groupfilter function='member' level='[none:Calculation_736338556898148352:nk]' member='true' user:ui-domain='relevant' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+          </filter>
+          <manual-sort column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:range:nk]' direction='ASC'>
+            <dictionary>
+              <bucket>&quot;EC&quot;</bucket>
+              <bucket>&quot;EL&quot;</bucket>
+              <bucket>&quot;MS&quot;</bucket>
+              <bucket>&quot;HS&quot;</bucket>
+              <bucket>&quot;SS&quot;</bucket>
+            </dictionary>
+          </manual-sort>
+          <manual-sort column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:school:nk]' direction='ASC'>
+            <dictionary>
+              <bucket>&quot;CHUB&quot;</bucket>
+              <bucket>&quot;EDAH&quot;</bucket>
+              <bucket>&quot;ELLI&quot;</bucket>
+              <bucket>&quot;GCTY&quot;</bucket>
+              <bucket>&quot;GREN&quot;</bucket>
+              <bucket>&quot;IHIL&quot;</bucket>
+              <bucket>&quot;JEFF&quot;</bucket>
+              <bucket>&quot;LINC&quot;</bucket>
+              <bucket>&quot;LWCK&quot;</bucket>
+              <bucket>&quot;SS&quot;</bucket>
+              <bucket>&quot;SYRN&quot;</bucket>
+              <bucket>&quot;TNDY&quot;</bucket>
+              <bucket>&quot;TYHE&quot;</bucket>
+              <bucket>&quot;WASH&quot;</bucket>
+              <bucket>&quot;WLCX&quot;</bucket>
+              <bucket>&quot;KMS&quot;</bucket>
+              <bucket>&quot;AMS&quot;</bucket>
+              <bucket>&quot;FMS&quot;</bucket>
+              <bucket>&quot;HMS&quot;</bucket>
+              <bucket>&quot;IMS&quot;</bucket>
+              <bucket>&quot;NHC&quot;</bucket>
+              <bucket>&quot;CHS&quot;</bucket>
+              <bucket>&quot;HHS&quot;</bucket>
+              <bucket>&quot;PHS&quot;</bucket>
+            </dictionary>
+          </manual-sort>
+          <slices>
+            <column>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:Calculation_736338556898148352:nk]</column>
+            <column>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[Action (Grade,Range)]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style>
+          <style-rule element='axis'>
+            <format attr='display' class='0' field='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[__tableau_internal_object_id__].[cnt:v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13:qk]' scope='cols' value='false' />
+            <format attr='display' class='0' field='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[__tableau_internal_object_id__].[pcto:cnt:v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13:qk]' scope='cols' value='false' />
+          </style-rule>
+          <style-rule element='table'>
+            <format attr='background-color' value='#e6e6e6' />
+          </style-rule>
+          <style-rule element='worksheet'>
+            <format attr='display-field-labels' scope='rows' value='false' />
+          </style-rule>
+        </style>
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+            <encodings>
+              <color column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:range:nk]' />
+              <text column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[__tableau_internal_object_id__].[pcto:cnt:v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13:qk]' />
+              <text column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[__tableau_internal_object_id__].[cnt:v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13:qk]' />
+            </encodings>
+            <customized-tooltip>
+              <formatted-text>
+                <run bold='true'><![CDATA[<[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:school:nk]>]]></run>
+                <run> has </run>
+                <run bold='true'><![CDATA[<[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[__tableau_internal_object_id__].[cnt:v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13:qk]>]]></run>
+                <run> students, which is </run>
+                <run bold='true'><![CDATA[<[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[__tableau_internal_object_id__].[pcto:cnt:v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13:qk]>]]></run>
+                <run> of the currently select population.</run>
+              </formatted-text>
+            </customized-tooltip>
+            <customized-label>
+              <formatted-text>
+                <run>&lt;</run>
+                <run>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[__tableau_internal_object_id__].[cnt:v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13:qk]</run>
+                <run>&gt;</run>
+              </formatted-text>
+            </customized-label>
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-show' value='true' />
+                <format attr='mark-labels-cull' value='true' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows>([federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:range:nk] / [federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:school:nk])</rows>
+        <cols>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[__tableau_internal_object_id__].[cnt:v_pcsd25EnrollmentSummary_25124397E28645719DCB4D5C9FE30F13:qk]</cols>
+      </table>
+      <simple-id uuid='{6EFB3F23-A164-4827-8F7E-0DEDE8551D1D}' />
+    </worksheet>
+    <worksheet name='Total Enrollments'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='v_pcsd25EnrollmentSummary+ (pocatello)' name='federated.0bqo72r0wzrt9u1dchk4o1nifzvm' />
+          </datasources>
+          <datasource-dependencies datasource='federated.0bqo72r0wzrt9u1dchk4o1nifzvm'>
+            <column caption='InnerJoinCalendarID' datatype='boolean' name='[Calculation_736338556898148352]' role='dimension' type='nominal'>
+              <calculation class='tableau' formula='[calendarID] = [calendarID (Custom SQL Query)]' />
+            </column>
+            <column caption='Active Enrolled Today' datatype='integer' name='[Calculation_736338556908015619]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='SUM(IF([enrollmentStartDate] &lt;= NOW() AND (NOW() &lt;= [enrollmentEndDate] OR ISNULL([enrollmentEndDate]) = TRUE)) &#13;&#10;THEN 1 &#13;&#10;ELSE 0 END)' />
+            </column>
+            <column caption='Total Enrollments' datatype='integer' name='[Calculation_736338556908396548]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='COUNT([personID])' />
+            </column>
+            <column caption='Average Daily Membership' datatype='real' name='[averageDailyMembership]' role='measure' type='quantitative' />
+            <column datatype='integer' name='[calendarID (Custom SQL Query)]' role='measure' type='quantitative' />
+            <column caption='Calendar ID' datatype='integer' name='[calendarID]' role='dimension' type='ordinal' />
+            <column caption='Enrollment End Date' datatype='datetime' name='[enrollmentEndDate]' role='dimension' type='ordinal' />
+            <column caption='Enrollment Start Date' datatype='datetime' name='[enrollmentStartDate]' role='dimension' type='ordinal' />
+            <column caption='Grade' datatype='string' name='[grade]' role='dimension' type='nominal' />
+            <column-instance column='[Calculation_736338556898148352]' derivation='None' name='[none:Calculation_736338556898148352:nk]' pivot='key' type='nominal' />
+            <column caption='Person ID' datatype='integer' name='[personID]' role='dimension' type='ordinal' />
+            <column caption='Range' datatype='string' name='[range]' role='dimension' type='nominal' />
+            <column caption='School' datatype='string' name='[school]' role='dimension' type='nominal' />
+            <column-instance column='[averageDailyMembership]' derivation='Sum' name='[sum:averageDailyMembership:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[Calculation_736338556908015619]' derivation='User' name='[usr:Calculation_736338556908015619:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[Calculation_736338556908396548]' derivation='User' name='[usr:Calculation_736338556908396548:qk]' pivot='key' type='quantitative' />
+          </datasource-dependencies>
+          <filter class='categorical' column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[:Measure Names]'>
+            <groupfilter function='union' user:op='manual'>
+              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[usr:Calculation_736338556908015619:qk]&quot;' />
+              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[sum:averageDailyMembership:qk]&quot;' />
+              <groupfilter function='member' level='[:Measure Names]' member='&quot;[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[usr:Calculation_736338556908396548:qk]&quot;' />
+            </groupfilter>
+          </filter>
+          <filter class='categorical' column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[Action (Grade,Range)]'>
+            <groupfilter function='crossjoin' user:ui-action-filter='[Action2_25916F4A322344DA874E468EB24D3C49]' user:ui-enumeration='all' user:ui-marker='enumerate'>
+              <groupfilter function='level-members' level='[grade]' />
+              <groupfilter function='level-members' level='[range]' />
+            </groupfilter>
+          </filter>
+          <filter class='categorical' column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[Action (Range,School)]'>
+            <groupfilter function='crossjoin' user:ui-action-filter='[Action1_0EABE69DA41640219F1CEBEE71FD033C]' user:ui-enumeration='all' user:ui-marker='enumerate'>
+              <groupfilter function='level-members' level='[range]' />
+              <groupfilter function='level-members' level='[school]' />
+            </groupfilter>
+          </filter>
+          <filter class='categorical' column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:Calculation_736338556898148352:nk]' filter-group='3'>
+            <groupfilter function='member' level='[none:Calculation_736338556898148352:nk]' member='true' user:ui-domain='relevant' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+          </filter>
+          <slices>
+            <column>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:Calculation_736338556898148352:nk]</column>
+            <column>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[:Measure Names]</column>
+            <column>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[Action (Range,School)]</column>
+            <column>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[Action (Grade,Range)]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style>
+          <style-rule element='cell'>
+            <format attr='width' field='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[:Measure Names]' value='99' />
+            <format attr='text-align' value='center' />
+            <format attr='vertical-align' value='center' />
+            <format attr='text-format' field='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[sum:averageDailyMembership:qk]' value='n#,##0;-#,##0' />
+            <format attr='text-format' field='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[usr:Calculation_736338556908015619:qk]' value='n#,##0;-#,##0' />
+            <format attr='text-format' field='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[usr:Calculation_736338556908396548:qk]' value='n#,##0;-#,##0' />
+          </style-rule>
+          <style-rule element='label'>
+            <format attr='text-align' scope='rows' value='center' />
+            <format attr='vertical-align' scope='rows' value='center' />
+            <format attr='text-align' scope='cols' value='center' />
+            <format attr='vertical-align' scope='cols' value='center' />
+          </style-rule>
+          <style-rule element='table'>
+            <format attr='background-color' value='#e6e6e6' />
+          </style-rule>
+        </style>
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+            <encodings>
+              <text column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[Multiple Values]' />
+            </encodings>
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-show' value='true' />
+                <format attr='mark-labels-cull' value='true' />
+              </style-rule>
+              <style-rule element='pane'>
+                <format attr='minwidth' value='-1' />
+                <format attr='maxwidth' value='-1' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows />
+        <cols>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[:Measure Names]</cols>
+        <tooltip-style tooltip-mode='none' />
+      </table>
+      <simple-id uuid='{03564178-4B89-4814-87A9-3C0AFD41F09C}' />
+    </worksheet>
+    <worksheet name='YoY Enrollments WS'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='v_pcsd25EnrollmentSummary+ (pocatello)' name='federated.0bqo72r0wzrt9u1dchk4o1nifzvm' />
+          </datasources>
+          <datasource-dependencies datasource='federated.0bqo72r0wzrt9u1dchk4o1nifzvm'>
+            <column caption='YoYEnrollmentCounts' datatype='integer' name='[Calculation_1816920993182380040]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='COUNTD(&#13;&#10;IF NOW() &gt;= [enrollmentStartDate] AND (NOW() &lt;= [enrollmentEndDate] OR ISNULL([enrollmentEndDate]) = TRUE)&#13;&#10;    THEN [enrollmentID]&#13;&#10;ELSEIF DATEADD(&apos;day&apos;,-364,NOW()) &gt;= [enrollmentStartDate] AND DATEADD(&apos;day&apos;,-364,NOW()) &lt;= [enrollmentEndDate]&#13;&#10;    THEN [enrollmentID]&#13;&#10;ELSEIF DATEADD(&apos;day&apos;,-728,NOW()) &gt;= [enrollmentStartDate] AND DATEADD(&apos;day&apos;,-728,NOW()) &lt;= [enrollmentEndDate]&#13;&#10;    THEN [enrollmentID]&#13;&#10;ELSEIF DATEADD(&apos;day&apos;,-1092,NOW()) &gt;= [enrollmentStartDate] AND DATEADD(&apos;day&apos;,-1092,NOW()) &lt;= [enrollmentEndDate]&#13;&#10;    THEN [enrollmentID]&#13;&#10;ELSEIF DATEADD(&apos;day&apos;,-1456,NOW()) &gt;= [enrollmentStartDate] AND DATEADD(&apos;day&apos;,-1456,NOW()) &lt;= [enrollmentEndDate]&#13;&#10;    THEN [enrollmentID]&#13;&#10;END)' />
+            </column>
+            <column caption='End Year' datatype='integer' name='[endYear]' role='dimension' type='quantitative' />
+            <column caption='Enrollment End Date' datatype='datetime' name='[enrollmentEndDate]' role='dimension' type='ordinal' />
+            <column caption='Enrollment ID' datatype='integer' name='[enrollmentID]' role='dimension' type='ordinal' />
+            <column caption='Enrollment Start Date' datatype='datetime' name='[enrollmentStartDate]' role='dimension' type='ordinal' />
+            <column-instance column='[endYear]' derivation='None' name='[none:endYear:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[range]' derivation='None' name='[none:range:nk]' pivot='key' type='nominal' />
+            <column-instance column='[school]' derivation='None' name='[none:school:nk]' pivot='key' type='nominal' />
+            <column caption='Range' datatype='string' name='[range]' role='dimension' type='nominal' />
+            <column caption='School' datatype='string' name='[school]' role='dimension' type='nominal' />
+            <column-instance column='[Calculation_1816920993182380040]' derivation='User' name='[usr:Calculation_1816920993182380040:qk]' pivot='key' type='quantitative' />
+          </datasource-dependencies>
+          <filter class='quantitative' column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:endYear:qk]' included-values='in-range'>
+            <min>2018</min>
+            <max>2022</max>
+          </filter>
+          <filter class='categorical' column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:range:nk]'>
+            <groupfilter function='member' level='[none:range:nk]' member='&quot;MS&quot;' user:ui-domain='relevant' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+          </filter>
+          <manual-sort column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:range:nk]' direction='ASC'>
+            <dictionary>
+              <bucket>&quot;EL&quot;</bucket>
+              <bucket>&quot;MS&quot;</bucket>
+              <bucket>&quot;HS&quot;</bucket>
+            </dictionary>
+          </manual-sort>
+          <manual-sort column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:school:nk]' direction='ASC'>
+            <dictionary>
+              <bucket>&quot;CHUB&quot;</bucket>
+              <bucket>&quot;EDAH&quot;</bucket>
+              <bucket>&quot;ELLI&quot;</bucket>
+              <bucket>&quot;GCTY&quot;</bucket>
+              <bucket>&quot;GREN&quot;</bucket>
+              <bucket>&quot;IHIL&quot;</bucket>
+              <bucket>&quot;JEFF&quot;</bucket>
+              <bucket>&quot;LWCK&quot;</bucket>
+              <bucket>&quot;SYRN&quot;</bucket>
+              <bucket>&quot;TNDY&quot;</bucket>
+              <bucket>&quot;TYHE&quot;</bucket>
+              <bucket>&quot;WASH&quot;</bucket>
+              <bucket>&quot;WLCX&quot;</bucket>
+              <bucket>&quot;KMS&quot;</bucket>
+              <bucket>&quot;AMS&quot;</bucket>
+              <bucket>&quot;FMS&quot;</bucket>
+              <bucket>&quot;HMS&quot;</bucket>
+              <bucket>&quot;IMS&quot;</bucket>
+              <bucket>&quot;NHC&quot;</bucket>
+              <bucket>&quot;CHS&quot;</bucket>
+              <bucket>&quot;HHS&quot;</bucket>
+              <bucket>&quot;PHS&quot;</bucket>
+            </dictionary>
+          </manual-sort>
+          <slices>
+            <column>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:range:nk]</column>
+            <column>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:endYear:qk]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style>
+          <style-rule element='axis'>
+            <encoding attr='space' class='0' field='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:endYear:qk]' field-type='quantitative' major-origin='0' major-spacing='1' minor-origin='0' minor-show='false' minor-spacing='1' scope='cols' type='space' />
+            <encoding attr='space' class='0' field='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[usr:Calculation_1816920993182380040:qk]' field-type='quantitative' minor-origin='0' minor-show='false' minor-spacing='100' scope='rows' type='space' />
+            <format attr='display' class='0' field='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[usr:Calculation_1816920993182380040:qk]' scope='rows' value='false' />
+            <format attr='display' class='0' field='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:endYear:qk]' scope='cols' value='false' />
+          </style-rule>
+          <style-rule element='cell'>
+            <format attr='cell-w' value='3080' />
+            <format attr='cell-h' value='20' />
+            <format attr='cell' value='20' />
+            <format attr='cell-q' value='100' />
+          </style-rule>
+          <style-rule element='mark'>
+            <encoding attr='color' field='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:endYear:qk]' palette='blue_teal_10_0' type='interpolated' />
+          </style-rule>
+          <style-rule element='table'>
+            <format attr='background-color' value='#e6e6e6' />
+          </style-rule>
+          <style-rule element='worksheet'>
+            <format attr='display-field-labels' scope='cols' value='false' />
+          </style-rule>
+          <style-rule element='gridline'>
+            <format attr='stroke-size' value='0' />
+            <format attr='line-visibility' value='off' />
+          </style-rule>
+        </style>
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-disallow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Bar' />
+            <mark-sizing mark-sizing-setting='marks-scaling-off' />
+            <encodings>
+              <color column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:endYear:qk]' />
+              <text column='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[usr:Calculation_1816920993182380040:qk]' />
+            </encodings>
+            <customized-tooltip show-buttons='false'>
+              <formatted-text>
+                <run>This day from school year</run>
+                <run bold='true'><![CDATA[ <[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:endYear:qk]> ]]></run>
+                <run>at</run>
+                <run bold='true'><![CDATA[ <[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:school:nk]>.]]></run>
+              </formatted-text>
+            </customized-tooltip>
+            <style>
+              <style-rule element='mark'>
+                <format attr='size' value='1.9890055656433105' />
+                <format attr='mark-labels-show' value='true' />
+                <format attr='mark-labels-cull' value='true' />
+              </style-rule>
+              <style-rule element='pane'>
+                <format attr='minwidth' value='366' />
+                <format attr='maxwidth' value='366' />
+                <format attr='aspect' value='0' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[usr:Calculation_1816920993182380040:qk]</rows>
+        <cols>(([federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:range:nk] / [federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:school:nk]) * [federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:endYear:qk])</cols>
+      </table>
+      <simple-id uuid='{57040F27-0365-4555-8EE6-2FFE486C2977}' />
+    </worksheet>
+  </worksheets>
+  <dashboards>
+    <dashboard name='Enrollment Summary'>
+      <style>
+        <style-rule element='table'>
+          <format attr='background-color' value='#e6e6e6' />
+        </style-rule>
+      </style>
+      <size sizing-mode='automatic' />
+      <zones>
+        <zone _.fcp.SetMembershipControl.false...type='layout-basic' _.fcp.SetMembershipControl.true...type-v2='layout-basic' h='100000' id='6' w='100000' x='0' y='0'>
+          <zone _.fcp.SetMembershipControl.false...type='layout-flow' _.fcp.SetMembershipControl.true...type-v2='layout-flow' h='98456' id='24' param='horz' w='99142' x='429' y='772'>
+            <zone _.fcp.SetMembershipControl.false...type='layout-basic' _.fcp.SetMembershipControl.true...type-v2='layout-basic' h='98456' id='22' w='99142' x='429' y='772'>
+              <zone _.fcp.SetMembershipControl.false...type='layout-flow' _.fcp.SetMembershipControl.true...type-v2='layout-flow' h='81853' id='9' param='horz' w='99142' x='429' y='772'>
+                <zone _.fcp.SetMembershipControl.false...type='layout-basic' _.fcp.SetMembershipControl.true...type-v2='layout-basic' fixed-size='928' h='81853' id='7' is-fixed='true' w='49759' x='429' y='772'>
+                  <zone h='55791' id='5' name='Enrollment by Grade &amp; Range' show-title='false' w='49759' x='429' y='26834'>
+                    <zone-style>
+                      <format attr='border-color' value='#000000' />
+                      <format attr='border-style' value='none' />
+                      <format attr='border-width' value='0' />
+                      <format attr='margin' value='4' />
+                    </zone-style>
+                  </zone>
+                  <zone h='12934' id='14' name='Class Size Buckets' show-title='false' w='25843' x='429' y='13900'>
+                    <zone-style>
+                      <format attr='border-color' value='#000000' />
+                      <format attr='border-style' value='none' />
+                      <format attr='border-width' value='0' />
+                      <format attr='margin' value='4' />
+                    </zone-style>
+                  </zone>
+                  <zone _.fcp.SetMembershipControl.false...type='text' _.fcp.SetMembershipControl.true...type-v2='text' forceUpdate='true' h='13128' id='20' w='41234' x='8954' y='772'>
+                    <formatted-text>
+                      <run bold='true' fontalignment='1' fontname='MrEavesModOTHeavy' fontsize='28'>Enrollment Summary</run>
+                      <run fontalignment='2'>Æ&#10;</run>
+                      <run fontalignment='2' fontname='MrEavesModOT'>Powered By: PCSD25 Data Team</run>
+                      <run fontalignment='2'>Æ&#10;</run>
+                      <run fontalignment='2' fontname='MrEavesModOT'>Current Status: 09/17/2021 beta v0.4</run>
+                    </formatted-text>
+                    <zone-style>
+                      <format attr='border-color' value='#000000' />
+                      <format attr='border-style' value='none' />
+                      <format attr='border-width' value='0' />
+                      <format attr='margin' value='4' />
+                    </zone-style>
+                  </zone>
+                  <zone h='12934' id='13' name='Total Enrollments' show-title='false' w='23916' x='26272' y='13900'>
+                    <zone-style>
+                      <format attr='border-color' value='#000000' />
+                      <format attr='border-style' value='none' />
+                      <format attr='border-width' value='0' />
+                      <format attr='margin' value='4' />
+                    </zone-style>
+                  </zone>
+                  <zone _.fcp.SetMembershipControl.false...type='bitmap' _.fcp.SetMembershipControl.true...type-v2='bitmap' h='13128' id='21' is-scaled='1' param='C:/Users/lopezmi/Pictures/Presentations/SD25_Logo_RGB-01.png' w='8525' x='429' y='772'>
+                    <zone-style>
+                      <format attr='border-color' value='#000000' />
+                      <format attr='border-style' value='none' />
+                      <format attr='border-width' value='0' />
+                      <format attr='margin' value='4' />
+                    </zone-style>
+                  </zone>
+                </zone>
+                <zone h='81853' id='15' name='Enrollment by School' show-title='false' w='49383' x='50188' y='772'>
+                  <layout-cache minwidth='261' type-h='fixed' type-w='scalable' />
+                  <zone-style>
+                    <format attr='border-color' value='#000000' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='margin' value='4' />
+                  </zone-style>
+                </zone>
+              </zone>
+              <zone h='16603' id='19' name='Enrollment Counts by Range' show-title='false' w='99142' x='429' y='82625'>
+                <zone-style>
+                  <format attr='border-color' value='#000000' />
+                  <format attr='border-style' value='none' />
+                  <format attr='border-width' value='0' />
+                  <format attr='margin' value='4' />
+                </zone-style>
+              </zone>
+            </zone>
+          </zone>
+          <zone-style>
+            <format attr='border-color' value='#000000' />
+            <format attr='border-style' value='none' />
+            <format attr='border-width' value='0' />
+            <format attr='margin' value='8' />
+          </zone-style>
+        </zone>
+      </zones>
+      <devicelayouts>
+        <devicelayout auto-generated='true' name='Phone'>
+          <size maxheight='1100' minheight='1100' sizing-mode='vscroll' />
+          <zones>
+            <zone _.fcp.SetMembershipControl.false...type='layout-basic' _.fcp.SetMembershipControl.true...type-v2='layout-basic' h='100000' id='32' w='100000' x='0' y='0'>
+              <zone _.fcp.SetMembershipControl.false...type='layout-flow' _.fcp.SetMembershipControl.true...type-v2='layout-flow' h='98456' id='31' param='vert' w='99142' x='429' y='772'>
+                <zone _.fcp.SetMembershipControl.false...type='bitmap' _.fcp.SetMembershipControl.true...type-v2='bitmap' fixed-size='97' h='13128' id='21' is-fixed='true' is-scaled='1' param='C:/Users/lopezmi/Pictures/Presentations/SD25_Logo_RGB-01.png' w='8525' x='429' y='772'>
+                  <zone-style>
+                    <format attr='border-color' value='#000000' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='margin' value='4' />
+                    <format attr='padding' value='0' />
+                  </zone-style>
+                </zone>
+                <zone _.fcp.SetMembershipControl.false...type='text' _.fcp.SetMembershipControl.true...type-v2='text' forceUpdate='true' h='13128' id='20' w='41234' x='8954' y='772'>
+                  <formatted-text>
+                    <run bold='true' fontalignment='1' fontname='MrEavesModOTHeavy' fontsize='28'>Enrollment Summary</run>
+                    <run fontalignment='2'>Æ&#10;</run>
+                    <run fontalignment='2' fontname='MrEavesModOT'>Powered By: PCSD25 Data Team</run>
+                    <run fontalignment='2'>Æ&#10;</run>
+                    <run fontalignment='2' fontname='MrEavesModOT'>Current Status: 09/17/2021 beta v0.4</run>
+                  </formatted-text>
+                  <zone-style>
+                    <format attr='border-color' value='#000000' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='margin' value='4' />
+                    <format attr='padding' value='0' />
+                  </zone-style>
+                </zone>
+                <zone fixed-size='280' h='81853' id='15' is-fixed='true' name='Enrollment by School' show-title='false' w='49383' x='50188' y='772'>
+                  <layout-cache minwidth='261' type-h='fixed' type-w='scalable' />
+                  <zone-style>
+                    <format attr='border-color' value='#000000' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='margin' value='4' />
+                    <format attr='padding' value='0' />
+                  </zone-style>
+                </zone>
+                <zone fixed-size='96' h='12934' id='14' is-fixed='true' name='Class Size Buckets' show-title='false' w='25843' x='429' y='13900'>
+                  <zone-style>
+                    <format attr='border-color' value='#000000' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='margin' value='4' />
+                    <format attr='padding' value='0' />
+                  </zone-style>
+                </zone>
+                <zone fixed-size='96' h='12934' id='13' is-fixed='true' name='Total Enrollments' show-title='false' w='23916' x='26272' y='13900'>
+                  <zone-style>
+                    <format attr='border-color' value='#000000' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='margin' value='4' />
+                    <format attr='padding' value='0' />
+                  </zone-style>
+                </zone>
+                <zone fixed-size='280' h='55791' id='5' is-fixed='true' name='Enrollment by Grade &amp; Range' show-title='false' w='49759' x='429' y='26834'>
+                  <zone-style>
+                    <format attr='border-color' value='#000000' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='margin' value='4' />
+                    <format attr='padding' value='0' />
+                  </zone-style>
+                </zone>
+                <zone fixed-size='125' h='16603' id='19' is-fixed='true' name='Enrollment Counts by Range' show-title='false' w='99142' x='429' y='82625'>
+                  <zone-style>
+                    <format attr='border-color' value='#000000' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='margin' value='4' />
+                    <format attr='padding' value='0' />
+                  </zone-style>
+                </zone>
+              </zone>
+              <zone-style>
+                <format attr='border-color' value='#000000' />
+                <format attr='border-style' value='none' />
+                <format attr='border-width' value='0' />
+                <format attr='margin' value='8' />
+              </zone-style>
+            </zone>
+          </zones>
+        </devicelayout>
+      </devicelayouts>
+      <simple-id uuid='{CF97CA51-EC17-4AE4-9ED4-F5AF634F7DDD}' />
+    </dashboard>
+    <dashboard name='YoY Enrollments'>
+      <style />
+      <size sizing-mode='automatic' />
+      <datasources>
+        <datasource caption='v_pcsd25EnrollmentSummary+ (pocatello)' name='federated.0bqo72r0wzrt9u1dchk4o1nifzvm' />
+      </datasources>
+      <datasource-dependencies datasource='federated.0bqo72r0wzrt9u1dchk4o1nifzvm'>
+        <column-instance column='[range]' derivation='None' name='[none:range:nk]' pivot='key' type='nominal' />
+        <column caption='Range' datatype='string' name='[range]' role='dimension' type='nominal' />
+      </datasource-dependencies>
+      <zones>
+        <zone _.fcp.SetMembershipControl.false...type='layout-basic' _.fcp.SetMembershipControl.true...type-v2='layout-basic' h='100000' id='4' w='100000' x='0' y='0'>
+          <zone _.fcp.SetMembershipControl.false...type='layout-flow' _.fcp.SetMembershipControl.true...type-v2='layout-flow' h='98456' id='7' param='horz' w='99142' x='429' y='772'>
+            <zone _.fcp.SetMembershipControl.false...type='layout-basic' _.fcp.SetMembershipControl.true...type-v2='layout-basic' h='98456' id='5' w='99142' x='429' y='772'>
+              <zone h='91217' id='3' name='YoY Enrollments WS' show-title='false' w='99142' x='429' y='8011'>
+                <zone-style>
+                  <format attr='border-color' value='#000000' />
+                  <format attr='border-style' value='none' />
+                  <format attr='border-width' value='0' />
+                  <format attr='margin' value='4' />
+                </zone-style>
+              </zone>
+              <zone _.fcp.SetMembershipControl.false...type='filter' _.fcp.SetMembershipControl.true...type-v2='filter' h='7239' id='8' mode='dropdown' name='YoY Enrollments WS' param='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:range:nk]' w='99142' x='429' y='772'>
+                <zone-style>
+                  <format attr='border-color' value='#000000' />
+                  <format attr='border-style' value='none' />
+                  <format attr='border-width' value='0' />
+                  <format attr='margin' value='4' />
+                </zone-style>
+              </zone>
+            </zone>
+          </zone>
+          <zone-style>
+            <format attr='border-color' value='#000000' />
+            <format attr='border-style' value='none' />
+            <format attr='border-width' value='0' />
+            <format attr='margin' value='8' />
+          </zone-style>
+        </zone>
+      </zones>
+      <devicelayouts>
+        <devicelayout auto-generated='true' name='Phone'>
+          <size maxheight='700' minheight='700' sizing-mode='vscroll' />
+          <zones>
+            <zone _.fcp.SetMembershipControl.false...type='layout-basic' _.fcp.SetMembershipControl.true...type-v2='layout-basic' h='100000' id='16' w='100000' x='0' y='0'>
+              <zone _.fcp.SetMembershipControl.false...type='layout-flow' _.fcp.SetMembershipControl.true...type-v2='layout-flow' h='98456' id='15' param='vert' w='99142' x='429' y='772'>
+                <zone _.fcp.SetMembershipControl.false...type='filter' _.fcp.SetMembershipControl.true...type-v2='filter' h='7239' id='8' mode='dropdown' name='YoY Enrollments WS' param='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:range:nk]' w='99142' x='429' y='772'>
+                  <zone-style>
+                    <format attr='border-color' value='#000000' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='margin' value='4' />
+                    <format attr='padding' value='0' />
+                  </zone-style>
+                </zone>
+                <zone fixed-size='280' h='91217' id='3' is-fixed='true' name='YoY Enrollments WS' show-title='false' w='99142' x='429' y='8011'>
+                  <zone-style>
+                    <format attr='border-color' value='#000000' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='margin' value='4' />
+                    <format attr='padding' value='0' />
+                  </zone-style>
+                </zone>
+              </zone>
+              <zone-style>
+                <format attr='border-color' value='#000000' />
+                <format attr='border-style' value='none' />
+                <format attr='border-width' value='0' />
+                <format attr='margin' value='8' />
+              </zone-style>
+            </zone>
+          </zones>
+        </devicelayout>
+      </devicelayouts>
+      <simple-id uuid='{7BB6CF7C-2957-44BA-9BEF-DF1AE54898DC}' />
+    </dashboard>
+  </dashboards>
+  <windows source-height='30'>
+    <window class='dashboard' name='Enrollment Summary'>
+      <viewpoints>
+        <viewpoint name='Class Size Buckets'>
+          <zoom type='entire-view' />
+        </viewpoint>
+        <viewpoint name='Enrollment Counts by Range'>
+          <zoom type='entire-view' />
+        </viewpoint>
+        <viewpoint name='Enrollment by Grade &amp; Range'>
+          <zoom type='entire-view' />
+          <highlight>
+            <color-one-way>
+              <field>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:grade:nk]</field>
+            </color-one-way>
+          </highlight>
+        </viewpoint>
+        <viewpoint name='Enrollment by School'>
+          <zoom type='entire-view' />
+          <highlight>
+            <color-one-way>
+              <field>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:range:nk]</field>
+            </color-one-way>
+          </highlight>
+        </viewpoint>
+        <viewpoint name='Total Enrollments'>
+          <zoom type='entire-view' />
+        </viewpoint>
+      </viewpoints>
+      <active id='15' />
+      <simple-id uuid='{50559138-3D10-467C-8442-740E64AC2A94}' />
+    </window>
+    <window class='dashboard' maximized='true' name='YoY Enrollments'>
+      <viewpoints>
+        <viewpoint name='YoY Enrollments WS'>
+          <zoom type='entire-view' />
+        </viewpoint>
+      </viewpoints>
+      <active id='3' />
+      <simple-id uuid='{EB1B4C15-57A1-4B1A-8619-7FF73432EB73}' />
+    </window>
+    <window class='worksheet' name='EL Class Size'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+      </cards>
+      <viewpoint>
+        <zoom type='entire-view' />
+        <highlight>
+          <color-one-way>
+            <field>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:Logical Grade (copy)_1816920993168220166:nk]</field>
+            <field>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:courseName:nk]</field>
+            <field>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:range (Custom SQL Query1):nk]</field>
+            <field>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:school (Custom SQL Query1):nk]</field>
+            <field>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:sectionID:ok]</field>
+          </color-one-way>
+        </highlight>
+      </viewpoint>
+      <simple-id uuid='{0840D228-4BAA-490D-B30F-D737428A93E2}' />
+    </window>
+    <window class='worksheet' name='YoY Enrollments WS'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='35'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+        <edge name='right'>
+          <strip size='160'>
+            <card param='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:range:nk]' show-all='false' type='filter' />
+            <card pane-specification-id='0' param='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:endYear:qk]' type='color' />
+            <card mode='type_in' param='[Parameters].[Parameter 1]' type='parameter' />
+          </strip>
+        </edge>
+      </cards>
+      <viewpoint>
+        <zoom type='entire-view' />
+        <highlight>
+          <color-one-way>
+            <field>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:Calculation_1816920993194901513:nk]</field>
+            <field>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:endYear:qk]</field>
+            <field>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:range:nk]</field>
+            <field>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:school:nk]</field>
+          </color-one-way>
+        </highlight>
+      </viewpoint>
+      <simple-id uuid='{F0D37789-E92A-4763-A4E8-5654FEDFC88E}' />
+    </window>
+    <window class='worksheet' name='Enrollment by Grade &amp; Range'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+        <edge name='right'>
+          <strip size='160'>
+            <card param='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:Calculation_736338556898148352:nk]' type='filter' />
+            <card pane-specification-id='0' param='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:grade:nk]' type='color' />
+            <card mode='type_in' param='[Parameters].[Parameter 1]' type='parameter' />
+            <card AVG='true' KURTOSIS='false' MAX='true' MEDIAN='true' MIN='true' QUART1='false' QUART3='false' SKEWNESS='false' STDEV='false' SUM='true' type='summary' />
+          </strip>
+        </edge>
+      </cards>
+      <viewpoint>
+        <zoom type='entire-view' />
+        <highlight>
+          <color-one-way>
+            <field>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:grade:nk]</field>
+            <field>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:range:nk]</field>
+          </color-one-way>
+        </highlight>
+      </viewpoint>
+      <simple-id uuid='{39271921-2726-4BAF-B1BD-84AA4798C4F9}' />
+    </window>
+    <window class='worksheet' name='Enrollment by School'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+        <edge name='right'>
+          <strip size='160'>
+            <card mode='type_in' param='[Parameters].[Parameter 1]' type='parameter' />
+            <card pane-specification-id='0' param='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:range:nk]' type='color' />
+          </strip>
+        </edge>
+      </cards>
+      <viewpoint>
+        <zoom type='entire-view' />
+        <highlight>
+          <color-one-way>
+            <field>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:Calculation_736338556898148352:nk]</field>
+            <field>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:range:nk]</field>
+            <field>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:school:nk]</field>
+          </color-one-way>
+        </highlight>
+      </viewpoint>
+      <simple-id uuid='{F715E9B3-1ED9-41A8-A248-5029E652FE43}' />
+    </window>
+    <window class='worksheet' name='Enrollment Counts by Range'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+        <edge name='right'>
+          <strip size='160'>
+            <card pane-specification-id='0' param='[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:range:nk]' type='color' />
+            <card mode='type_in' param='[Parameters].[Parameter 1]' type='parameter' />
+          </strip>
+        </edge>
+      </cards>
+      <viewpoint>
+        <zoom type='entire-view' />
+        <highlight>
+          <color-one-way>
+            <field>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:range:nk]</field>
+          </color-one-way>
+        </highlight>
+      </viewpoint>
+      <simple-id uuid='{2C4484F8-D7EA-4EA5-B9E9-C825655B3837}' />
+    </window>
+    <window class='worksheet' name='Total Enrollments'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+            <card type='measures' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+        <edge name='right'>
+          <strip size='160'>
+            <card mode='type_in' param='[Parameters].[Parameter 1]' type='parameter' />
+          </strip>
+        </edge>
+      </cards>
+      <viewpoint>
+        <highlight>
+          <color-one-way>
+            <field>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[:Measure Names]</field>
+          </color-one-way>
+        </highlight>
+      </viewpoint>
+      <simple-id uuid='{0E5D14BB-A407-4DA2-B0B8-6154D06A1607}' />
+    </window>
+    <window class='worksheet' name='Class Size Buckets'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+            <card type='measures' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+        <edge name='right'>
+          <strip size='160'>
+            <card mode='type_in' param='[Parameters].[Parameter 1]' type='parameter' />
+          </strip>
+        </edge>
+      </cards>
+      <viewpoint>
+        <highlight>
+          <color-one-way>
+            <field>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[:Measure Names]</field>
+            <field>[federated.0bqo72r0wzrt9u1dchk4o1nifzvm].[none:range (Custom SQL Query1):nk]</field>
+          </color-one-way>
+        </highlight>
+      </viewpoint>
+      <simple-id uuid='{9315F7DF-1F88-4459-8DE1-0DB18CE0E74F}' />
+    </window>
+  </windows>
+  <thumbnails>
+    <thumbnail height='44' name='Class Size Buckets' width='192'>
+      iVBORw0KGgoAAAANSUhEUgAAAMAAAAAsCAYAAAAzWrf+AAAACXBIWXMAAA7DAAAOwwHHb6hk
+      AAAEv0lEQVR4nO3cXUxTZxzH8a/aUnnJsskGKo4xcbHRkWxjWQnhZs0W3EWJCU2WGDYjN0IM
+      au9cxg3BmWVLRtBkMWEmwNiihJfJsaEGh8QtOi6aXYws+DJAoBbIMG5ACqWVXSgvgpYycyj0
+      +X/ueM7Tk/9J+uN5nnOe0w0zMzMzCKGojZEuQIhIkgAIpUkAhNIMixu8Xm8k6hAiImQEEEqT
+      AAilSQCE0iQAQmkSAKE0CYBQmgRAKE0CIJQmARBKW/IkWKxR/lFuXXNR77yEO/U4zQ7Ls/sG
+      fQy4nVxsuUzHWC6VlXZS5g/S3/ol5ed+YyiYwK4PSvisKJukTatwDSEF8Q24cV5s4XLHGLmV
+      ldjni8Y/eotrrnqcl9ykHm8m1OWH6utpOEZRTc/c3zICrBOdVSeovZtMzp5EAsv09WjlfPML
+      vPdOOlOLjgX/+I7Pa2fIP9OIduEUWT1f80WzR6+yw+fRKH9UNOmLi6aTqhO13E3OYU/iclcf
+      uu/gQA87D55F0zQ0TZMRYL2wHKnCAngaNBgP3Tdl/ykqADorlhz7/aqLmI++Yt+2GOB17J98
+      yE9nfua2/VPe0KHusKXs59SjollatYUjVRbAw/KXH6rvEN5BSDDHzbXICKAUD31/BXhz9/xX
+      fdPW7Wwf6WfQF8GyVs0Y/z6Al7e8NNciI4Dqtm5jB1cZvQ8LFgpR6h8e3If2kzbaAdOLr0kA
+      1r9OKmwnaQfYeZCzTyx4wzDkZZBXeGuLPtXpbeGi1lqqhVwcw7scbdY4CoCf8ZvNEoD1z4JD
+      03CE1TeFtHQDrTdvg+XRNCg4dI97SansiNWzRv2k2CvR7P/nkzEk7P5Y1gCqefv9ffhbL+Dy
+      +sHfS8P3bbxgzYnsAni1/NnCuSu3GPEFgSC+OxfYsPhXIeSNsLVowTRnoadOeTw0HCtiwa3u
+      x6yUag4sa/Q5wOL787OspRoOKrCdXHL17Dx4lkr7oglfZ4i+uX6u1H7LD7/e4e/xAIaEXRIA
+      oTaZAgmlSQCE0iQAQmkSAKG0ZZ8DeDxrYKOUEDqRu0BCaTIFEkqTAAilSQCE0iQAQmnPsRv0
+      6XtOZvdndFbY+PHVp+zVELqZmJigurqa9vZ2AoEAGRkZOBwOEhMTI12aLqanpzl//jxNTU0Y
+      jUYOHDhAXl4eGzeG/3/9ubdDL78HW6yW6upqUlNTqaurw2g04nQ6qa+vp7i4ONKl6eL69et4
+      vV7q6uoYHx/n9OnTpKenk5GREfY5ZAoURQ4fPozNZiM2NhaDwUBWVhZGozHSZekiEAjgdrvJ
+      z88nPj6e5ORk8vLycLvdKzqPBCCKGAzzA/r09DRtbW2YzeYIVqQfv9+PyWQiKSlpri0tLY3J
+      yUkePnwY9nnkjbAo09XVhcvl4tChQxQUFES6nDVPRoAo0tvby40bNygpKYnahe+smJgYpqam
+      GBkZmWvr6+tj8+bNK1oESwCiSEdHB1arFZPJFOlSdGcwGMjMzKSxsZGJiQmGh4dpaWkhMzNz
+      Zed53kJmf2Ji1sLX1HpqirDVPD5gLUWT20W68fl8dHd309TU9ES72WymrKyMuLi4Z3xy/crO
+      zqa/v5+CggKMRiOFhYXs3bt3ReeQzXBCaTIFEkr7D4S3rvrA7tWdAAAAAElFTkSuQmCC
+    </thumbnail>
+    <thumbnail height='192' name='EL Class Size' width='192'>
+      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
+    </thumbnail>
+    <thumbnail height='192' name='Enrollment Counts by Range' width='192'>
+      iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAACXBIWXMAAA7DAAAOwwHHb6hk
+      AAADFklEQVR4nO3czY4UBRiG0a+6G0YZQIxBY8LGDQuvgDtm6S2YeBMmJMTogpkQ5M9hmGbo
+      dmFwJXHBhAk856yq05U3tXlS1bXoZbfb7QeiNjMzR0dHl30dcClW7w7W6/XFja5W/3/SR9yx
+      Zet9Wxe3Bp8gAZAmANIEQJoASBMAaQIgTQCkCYA0AZAmANIEQJoASBMAaQIgTQCkCYA0AZAm
+      ANIEQJoASBMAaQIgTQCkCYA0AZAmANI27w7u//xgHj569sGDy8zMssx+/+F/Or1c0I4tW+/b
+      +jeAR3++mt+OX17IMHwqPAKRJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0A
+      pAmANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECa
+      AEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApAmA
+      NAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgT
+      AGkCIE0ApG0u+wLgY/rh+1vz1+l2vr11OH88fiEAWl5vz+fO7ZuzWi1z+6trHoFouffjnXny
+      4nT2+5nrX151B6Dlp19+nZmZ34+fz4zfAATcuHZ1Dq5sZln++bxaljnf7eZs+1YAfP5evtrO
+      3bvfzLIss9ms5vTszVxZr+fszbkA+Px99/XhfHGwmSfPT+f87W5uHh7M42cn83orAAKOn57M
+      8dOT//zOWyDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECa
+      AEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApAmA
+      NAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgT
+      AGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDS/gbfHWLY6a7fIQAAAABJRU5E
+      rkJggg==
+    </thumbnail>
+    <thumbnail height='192' name='Enrollment Summary' width='192'>
+      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
+      AABJRU5ErkJggg==
+    </thumbnail>
+    <thumbnail height='192' name='Enrollment by Grade &amp; Range' width='192'>
+      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
+      TkSuQmCC
+    </thumbnail>
+    <thumbnail height='192' name='Enrollment by School' width='192'>
+      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
+      AAAAAElFTkSuQmCC
+    </thumbnail>
+    <thumbnail height='64' name='Total Enrollments' width='192'>
+      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
+    </thumbnail>
+    <thumbnail height='192' name='YoY Enrollments' width='192'>
+      iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAACXBIWXMAAA7DAAAOwwHHb6hk
+      AAAGjUlEQVR4nO3dy29baR3G8ec4tuM4lyrNRaGNSymlUQaSsiibUoFEBcthifj7WLBhA5rV
+      bBAo0I4yky5oG6tpGTpNi5O0dhLH8eXY52UzGtUaRmM1l1PP8/3scpQj/WLl69evL8dRCCEI
+      MJVJewAgTQQAawQAa28FELT214+19slGetMA5yz79g+H+6+VdAv66E9/UIhGdNDOqDd6QeON
+      ukZms+rEE/rdb3+T1qzAqesLYPXWHR03W2o2iirksxqbmtF/X3yhv/3zc314+1dKwmhacwJn
+      IuJpUDjrWwFatT3txiM6erOj2alx7Ry2tbL8o7RmA85c37NArf0j7Ry81tbWU7VaTbE24Luu
+      L4BsoaBJtXXp2gfK5fNqtZppzQWcC/YAsMYLYbBGALBGALBGALBGALBGALBGALBGALBGALD2
+      1ZvhQghqt9uKoijNeYBz1fdu0EqlotFR3vMPHzwEgjUCgDUCgDUCSEkIQUmSpD2GjW+6vQkg
+      JSEEdbvdtMewkSSJer3e145n/8/vvv9Comr1jbpxW0ednHKdmqKJaXXjrq6WLqc93XfSi8+f
+      afZSSZVKRYVMV50wKoWgxe8vaiTt4U5gOFeAEPSfZ//W2MSYmq222s2msqMFxe2OeFBx+kKv
+      o929Xe1U3qjdbqrZaSmbzSuOO0qG/POEw7kCRJGWfvwTxe2GvjczoRDGFUJP2XxevIx3+nrd
+      rpZXbyluHimKcmonGamXKM7lhvreX3rrM8EhBD19+lS5XC7tmSyEENTr9ZTNDud90LBJkkQh
+      BI2M9Cfbd+vncjleCT4nSZKo2+0qn8+nPYqFXq+nJEm+dgc/nHsA4JQQAKwRAKwRAKwRAKwR
+      AKwRAKwRAKwRAKwRAKwRAKwRAKwRAKwRAKwRAKwRAKwRAKwRAKwRAKwRAKwRAKwRAKxxUZoh
+      srOzo/X1dd25c0cbGxuamJjQ2NiYVlZW0h5taLECDJH5+XlduXJF9+/f16tXr1QsFtMeaeix
+      AgyROI61uLio1dVVVSoVVatVIjihvksjPn/+nCvDnROuDHe+vunKcKwAQ6QeYr0Izb5jk8qq
+      lGEVeFcEYCJJEj148EDZbFaNRkOXL1/W8fGxlpeX0x4tVQRgIpPJ6Nq1a6rX65qamlKxWFSr
+      1Up7rNTxLJCRWq2m2dlZPX78WPV6XU+ePFGj0Uh7rFSxCU7Ju2yC2QO8OzbB0N93azqM+7+Y
+      7xfz05rK+f4b+P7lhvbaHVU7/QHEw/4lXyfEHgDWCADWCADWCADWCADWCADWCADWCADWeCEM
+      A9ne3tbR0ZFCCBofH9f29rZu3Lih2dnZtEc7EVYADKRcLqvRaGhra0sHBweqVqva399Pe6wT
+      IwAMpFQqqdVqffU5gmKxqCiK0h7rxHgIhIEsLS1paWkp7TFOHQFgIB9/8Vqf7R32Hft1aUa3
+      5i+kNNHpIAAMZOe4o3Kt/8Mzt+anUprm9LAHgDUCgDUCgDUCgDUCwHvv5cuX2t3d1aNHj1Sv
+      11Uul/XltRxOjGeBcObq9bo2Nzc1NzenWq2mTCajKIp08+bNbz231+vp3r17un37tgqFgtbW
+      1tRsNjUzM6O5ubkTz8YKgDNXLpcVx7EuXryofD6v69eva3JycqBzoyjS9PS0Hj58qPX1dS0v
+      L2t8fPzULgrMCoAzVyqVVC6XtbGxoenpae3t7enq1asDnZvJZHT37t2+Y4OeOwgCwJlbWFjQ
+      wsLCO5//57VNHTb6L+P44c+XdWGicNLRCABn718vq/rjp8/6jq1cuqjf/+yHA53/l39s6sXu
+      Qd+xX/70BwSA4XDQ6ujhq1rfsQtj78f3IrAJhjUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUC
+      gDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUC
+      gDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUC
+      gDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUC
+      gDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUC
+      gDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUCgDUC
+      gDUCgLX/ARzp4LZ98WRJAAAAAElFTkSuQmCC
+    </thumbnail>
+    <thumbnail height='192' name='YoY Enrollments WS' width='192'>
+      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
+      CACm/RNszemBWB7t4AAAAABJRU5ErkJggg==
+    </thumbnail>
+  </thumbnails>
+</workbook>
