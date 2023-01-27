@@ -22,7 +22,6 @@ USE pocatello
 
 SELECT DISTINCT x.searchableField
 	,x.searchType
-	,x.searchLocation
 	,x.localCode
 	,x.[status]
 	,x.[type]
@@ -34,7 +33,6 @@ FROM (
 	SELECT RANK() OVER (PARTITION BY p.personID ORDER BY hm.modifiedDate, hm.householdID DESC) AS 'duplicateNumber'
 		,id.lastName + ', ' + id.firstName AS 'searchableField'
 		,'guardianName' AS 'searchType'
-		,'search>household>members' AS 'searchLocation'
 		,'GU001' AS 'localCode'
 		,'error' AS 'status'
 		,'guardianMultipleHouseholdMembership' AS 'type'
@@ -71,7 +69,6 @@ UNION ALL
 
 SELECT DISTINCT x.searchableField
 	,x.searchType
-	,x.searchLocation
 	,x.localCode
 	,x.[status]
 	,x.[type]
@@ -83,7 +80,6 @@ FROM (
 	SELECT RANK() OVER (PARTITION BY p.personID ORDER BY hl.modifiedDate, hl.addressID DESC) AS 'duplicateNumber'
 		,id.lastName + ', ' + id.firstName AS 'searchableField'
 		,'guardianName' AS 'searchType'
-		,'search>household' AS 'searchLocation'
 		,'GU002' AS 'localCode'
 		,'error' AS 'status'
 		,'guardianMultiplePrimaryAddresses' AS 'type'
@@ -124,7 +120,6 @@ UNION ALL
 --GU003	=========================================
 SELECT DISTINCT x.searchableField
 	,x.searchType
-	,x.searchLocation
 	,x.localCode
 	,x.[status]
 	,x.[type]
@@ -136,7 +131,6 @@ FROM (
 	SELECT RANK() OVER (PARTITION BY p.personID ORDER BY hl.modifiedDate, hl.addressID DESC) AS 'duplicateNumber'
 		,id.lastName + ', ' + id.firstName AS 'searchableField'
 		,'guardianName' AS 'searchType'
-		,'search>household' AS 'searchLocation'
 		,'GU003' AS 'localCode'
 		,'error' AS 'status'
 		,'guardianMultipleMailingAddresses' AS 'type'
@@ -177,7 +171,6 @@ UNION ALL
 --GU004	===========================
 SELECT DISTINCT id.lastName + ', ' + id.firstName AS 'searchableField'
 	,'guardianName' AS 'searchType'
-	,'serach>allPeople>demographics' AS 'searchLocation'
 	,'HH002' AS 'localCode'
 	,'incomplete' AS 'status'
 	,'guardianNoBirthdate' AS 'type'
@@ -218,7 +211,6 @@ UNION ALL
 
 SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,'studentNumber' AS 'searchType'
-	,'search>household' AS 'searchLocation'
 	,'HH001' AS 'localCode'
 	,'error' AS 'status'
 	,'householdNoPrimaryAddress' AS 'type'
@@ -263,7 +255,6 @@ UNION ALL
 
 SELECT DISTINCT id.lastName + ', ' + id.firstName AS 'searchableField'
 	,'studentsHouseholdMemberName' AS 'searchType'
-	,'search>allPeople>demographics' AS 'searchLocation'
 	,'HH003' AS 'localCode'
 	,'warning' AS 'status'
 	,'householdMemberNameSyntax' AS 'type'
@@ -320,7 +311,6 @@ UNION ALL
 
 SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,'studentNumber' AS 'searchType'
-	,'search>student>demographics' AS 'searchLocation'
 	,'ST001' AS 'localCode'
 	,'error' AS 'status'
 	,'studentNoBirthdate' AS 'type'
@@ -349,7 +339,6 @@ UNION ALL
 --ST002	========================
 SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,'studentNumber' AS 'searchType'
-	,'search>student>demographics' AS 'searchLocation'
 	,'ST002' AS 'localCode'
 	,'warning' AS 'status'
 	,'studentNameSyntax' AS 'type'
@@ -395,7 +384,6 @@ UNION ALL
 --ST003	=================================
 SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,'studentNumber' AS 'searchType'
-	,'search>allPeople>relationships' AS 'searchLocation'
 	,'ST003' AS 'localCode'
 	,'incomplete' AS 'status'
 	,CASE
@@ -436,7 +424,6 @@ UNION ALL
 --ST004	=========================
 SELECT DISTINCT x.searchableField
 	,x.searchType
-	,x.searchLocation
 	,x.localCode
 	,x.[status]
 	,x.[type]
@@ -447,7 +434,6 @@ SELECT DISTINCT x.searchableField
 FROM (
 		SELECT DISTINCT p.studentNumber AS 'searchableField'
 			,'studentNumber' AS 'searchType'
-			,'search>allPeople>relationships' AS 'searchLocation'
 			,'ST004' AS 'localCode'
 			,'error' AS 'status'
 			,'studentNoGuardians' AS 'type'
@@ -487,7 +473,6 @@ UNION ALL
 --ST005	============================================
 SELECT DISTINCT x.searchableField
 	,x.searchType
-	,x.searchLocation
 	,x.localCode
 	,x.[status]
 	,x.[type]
@@ -499,7 +484,6 @@ FROM (
 	SELECT RANK() OVER (PARTITION BY p.personID ORDER BY hm.modifiedDate, hm.householdID DESC) AS 'duplicateNumber'
 		,p.studentNumber AS 'searchableField'
 		,'studentNumber' AS 'searchType'
-		,'search>household>members' AS 'searchLocation'
 		,'ST005' AS 'localCode'
 		,'error' AS 'status'
 		,'studentMultiplePrimaryMembership' AS 'type'
@@ -532,7 +516,6 @@ UNION ALL
 --ST006	========================================
 SELECT DISTINCT x.searchableField
 	,x.searchType
-	,x.searchLocation
 	,x.localCode
 	,x.[status]
 	,x.[type]
@@ -544,7 +527,6 @@ FROM (
 	SELECT RANK() OVER (PARTITION BY p.personID ORDER BY hl.modifiedDate, hl.addressID DESC) AS 'duplicateNumber'
 		,p.studentNumber AS 'searchableField'
 		,'studentNumber' AS 'searchType'
-		,'search>household' AS 'searchLocation'
 		,'ST006' AS 'localCode'
 		,'error' AS 'status'
 		,'studentMultiplePrimaryAddresses' AS 'type'
@@ -582,7 +564,6 @@ UNION ALL
 --ST007	========================================
 SELECT DISTINCT x.searchableField
 	,x.searchType
-	,x.searchLocation
 	,x.localCode
 	,x.[status]
 	,x.[type]
@@ -594,7 +575,6 @@ FROM (
 	SELECT RANK() OVER (PARTITION BY p.personID ORDER BY hl.modifiedDate, hl.addressID DESC) AS 'duplicateNumber'
 		,p.studentNumber AS 'searchableField'
 		,'studentNumber' AS 'searchType'
-		,'search>household' AS 'searchLocation'
 		,'ST007' AS 'localCode'
 		,'error' AS 'status'
 		,'studentMultipleMailingAddresses' AS 'type'
@@ -632,7 +612,6 @@ UNION ALL
 --ST008	=====================================
 SELECT DISTINCT x.searchableField
 	,x.searchType
-	,x.searchLocation
 	,x.localCode
 	,x.[status]
 	,x.[type]
@@ -644,7 +623,6 @@ FROM (
 	SELECT RANK() OVER (PARTITION BY p.personID ORDER BY p.personID, rp.personID2 DESC) AS 'duplicateNumber'
 		,p.studentNumber AS 'searchableField'
 		,'studentNumber' AS 'searchType'
-		,'search>allPeople>relationships' AS 'searchLocation'
 		,'ST008' AS 'localCode'
 		,'warning' AS 'status'
 		,'studentMoreThanTwoGuardians' AS 'type'
@@ -677,7 +655,6 @@ UNION ALL
 --ST009	====================================
 SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,'studentNumber' AS 'searchType'
-	,'search>allPeople>relationships' AS 'searchLocation'
 	,'ST009' AS 'localCode'
 	,'error' AS 'status'
 	,'studentWithUnderageGuardian' AS 'type'
@@ -746,7 +723,6 @@ UNION ALL
 --ST011	========================================
 SELECT x.searchableField
 	,x.searchType
-	,x.searchLocation
 	,x.localCode
 	,x.[status]
 	,x.[type]
@@ -757,7 +733,6 @@ SELECT x.searchableField
 FROM (
 	SELECT p.studentNumber AS 'searchableField'
 		,'studentNumber' AS 'searchType'
-		,'search>household' AS 'searchLocation'
 		,'ST011' AS 'localCode'
 		,'error' AS 'status'
 		,'studentMultipleSimlarAddresses' AS 'type'
@@ -807,7 +782,6 @@ UNION ALL
 --ST012	========================================
 SELECT x.searchableField
 	,x.searchType
-	,x.searchLocation
 	,x.localCode
 	,x.[status]
 	,x.[type]
@@ -851,7 +825,6 @@ FROM (
 		,'studentNumber' AS 'searchType'
 		,'ST012' AS 'localCode'
 		,'warning' AS 'status'
-		,'search>allPeople>demographics' AS 'searchLocation'
 		,'studentAgeOutsideGradeRange' AS 'type'
 		,p.personID
 		,cal.calendarID
@@ -883,7 +856,6 @@ UNION ALL
 --ST013	====================================
 SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,'studentNumber' AS 'searchType'
-	,'search>allPeople>demographics' AS 'searchLocation'
 	,'ST013' AS 'localCode'
 	,'error' AS 'status'
 	,'studentIncompleteImmigration' AS 'type'
@@ -913,7 +885,6 @@ UNION ALL
 --ST014	===============================================
 SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,'studentNumber' AS 'searchType'
-	,'search>allPeople>demographics' AS 'searchLocation'
 	,'ST014' AS 'localCode'
 	,'warning' AS 'status'
 	,'studentUSBirthWithImmigrationData' AS 'type'
@@ -945,7 +916,6 @@ UNION ALL
 --ST015	==========================================================
 SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,'studentNumber' AS 'searchType'
-	,'search>allPeople>demographics' AS 'searchLocation'
 	,'ST015' AS 'localCode'
 	,'incomplete' AS 'status'
 	,'studentImmigrationWithNoHomeLanguage' AS 'type'
@@ -975,7 +945,6 @@ UNION ALL
 --ST016	==============================================================
 SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,'studentNumber' AS 'searchType'
-	,'search>allPeople>demographics' AS 'searchLocation'
 	,'ST016' AS 'localCode'
 	,'warning' AS 'status'
 	,'studentNoImmigrationWithImmigrationData' AS 'type'
@@ -1007,7 +976,6 @@ UNION ALL
 --ST017	======================================
 SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,'studentNumber' AS 'searchType'
-	,'search>allPeople>demographics' AS 'searchLocation'
 	,'ST017' AS 'localCode'
 	,'error' AS 'status'
 	,'studentImmigrationExpired' AS 'type'
@@ -1046,7 +1014,6 @@ UNION ALL
 --Part 1 of 2
 SELECT DISTINCT id.lastName + ', ' + id.firstName AS 'searchableField'
 	,'studentRelationName' AS 'searchType'
-	,'search>allPeople>households' AS 'searchLocation'
 	,'RE001' AS 'localCode'
 	,'error' AS 'status'
 	,'relationMailingContactNoAddress' AS 'type'
@@ -1084,7 +1051,6 @@ UNION ALL
 --Part 2 of 2
 SELECT DISTINCT id.lastName + ', ' + id.firstName AS 'searchableField'
 	,'studentRelationName' AS 'searchType'
-	,'search>allPeople>households' AS 'searchLocation'
 	,'RE001' AS 'localCode'
 	,'error' AS 'status'
 	,'relationMailingContactNoAddress' AS 'type'
@@ -1126,7 +1092,6 @@ UNION ALL
 --RE002	=========================================
 SELECT DISTINCT id.lastName + ', ' + id.firstName AS 'searchableField'
 	,'studentRelationName' AS 'searchType'
-	,'search>allPeople>demographics' AS 'searchLocation'
 	,'RE002' AS 'localCode'
 	,'error' AS 'status'
 	,'relationMessengerContactNoPhoneMask' AS 'type'
