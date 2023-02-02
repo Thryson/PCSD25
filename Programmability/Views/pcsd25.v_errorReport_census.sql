@@ -5,7 +5,7 @@ USE pocatello
 -- Modder:		<Lopez, Michael>
 -- Create date: <05/21/2019>
 -- Update date: <01/26/2023>
--- Description:	<Compile all existing census error reports into view>
+-- Description:	<Compile all existing census error reports into a single view>
 -- =============================================
 
 
