@@ -1119,3 +1119,522 @@ WHERE en.serviceType = 'P'
 	AND ISNULL(mp.phoneMask, 0) + ISNULL(mp.textMask, 0) + ISNULL(me.emailMask, 0) <= 0
 
 
+UNION ALL
+
+
+--============================== 
+-- 
+-- Enrollment Errors Code; EN--- 
+-- 
+--==============================     
+
+--Error ================================ 
+--Code  || Student Multiple Homerooms || 
+--EN001 ================================  
+SELECT DISTINCT p.studentNumber AS 'searchableField'
+	,'studentNumber' AS 'searchType'
+	,'EN001' AS 'localCode'
+	,'error' AS 'status'
+	,'studentMultipleHomeroom' AS 'type'
+	,p.personID
+	,cal.calendarID
+	,sch.comments AS 'school'
+	,0 AS 'stateReporting'
+	,te.termID AS 'alt'
+FROM Roster AS rs
+	INNER JOIN Section AS se ON se.sectionID = rs.sectionID
+	INNER JOIN Course AS c ON c.courseID = se.courseID
+		AND c.homeroom = 1
+	INNER JOIN Calendar AS cal ON cal.calendarID = c.calendarID
+	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
+			AND scy.active = 1
+	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN ScheduleStructure AS ss ON ss.calendarID = cal.calendarID
+	INNER JOIN SectionPlacement AS sp ON sp.sectionID = se.sectionID
+	INNER JOIN Term AS te ON te.termID = sp.termID
+	INNER JOIN Person AS p ON p.personID = rs.personID
+	INNER JOIN [Identity] AS id ON id.personID = p.personID
+		AND id.identityID = p.currentIdentityID
+WHERE rs.endDate IS NULL
+		OR GETDATE() <= rs.endDate  
+GROUP BY studentNumber
+	,p.personID
+	,cal.calendarID
+	,sch.comments
+	,te.termID  
+HAVING COUNT(*) > 1
+
+
+UNION ALL
+
+
+--Error ======================================== 
+--Code  || 1C2A with Previous Year Enrollment || 
+--EN002 ========================================  
+SELECT DISTINCT p.studentNumber AS 'searchableField'
+	,'studentNumber' AS 'searchType'
+	,'EN002' AS 'localCode'
+	,'warning' AS 'status'
+	,'studentStartCode' AS 'type'
+	,p.personID
+	,cal.calendarID
+	,sch.comments AS 'school'
+	,1 AS 'stateReporting'
+	,1 AS 'alt'
+FROM Enrollment AS en1
+	INNER JOIN Enrollment AS en2 ON en2.personID = en1.personID
+		AND en2.endYear = en1.endYear - 1
+		AND en2.serviceType = 'P'
+	INNER JOIN Person AS p ON p.personID = en1.personID
+	INNER JOIN [Identity] AS id ON id.personID = p.personID
+		AND id.identityID = p.currentIdentityID
+	INNER JOIN Calendar AS cal ON cal.calendarID = en1.calendarID
+	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
+			AND scy.active = 1
+	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+WHERE en1.startStatus IN ('1C','2A')
+	AND en1.serviceType = 'P'
+	AND (MONTH(en1.startDate) = 8 AND MONTH(en2.endDate) = 5)     
+
+
+UNION ALL
+
+
+--Error ===================================== 
+--Code  || 1C2A Enrollments within 14 Days || 
+--EN003 =====================================  
+SELECT DISTINCT p.studentNumber AS 'searchableField'
+	,'studentNumber' AS 'searchType'
+	,'EN003' AS 'localCode'
+	,'warning' AS 'status'
+	,'studentStartCode' AS 'type'
+	,p.personID
+	,cal.calendarID
+	,sch.comments AS 'school'
+	,1 AS 'stateReporting'
+	,1 AS 'alt'
+FROM Enrollment AS en1
+	INNER JOIN Enrollment AS en2 ON en2.personID = en1.personID
+		AND en2.endYear = en1.endyear
+		AND en2.enrollmentID != en1.enrollmentID
+		AND en2.serviceType = 'P'
+		AND en2.startDate < en1.startDate
+		AND DATEADD(DAY, 14, en2.endDate) >= en1.startDate
+	INNER JOIN Person AS p ON p.personID = en1.personID
+	INNER JOIN [Identity] AS id ON id.personID = p.personID
+		AND id.identityID = p.currentIdentityID
+	INNER JOIN Calendar AS cal ON cal.calendarID = en1.calendarID
+	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
+			AND scy.active = 1
+	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+		AND sch.schoolID != 34
+WHERE en1.startStatus IN ('1C','2A')
+	AND en1.serviceType = 'P'     
+
+
+UNION ALL
+
+
+--Error ======================================== 
+--Code  || 2A2B2C2D with Next Year Enrollment || 
+--EN004 ========================================  
+SELECT DISTINCT p.studentNumber AS 'searchableField'
+	,'studentNumber' AS 'searchType'
+	,'EN004' AS 'localCode'
+	,'warning' AS 'status'
+	,'studentEndCode' AS 'type'
+	,p.personID
+	,cal.calendarID
+	,sch.comments AS 'school'
+	,1 AS 'stateReporting'
+	,1 AS 'alt'
+FROM Enrollment AS en1
+	INNER JOIN Enrollment AS en2 ON en2.personID = en1.personID
+		AND en2.serviceType = 'P'
+	INNER JOIN Person AS p ON p.personID = en1.personID
+	INNER JOIN [Identity] AS id ON id.personID = p.personID
+		AND id.identityID = p.currentIdentityID
+	INNER JOIN Calendar AS cal ON cal.calendarID = en2.calendarID
+	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
+			AND scy.active = 1
+	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+WHERE en1.endStatus IN ('2A','2B','2C','2D')
+	AND en1.serviceType = 'P'
+	AND (MONTH(en2.startDate) = 8 AND MONTH(en1.endDate) = 5)     
+
+
+UNION ALL
+
+
+--Error ========================================= 
+--Code  || 2A2B2C2D Enrollments within 14 Days || 
+--EN005 =========================================  
+SELECT DISTINCT p.studentNumber AS 'searchableField'
+	,'studentNumber' AS 'searchType'
+	,'EN005' AS 'localCode'
+	,'warning' AS 'status'
+	,'studentStartCode' AS 'type'
+	,p.personID
+	,cal.calendarID
+	,sch.comments AS 'school'
+	,1 AS 'stateReporting'
+	,1 AS 'alt'
+FROM Enrollment AS en1
+	INNER JOIN Enrollment AS en2 ON en2.personID = en1.personID
+		AND en2.endYear = en1.endYear
+		AND en2.enrollmentID != en1.enrollmentID
+		AND en2.serviceType = 'P'
+		AND en2.startDate < en1.startDate
+		AND DATEADD(DAY, 14, en2.endDate) >= en1.startDate
+	INNER JOIN Person AS p ON p.personID = en1.personID
+	INNER JOIN [Identity] AS id ON id.personID = p.personID
+		AND id.identityID = p.currentIdentityID
+	INNER JOIN Calendar AS cal ON cal.calendarID = en2.calendarID
+	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
+			AND scy.active = 1
+	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+		AND sch.schoolID != 34
+WHERE en2.endStatus IN ('2A','2B','2C','2D')
+	AND en1.serviceType = 'P'     
+
+
+UNION ALL
+
+
+--Error ======================================= 
+--Code  || Enrollment Record with no classes || 
+--EN006 =======================================  
+SELECT DISTINCT p.studentNumber AS 'searchableField'
+	,'studentNumber' AS 'searchType'
+	,'EN006' AS 'localCode'
+	,'error' AS 'status'
+	,'enrollmentNoClasses' AS 'type'
+	,p.personID
+	,cal.calendarID
+	,sch.comments AS 'school'
+	,1 AS 'stateReporting'
+	,1 AS 'alt'
+FROM Enrollment AS en
+	INNER JOIN Person AS p ON p.personID = en.personID
+	INNER JOIN [Identity] AS id ON id.personID = p.personID
+		AND id.identityID = p.currentIdentityID
+	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
+	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
+			AND scy.active = 1
+	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+		AND sch.schoolID NOT IN (7,33) -- Exlucde the following HS, LINC
+WHERE en.serviceType = 'P'
+	AND en.grade NOT IN ('NG','OT')
+	AND en.personID NOT IN (   
+		SELECT DISTINCT rs.personID   
+		FROM Roster AS rs   
+			INNER JOIN Section AS se ON se.sectionID = rs.sectionID   
+			INNER JOIN Trial AS tl ON tl.trialID = se.trialID   
+				AND tl.active = 1   
+			INNER JOIN Course AS co ON co.courseID = se.courseID   
+			INNER JOIN Calendar AS cal ON cal.calendarID = co.calendarID
+			INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
+					AND scy.active = 1  
+			INNER JOIN School AS sch ON sch.schoolID = cal.schoolID   
+				AND sch.schoolID NOT IN (34,7,33))     
+
+
+UNION ALL
+
+
+--Error ================================================================ 
+--Code  || Enrollment or Term Record with non aligned section enddate || 
+--EN007 ================================================================
+SELECT DISTINCT p.studentNumber AS 'searchableField'
+	,'studentNumber' AS 'searchType'
+	,'EN007' AS 'localCode'
+	,'error' AS 'status'
+	,'CourseEndDateNoMatch' AS 'type'
+	,p.personID
+	,x.calendarID
+	,sch.comments AS 'school'
+	,1 AS 'stateReporting'
+	,1 AS 'alt'
+FROM (
+		SELECT rs.personID  
+			,te.[name]  
+			,cal.calendarID  
+			,MAX(ISNULL(rs.endDate, te.endDate)) AS 'maxEndDate'  
+			,te.endDate AS 'termEndDate'  
+			,en.endDate AS 'enrolEndDate'  
+		FROM roster AS rs  
+			INNER JOIN Section AS se ON se.sectionID = rs.sectionID  
+			INNER JOIN Trial AS tl ON tl.trialID = se.trialID  
+				AND tl.active = 1  
+			INNER JOIN SectionPlacement AS sp ON sp.sectionID = se.sectionID  
+			INNER JOIN [Period] AS pd ON pd.periodID = sp.periodID  
+				AND pd.nonInstructional = 0  
+			INNER JOIN Term AS te ON te.termID = sp.termID  
+			INNER JOIN Course AS co ON co.courseID = se.courseID  
+			INNER JOIN Calendar AS cal ON cal.calendarID = co.calendarID  
+			INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
+				AND scy.active = 1 
+			INNER JOIN Enrollment AS en ON en.personID = rs.personID  
+				AND en.calendarID = cal.calendarID  
+		WHERE ISNULL(rs.startDate, te.startDate) >= en.startDate 
+				AND (ISNULL(rs.endDate, te.endDate) <= en.enddate OR en.endDate IS NULL)
+		GROUP BY rs.personID  
+			,te.[name]  
+			,cal.calendarID  
+			,te.endDate  
+			,en.endDate    
+		HAVING (MAX(ISNULL(rs.endDate, te.endDate)) < te.endDate  
+				AND en.endDate > te.endDate)  
+					OR (MAX(ISNULL(rs.endDate, te.endDate)) < en.endDate  
+						AND en.endDate < te.endDate)
+				) AS x
+	INNER JOIN Person AS p ON p.personID = x.personID
+	INNER JOIN [Identity] AS id ON p.personID = id.personID
+		AND id.identityID = p.currentIdentityID
+	INNER JOIN School AS sch ON sch.schoolID = x.calendarID     
+
+
+UNION ALL
+
+
+--Error ============================================== 
+--Code  || Same Class Same Period Overlapping Dates || 
+--EN008 ==============================================  
+SELECT DISTINCT p.studentNumber AS 'searchableField'
+	,'studentNumber' AS 'searchType'
+	,'EN008' AS 'localCode'
+	,'error' AS 'status'
+	,'mutlipleOverlappingRepeatedClass' AS 'type'
+	,p.personID
+	,cal.calendarID
+	,sch.comments AS 'school'
+	,1 AS 'stateReporting'
+	,1 AS 'alt'
+FROM Section AS se
+	INNER JOIN Trial AS tl ON tl.trialID = se.trialID
+		AND tl.active = 1
+	INNER JOIN Course AS co ON co.courseID = se.courseID
+	INNER JOIN Calendar AS cal ON cal.calendarID = co.calendarID
+	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
+		AND scy.active = 1 
+	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN SectionPlacement AS sp ON sp.sectionID = se.sectionID
+		AND sp.trialID = tl.trialID
+	INNER JOIN Term AS te ON te.termID = sp.termID
+	INNER JOIN [Period] AS pd ON pd.periodID = sp.periodID
+		AND pd.nonInstructional = 0
+	INNER JOIN Roster AS rs1 ON rs1.sectionID = se.sectionID
+	INNER JOIN Roster AS rs2 ON rs1.personID = rs2.personID
+		AND rs2.sectionID = rs1.sectionID
+		AND rs2.rosterID > rs1.rosterID
+	INNER JOIN Person AS p ON p.personID = rs1.personID
+	INNER JOIN [Identity] AS id ON id.personID = p.personID
+		AND id.identityID = p.currentIdentityID
+WHERE ISNULL(rs2.startDate, te.startDate) < ISNULL(rs1.endDate, te.endDate)
+	OR (rs1.startDate IS NULL AND rs2.startDate IS NULL)
+	OR (rs1.endDate IS NULL AND rs2.endDate IS NULL)
+
+
+UNION ALL
+
+
+--Error =================================== 
+--Code  || Student No Primary Enrollment || 
+--EN009 ===================================  
+SELECT DISTINCT p.studentNumber AS 'searchableField'
+	,'studentNumber' AS 'searchType'
+	,'EN009' AS 'localCode'
+	,'error' AS 'status'
+	,'studentNoPrimaryEnrollment' AS 'type'
+	,p.personID
+	,cal.calendarID
+	,sch.comments AS 'school'
+	,1 AS 'stateReporting'
+	,1 AS 'alt'
+FROM Enrollment AS e1 
+FULL OUTER JOIN Enrollment AS e2 ON e2.personID = e1.personID
+		AND e2.serviceType = 'P'
+		AND e2.endYear = YEAR(GETDATE())
+		AND (GETDATE() BETWEEN e2.startDate AND e2.endDate  
+			OR (GETDATE() > e2.startDate AND e2.endDate IS NULL))
+	INNER JOIN Calendar AS cal ON cal.calendarID = e1.calendarID
+	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
+		AND scy.active = 1 
+	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN Person AS p ON p.personID = e1.personID
+	INNER JOIN [Identity] AS id ON id.personID = p.personID
+		AND id.[identityID] = p.currentIdentityID
+WHERE e1.endYear = YEAR(GETDATE())
+	AND e1.serviceType = 'S'
+	AND e2.serviceType IS NULL
+	AND (GETDATE() BETWEEN e1.startDate AND e1.endDate 
+		OR (GETDATE() > e1.startDate AND e1.endDate IS NULL))   
+
+
+UNION ALL
+
+
+--Error =========================== 
+--Code  || Enddate No End Status || 
+--EN010 ===========================  
+SELECT DISTINCT p.studentNumber AS 'searchableField'
+	,'studentNumber' AS 'searchType'
+	,'EN010' AS 'localCode'
+	,'error' AS 'status'
+	,'enrollmentEnddateNoEndStatus' AS 'type'
+	,p.personID
+	,cal.calendarID
+	,sch.comments AS 'school'
+	,1 AS 'stateReporting'
+	,1 AS 'alt'
+FROM Enrollment AS en
+	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
+	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
+		AND scy.active = 1 
+	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN Person AS p ON p.personID = en.personID
+	INNER JOIN [Identity] AS id ON id.personID = p.personID
+		AND id.[identityID] = p.currentIdentityID
+WHERE en.endDate IS NOT NULL
+	AND en.endStatus IS NULL     
+
+
+UNION ALL
+
+
+--Error =========================== 
+--Code  || End Status No Enddate || 
+--EN011 ===========================  
+SELECT DISTINCT p.studentNumber AS 'searchableField'
+	,'studentNumber' AS 'searchType'
+	,'EN011' AS 'localCode'
+	,'error' AS 'status'
+	,'enrollmentEndStatusNoEnddate' AS 'type'
+	,p.personID
+	,cal.calendarID
+	,sch.comments AS 'school'
+	,1 AS 'stateReporting'
+	,1 AS 'alt'
+FROM Enrollment AS en
+	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
+	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
+		AND scy.active = 1 
+	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN Person AS p ON p.personID = en.personID
+	INNER JOIN [Identity] AS id ON id.personID = p.personID
+		AND id.[identityID] = p.currentIdentityID
+WHERE en.endDate IS NULL
+	AND en.endStatus IS NOT NULL     
+
+
+UNION ALL
+
+
+--Error =============================== 
+--Code  || Startdate No Start Status || 
+--EN012 ===============================  
+SELECT DISTINCT p.studentNumber AS 'searchableField'
+	,'studentNumber' AS 'searchType'
+	,'EN012' AS 'localCode'
+	,'error' AS 'status'
+	,'enrollmentStartdateNoStartStatus' AS 'type'
+	,p.personID
+	,cal.calendarID
+	,sch.comments AS 'school'
+	,1 AS 'stateReporting'
+	,1 AS 'alt'
+FROM Enrollment AS en
+	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
+	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
+		AND scy.active = 1 
+	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN Person AS p ON p.personID = en.personID
+	INNER JOIN [Identity] AS id ON id.personID = p.personID
+		AND id.[identityID] = p.currentIdentityID
+WHERE en.startDate IS NOT NULL
+	AND en.startStatus IS NULL     
+
+
+UNION ALL
+
+
+--Error =============================== 
+--Code  || Start Status No Startdate || 
+--EN013 ===============================  
+SELECT DISTINCT p.studentNumber AS 'searchableField'
+	,'studentNumber' AS 'searchType'
+	,'EN013' AS 'localCode'
+	,'error' AS 'status'
+	,'enrollmentStartStatusNoStartdate' AS 'type'
+	,p.personID
+	,cal.calendarID
+	,sch.comments AS 'school'
+	,1 AS 'stateReporting'
+	,1 AS 'alt'
+FROM Enrollment AS en
+	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
+	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
+		AND scy.active = 1 
+	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN Person AS p ON p.personID = en.personID
+	INNER JOIN [Identity] AS id ON id.personID = p.personID
+		AND id.[identityID] = p.currentIdentityID
+WHERE en.startDate IS NULL
+	AND en.startStatus IS NOT NULL   
+
+
+UNION ALL
+
+
+--Error ================================ 
+--Code  || At Risk when Grade Below 6 || 
+--EN014 ================================  
+SELECT DISTINCT p.studentNumber AS 'searchableField'
+	,'studentNumber' AS 'searchType'
+	,'EN014' AS 'localCode'
+	,'error' AS 'status'
+	,'enrollmentAtRiskGradeLessThan06' AS 'type'
+	,p.personID
+	,cal.calendarID
+	,sch.comments AS 'school'
+	,1 AS 'stateReporting'
+	,1 AS 'alt'
+FROM Enrollment AS en
+	INNER JOIN EnrollmentID AS eid ON eid.enrollmentID = en.enrollmentID
+	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
+	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
+		AND scy.active = 1 
+	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN Person AS p ON p.personID = en.personID
+	INNER JOIN [Identity] AS id ON id.personID = p.personID
+		AND id.[identityID] = p.currentIdentityID
+WHERE en.grade NOT IN ('06','07','08','09','10','11','12')
+	AND eid.atRisk = 'Y'
+
+
+UNION ALL
+
+
+--Error =================================== 
+--Code  || Enrollment Flagged as No Show || 
+--EN015 ===================================
+SELECT DISTINCT p.studentNumber AS 'searchableField'
+	,'studentNumber' AS 'searchType'
+	,'EN015' AS 'localCode'
+	,'error' AS 'status'
+	,'enrollmentFlaggedNoShow' AS 'type'
+	,p.personID
+	,cal.calendarID
+	,sch.comments AS 'school'
+	,1 AS 'stateReporting'
+	,1 AS 'alt'
+FROM Enrollment AS en
+	INNER JOIN EnrollmentID AS eid ON eid.enrollmentID = en.enrollmentID
+	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
+	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
+		AND scy.active = 1 
+	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN Person AS p ON p.personID = en.personID
+	INNER JOIN [Identity] AS id ON id.personID = p.personID
+		AND id.[identityID] = p.currentIdentityID
+WHERE en.noShow = 1
