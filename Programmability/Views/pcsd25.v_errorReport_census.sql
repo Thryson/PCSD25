@@ -4,7 +4,7 @@ USE pocatello
 -- Author:		<Lopez, Michael>
 -- Modder:		<Lopez, Michael>
 -- Create date: <05/21/2019>
--- Update date: <01/26/2023>
+-- Update date: <02/21/2023>
 -- Description:	<Compile all existing census error reports into a single view>
 -- =============================================
 
@@ -29,6 +29,7 @@ SELECT DISTINCT x.searchableField
 	,x.calendarID
 	,x.school
 	,0 AS 'stateReporting'
+	,0 AS 'alt'
 FROM (
 	SELECT RANK() OVER (PARTITION BY p.personID ORDER BY hm.modifiedDate, hm.householdID DESC) AS 'duplicateNumber'
 		,id.lastName + ', ' + id.firstName AS 'searchableField'
@@ -76,6 +77,7 @@ SELECT DISTINCT x.searchableField
 	,x.calendarID
 	,x.school
 	,0 AS 'stateReporting'
+	,0 AS 'alt'
 FROM ( 
 	SELECT RANK() OVER (PARTITION BY p.personID ORDER BY hl.modifiedDate, hl.addressID DESC) AS 'duplicateNumber'
 		,id.lastName + ', ' + id.firstName AS 'searchableField'
@@ -127,6 +129,7 @@ SELECT DISTINCT x.searchableField
 	,x.calendarID
 	,x.school
 	,0 AS 'stateReporting'
+	,0 AS 'alt'
 FROM (
 	SELECT RANK() OVER (PARTITION BY p.personID ORDER BY hl.modifiedDate, hl.addressID DESC) AS 'duplicateNumber'
 		,id.lastName + ', ' + id.firstName AS 'searchableField'
@@ -178,6 +181,7 @@ SELECT DISTINCT id.lastName + ', ' + id.firstName AS 'searchableField'
 	,cal.calendarID
 	,sch.comments AS 'school'
 	,0 AS 'stateReporting'
+	,0 AS 'alt'
 FROM Enrollment AS en
 	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
@@ -218,6 +222,7 @@ SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,cal.calendarID
 	,sch.comments AS 'school'
 	,0 AS 'stateReporting'
+	,0 AS 'alt'
 FROM Enrollment AS en
 	INNER JOIN [Identity] AS id ON id.personID = en.personID
 	INNER JOIN Person AS p ON p.personID = id.personID
@@ -242,7 +247,7 @@ WHERE hl.addressID IS NULL
 UNION ALL
 
 
---This report was limited down to just Guardians, this slot is open for another report
+--Report was removed, this slot is open
 --Error	==========
 --Code  || ---- ||
 --HH002	==========
@@ -262,6 +267,7 @@ SELECT DISTINCT id.lastName + ', ' + id.firstName AS 'searchableField'
 	,cal.calendarID
 	,sch.comments AS 'school'
 	,0 AS 'stateReporting'
+	,0 AS 'alt'
 FROM Enrollment AS en
 	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
@@ -318,6 +324,7 @@ SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,cal.calendarID
 	,sch.comments AS 'school'
 	,1 AS 'stateReporting'
+	,0 AS 'alt'
 FROM Enrollment AS en
 	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
@@ -346,6 +353,7 @@ SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,cal.calendarID
 	,sch.comments AS 'school'
 	,0 AS 'stateReporting'
+	,0 AS 'alt'
 FROM Enrollment AS en
 	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
@@ -398,6 +406,7 @@ SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,cal.calendarID
 	,sch.comments AS 'school'
 	,0 AS 'stateReporting'
+	,0 AS 'alt'
 FROM Enrollment AS en
 	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
@@ -431,6 +440,7 @@ SELECT DISTINCT x.searchableField
 	,x.calendarID
 	,x.school
 	,0 AS 'stateReporting'
+	,0 AS 'alt'
 FROM (
 		SELECT DISTINCT p.studentNumber AS 'searchableField'
 			,'studentNumber' AS 'searchType'
@@ -480,6 +490,7 @@ SELECT DISTINCT x.searchableField
 	,x.calendarID
 	,x.school
 	,0 AS 'stateReporting'
+	,0 AS 'alt'
 FROM (
 	SELECT RANK() OVER (PARTITION BY p.personID ORDER BY hm.modifiedDate, hm.householdID DESC) AS 'duplicateNumber'
 		,p.studentNumber AS 'searchableField'
@@ -523,6 +534,7 @@ SELECT DISTINCT x.searchableField
 	,x.calendarID
 	,x.school
 	,0 AS 'stateReporting'
+	,0 AS 'alt'
 FROM (
 	SELECT RANK() OVER (PARTITION BY p.personID ORDER BY hl.modifiedDate, hl.addressID DESC) AS 'duplicateNumber'
 		,p.studentNumber AS 'searchableField'
@@ -571,6 +583,7 @@ SELECT DISTINCT x.searchableField
 	,x.calendarID
 	,x.school
 	,0 AS 'stateReporting'
+	,0 AS 'alt'
 FROM (
 	SELECT RANK() OVER (PARTITION BY p.personID ORDER BY hl.modifiedDate, hl.addressID DESC) AS 'duplicateNumber'
 		,p.studentNumber AS 'searchableField'
@@ -619,6 +632,7 @@ SELECT DISTINCT x.searchableField
 	,x.calendarID
 	,x.school
 	,0 AS 'stateReporting'
+	,0 AS 'alt'
 FROM (
 	SELECT RANK() OVER (PARTITION BY p.personID ORDER BY p.personID, rp.personID2 DESC) AS 'duplicateNumber'
 		,p.studentNumber AS 'searchableField'
@@ -662,6 +676,7 @@ SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,cal.calendarID
 	,sch.comments AS 'school'
 	,0 AS 'stateReporting'
+	,0 AS 'alt'
 FROM Enrollment AS en
 	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
@@ -730,6 +745,7 @@ SELECT x.searchableField
 	,x.calendarID
 	,x.school
 	,0 AS 'stateReporting'
+	,0 AS 'alt'
 FROM (
 	SELECT p.studentNumber AS 'searchableField'
 		,'studentNumber' AS 'searchType'
@@ -789,6 +805,7 @@ SELECT x.searchableField
 	,x.calendarID
 	,x.school
 	,1 AS 'stateReporting'
+	,0 AS 'alt'
 FROM (
 	SELECT RANK() OVER (PARTITION BY p.personID ORDER BY en.grade DESC, en.startdate DESC) AS 'priority'
 		,CASE en.grade
@@ -863,6 +880,7 @@ SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,cal.calendarID
 	,sch.comments AS 'school'
 	,1 AS 'stateReporting'
+	,0 AS 'alt'
 FROM Enrollment AS en
 	INNER JOIN Person AS p ON p.personID = en.personID
 	INNER JOIN [Identity] AS id ON id.personID = p.personID
@@ -892,6 +910,7 @@ SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,cal.calendarID
 	,sch.comments AS 'school'
 	,1 AS 'stateReporting'
+	,0 AS 'alt'
 FROM Enrollment AS en
 	INNER JOIN Person AS p ON p.personID = en.personID
 	INNER JOIN [Identity] AS id ON id.personID = p.personID
@@ -923,6 +942,7 @@ SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,cal.calendarID
 	,sch.comments AS 'school'
 	,1 AS 'stateReporting'
+	,0 AS 'alt'
 FROM Enrollment AS en
 	INNER JOIN Person AS p ON p.personID = en.personID
 	INNER JOIN [Identity] AS id ON id.personID = p.personID
@@ -952,6 +972,7 @@ SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,cal.calendarID
 	,sch.comments AS 'school'
 	,1 AS 'stateReporting'
+	,0 AS 'alt'
 FROM Enrollment AS en
 	INNER JOIN Person AS p ON p.personID = en.personID
 	INNER JOIN [Identity] AS id ON id.personID = p.personID
@@ -983,6 +1004,7 @@ SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,cal.calendarID
 	,sch.comments AS 'school'
 	,1 AS 'stateReporting'
+	,0 AS 'alt'
 FROM Enrollment AS en
 	INNER JOIN Person AS p ON p.personID = en.personID
 	INNER JOIN [Identity] AS id ON id.personID = p.personID
@@ -1021,6 +1043,7 @@ SELECT DISTINCT id.lastName + ', ' + id.firstName AS 'searchableField'
 	,cal.calendarID
 	,sch.comments AS 'school'
 	,0 AS 'stateReporting'
+	,0 AS 'alt'
 FROM Enrollment AS en
 	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
@@ -1058,6 +1081,7 @@ SELECT DISTINCT id.lastName + ', ' + id.firstName AS 'searchableField'
 	,cal.calendarID
 	,sch.comments AS 'school'
 	,0 AS 'stateReporting'
+	,0 AS 'alt'
 FROM Enrollment AS en
 	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
@@ -1099,6 +1123,7 @@ SELECT DISTINCT id.lastName + ', ' + id.firstName AS 'searchableField'
 	,cal.calendarID
 	,sch.comments AS 'school'
 	,0 AS 'stateReporting'
+	,0 AS 'alt'
 FROM Enrollment AS en
 	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
