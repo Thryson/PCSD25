@@ -104,7 +104,7 @@ FROM Section AS se
 	INNER JOIN Person AS p ON p.personID = ssh.personID
 	INNER JOIN [Identity] AS id ON id.personID = p.personID
 		AND id.identityID = p.currentIdentityID
-WHERE p.staffStateID IS NULL     
+WHERE p.staffStateID IS NULL
 
 
 UNION ALL
@@ -214,7 +214,7 @@ FROM Section AS se
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
 		AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
-		AND sch.schoolID != 34
+		AND sch.schoolID NOT IN (34,35) --SSHS, PVTC
 	,Calendar AS cal2
 	INNER JOIN SchoolYear AS scy2 ON scy2.endYear = cal2.endYear
 		AND scy2.active = 1
@@ -227,14 +227,14 @@ WHERE se.providerIDOverride IS NULL
 UNION ALL
 
 
---Error ==================================== 
---Code  || CTS flag without 0565 Provider || 
---SE007 ====================================  
+--Error =================================== 
+--Code  || CTS flag with Provider School || 
+--SE007 ===================================  
 SELECT DISTINCT co.number + '-' + CONVERT(varchar, se.number) AS 'searchableField'
 	,'Course-Section' AS 'searchType'
 	,'SE007' AS 'localCode'
-	,'incomplete' AS 'status'
-	,'CTSSectionFlagWithout0565' AS 'type'
+	,'warning' AS 'status'
+	,'CTSSectionWithProviderSchool' AS 'type'
 	,cal2.calendarID
 	,sch2.comments AS 'school'
 	,1 AS 'stateReporting'
@@ -253,14 +253,14 @@ FROM Section AS se
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
 		AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
-		AND sch.schoolID != 34
+		AND sch.schoolID != 34 -- SSHS
 	,Calendar AS cal2
 	INNER JOIN SchoolYear AS scy2 ON scy2.endYear = cal2.endYear
 		AND scy2.active = 1
 	INNER JOIN School AS sch2 ON sch2.schoolID = cal2.schoolID
 		AND sch2.schoolID = 24 --EDC
-WHERE se.providerSchoolOverride != 0565
-	OR se.providerSchoolOverride IS NULL
+WHERE se.providerSchoolNameOverride IS NOT NULL
+	OR se.providerSchoolOverride IS NOT NULL
 
 
 UNION ALL
@@ -390,6 +390,39 @@ WHERE se.providerIDOverride IS NOT NULL
 UNION ALL
 
 
+--Error ======================================= 
+--Code  || Section Exited without Leave Code || 
+--SE012 =======================================
+SELECT DISTINCT per.studentNumber + '-' + co.number + '-' + trm.[name] AS 'searchableField'
+	,'studentNumber-CourseNumber-Term' AS 'searchType'
+	,'SE012' AS 'localCode'
+	,'error' AS 'status'
+	,'sectionExitedWithoutLeaveCode' AS 'type'
+	,cal.calendarID
+	,sch.comments AS 'school'
+	,1 AS 'stateReporting'
+	,1 AS 'alt'
+FROM Roster AS rs
+	INNER JOIN Section AS se ON se.sectionID = rs.sectionID
+	INNER JOIN Trial AS tl ON tl.trialID = se.trialID
+		AND tl.active = 1
+	INNER JOIN Course AS co ON co.courseID = se.courseID
+		AND co.active = 1
+	INNER JOIN Calendar AS cal ON cal.calendarID = co.calendarID
+	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
+		AND scy.active = 1
+	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+		AND sch.schoolID != 34
+	INNER JOIN SectionPlacement AS scp ON scp.sectionID = se.sectionID
+	INNER JOIN term AS trm ON trm.termID = scp.termID
+	INNER JOIN Person AS per ON per.personID = rs.personID
+WHERE rs.endDate <= trm.endDate
+	AND rs.exitReason IS NULL
+
+
+UNION ALL
+
+
 --============================== 
 -- 
 -- Course Errors Code; CO--- 
@@ -445,7 +478,7 @@ FROM Section AS se
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
 		AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
-		AND sch.schoolID != 34
+		AND sch.schoolID NOT IN (34,35) --SSHS, PVTC
 	INNER JOIN CustomCourse AS ps ON ps.courseID = co.courseID
 		AND ps.attributeID = 879
 	LEFT JOIN CustomCourse AS ise ON ise.courseID = co.courseID
@@ -476,7 +509,7 @@ FROM Section AS se
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
 		AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
-		AND sch.schoolID != 34
+		AND sch.schoolID NOT IN (34,35) --SSHS, PVTC
 	INNER JOIN CustomCourse AS ise ON ise.courseID = co.courseID
 		AND ise.attributeID = 311
 	LEFT JOIN CustomCourse AS ps ON ps.courseID = co.courseID
@@ -576,7 +609,7 @@ FROM Course AS co
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
 		AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
-		AND sch.schoolID != 34
+		AND sch.schoolID NOT IN (34,35) --SSHS, PVTC
 	INNER JOIN Department AS dep ON dep.departmentID = co.departmentID
 		AND dep.[name] = 'CTS'
 	,Calendar AS cal2
