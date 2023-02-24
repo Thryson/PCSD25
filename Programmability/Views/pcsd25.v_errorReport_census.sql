@@ -20,45 +20,44 @@ USE pocatello
 --Code  || Guardian Multiple Households ||
 --GU001	==================================
 
-SELECT DISTINCT x.searchableField
-	,x.searchType
-	,x.localCode
-	,x.[status]
-	,x.[type]
-	,x.personID
-	,x.calendarID
-	,x.school
+SELECT DISTINCT id.lastName + ', ' + id.firstName AS 'searchableField'
+	,'guardianName' AS 'searchType'
+	,'GU001' AS 'localCode'
+	,'error' AS 'status'
+	,'guardianMultipleHouseholdMembership' AS 'type'
+	,rp.personID2 AS 'personID'
+	,cal.calendarID
+	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,0 AS 'stateReporting'
 	,0 AS 'alt'
-FROM (
-	SELECT RANK() OVER (PARTITION BY p.personID ORDER BY hm.modifiedDate, hm.householdID DESC) AS 'duplicateNumber'
-		,id.lastName + ', ' + id.firstName AS 'searchableField'
-		,'guardianName' AS 'searchType'
-		,'GU001' AS 'localCode'
-		,'error' AS 'status'
-		,'guardianMultipleHouseholdMembership' AS 'type'
-		,rp.personID2 AS 'personID'
-		,cal.calendarID
-		,sch.comments AS 'school'
-	FROM Enrollment AS en
-		INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
-		INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
-			AND scy.active = 1
-		INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
-		INNER JOIN RelatedPair AS rp ON rp.personID1 = en.personID
-			AND rp.guardian = 1
-			AND (GETDATE() BETWEEN rp.startDate AND rp.endDate
-				OR (GETDATE() > rp.startDate AND rp.endDate IS NULL))
-		INNER JOIN [Identity] AS id ON id.personID = rp.personID2
-		INNER JOIN Person AS p ON p.personID = id.personID
-			AND p.currentIdentityID = id.identityID
-		INNER JOIN HouseholdMember AS hm ON hm.personID = rp.personID2
-			AND (GETDATE() BETWEEN hm.startDate AND hm.endDate
-				OR (GETDATE() > hm.startDate AND hm.endDate IS NULL))
-	WHERE en.serviceType = 'P'
-		AND (en.startDate <= GETDATE() AND (en.endDate IS NULL OR en.endDate >= GETDATE()))
-) AS x
-WHERE x.duplicateNumber != 1
+FROM Enrollment AS en
+	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
+	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
+		AND scy.active = 1
+	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
+	INNER JOIN RelatedPair AS rp ON rp.personID1 = en.personID
+		AND rp.guardian = 1
+		AND (GETDATE() BETWEEN rp.startDate AND rp.endDate
+			OR (GETDATE() > rp.startDate AND rp.endDate IS NULL))
+	INNER JOIN [Identity] AS id ON id.personID = rp.personID2
+	INNER JOIN Person AS p ON p.personID = id.personID
+		AND p.currentIdentityID = id.identityID
+	INNER JOIN HouseholdMember AS hm ON hm.personID = rp.personID2
+		AND (GETDATE() BETWEEN hm.startDate AND hm.endDate
+			OR (GETDATE() > hm.startDate AND hm.endDate IS NULL))
+WHERE en.serviceType = 'P'
+	AND (en.startDate <= GETDATE() AND (en.endDate IS NULL OR en.endDate >= GETDATE()))
+GROUP BY id.lastName
+	,id.firstName
+	,rp.personID2
+	,cal.calendarID
+	,sch.comments
+	,cs.[value]
+	,rp.personID1
+HAVING COUNT(*) >= 2
 
 
 UNION ALL
@@ -68,50 +67,50 @@ UNION ALL
 --Code  || Guardian Multiple Primary Addresses ||
 --GU002	=========================================
 
-SELECT DISTINCT x.searchableField
-	,x.searchType
-	,x.localCode
-	,x.[status]
-	,x.[type]
-	,x.personID
-	,x.calendarID
-	,x.school
+SELECT DISTINCT id.lastName + ', ' + id.firstName AS 'searchableField'
+	,'guardianName' AS 'searchType'
+	,'GU002' AS 'localCode'
+	,'error' AS 'status'
+	,'guardianMultiplePrimaryAddresses' AS 'type'
+	,rp.personID2 AS 'personID'
+	,cal.calendarID
+	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,0 AS 'stateReporting'
 	,0 AS 'alt'
-FROM ( 
-	SELECT RANK() OVER (PARTITION BY p.personID ORDER BY hl.modifiedDate, hl.addressID DESC) AS 'duplicateNumber'
-		,id.lastName + ', ' + id.firstName AS 'searchableField'
-		,'guardianName' AS 'searchType'
-		,'GU002' AS 'localCode'
-		,'error' AS 'status'
-		,'guardianMultiplePrimaryAddresses' AS 'type'
-		,rp.personID2 AS 'personID'
-		,cal.calendarID
-		,sch.comments AS 'school'
-	FROM Enrollment AS en
-		INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
-		INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
-			AND scy.active = 1
-		INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
-		INNER JOIN RelatedPair AS rp ON rp.personID1 = en.personID
-			AND rp.guardian = 1
-			AND (GETDATE() BETWEEN rp.startDate AND rp.endDate
-				OR (GETDATE() > rp.startDate AND rp.endDate IS NULL))
-		INNER JOIN [Identity] AS id ON id.personID = rp.personID2
-		INNER JOIN Person AS p ON p.personID = id.personID
-			AND p.currentIdentityID = id.identityID
-		INNER JOIN HouseholdMember AS hm ON hm.personID = rp.personID2
-			AND (GETDATE() BETWEEN hm.startDate AND hm.endDate
-				OR (GETDATE() > hm.startDate AND hm.endDate IS NULL))
-		INNER JOIN Household AS h ON h.householdID = hm.householdID
-		INNER JOIN HouseholdLocation AS hl ON hl.householdID = h.householdID
-			AND hl.[secondary] = 0
-			AND (GETDATE() BETWEEN hl.startDate AND hl.endDate
-				OR (GETDATE() > hl.startDate AND hl.endDate IS NULL))
-	WHERE en.serviceType = 'P'
-		AND (en.startDate <= GETDATE() AND (en.endDate IS NULL OR en.endDate >= GETDATE()))
-) AS x
-WHERE x.duplicateNumber != 1
+FROM Enrollment AS en
+	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
+	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
+		AND scy.active = 1
+	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
+	INNER JOIN RelatedPair AS rp ON rp.personID1 = en.personID
+		AND rp.guardian = 1
+		AND (GETDATE() BETWEEN rp.startDate AND rp.endDate
+			OR (GETDATE() > rp.startDate AND rp.endDate IS NULL))
+	INNER JOIN [Identity] AS id ON id.personID = rp.personID2
+	INNER JOIN Person AS p ON p.personID = id.personID
+		AND p.currentIdentityID = id.identityID
+	INNER JOIN HouseholdMember AS hm ON hm.personID = rp.personID2
+		AND (GETDATE() BETWEEN hm.startDate AND hm.endDate
+			OR (GETDATE() > hm.startDate AND hm.endDate IS NULL))
+	INNER JOIN Household AS h ON h.householdID = hm.householdID
+	INNER JOIN HouseholdLocation AS hl ON hl.householdID = h.householdID
+		AND hl.[secondary] = 0
+		AND (GETDATE() BETWEEN hl.startDate AND hl.endDate
+			OR (GETDATE() > hl.startDate AND hl.endDate IS NULL))
+WHERE en.serviceType = 'P'
+	AND (en.startDate <= GETDATE() AND (en.endDate IS NULL OR en.endDate >= GETDATE()))
+GROUP BY id.lastName
+	,id.firstName
+	,rp.personID2
+	,cal.calendarID
+	,sch.comments
+	,cs.[value]
+	,rp.personID1
+HAVING COUNT(*) >= 2
+
 
 
 UNION ALL
@@ -120,50 +119,50 @@ UNION ALL
 --Error	=========================================
 --Code  || Guardian Multiple Mailing Addresses ||
 --GU003	=========================================
-SELECT DISTINCT x.searchableField
-	,x.searchType
-	,x.localCode
-	,x.[status]
-	,x.[type]
-	,x.personID
-	,x.calendarID
-	,x.school
+SELECT id.lastName + ', ' + id.firstName AS 'searchableField'
+	,'guardianName' AS 'searchType'
+	,'GU003' AS 'localCode'
+	,'error' AS 'status'
+	,'guardianMultipleMailingAddresses' AS 'type'
+	,rp.personID2 AS 'personID'
+	,cal.calendarID
+	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,0 AS 'stateReporting'
 	,0 AS 'alt'
-FROM (
-	SELECT RANK() OVER (PARTITION BY p.personID ORDER BY hl.modifiedDate, hl.addressID DESC) AS 'duplicateNumber'
-		,id.lastName + ', ' + id.firstName AS 'searchableField'
-		,'guardianName' AS 'searchType'
-		,'GU003' AS 'localCode'
-		,'error' AS 'status'
-		,'guardianMultipleMailingAddresses' AS 'type'
-		,rp.personID2 AS 'personID'
-		,cal.calendarID
-		,sch.comments AS 'school'
-	FROM Enrollment AS en
-		INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
-		INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
-			AND scy.active = 1
-		INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
-		INNER JOIN RelatedPair AS rp ON rp.personID1 = en.personID
-			AND rp.guardian = 1
-			AND (GETDATE() BETWEEN rp.startDate AND rp.endDate
-				OR (GETDATE() > rp.startDate AND rp.endDate IS NULL))
-		INNER JOIN [Identity] AS id ON id.personID = rp.personID2
-		INNER JOIN Person AS p ON p.personID = id.personID
-			AND p.currentIdentityID = id.identityID
-		INNER JOIN HouseholdMember AS hm ON hm.personID = rp.personID2
-			AND (GETDATE() BETWEEN hm.startDate AND hm.endDate
-				OR (GETDATE() > hm.startDate AND hm.endDate IS NULL))
-		INNER JOIN Household AS h ON h.householdID = hm.householdID
-		INNER JOIN HouseholdLocation AS hl ON hl.householdID = h.householdID
-			AND hl.mailing = 1
-			AND (GETDATE() BETWEEN hl.startDate AND hl.endDate
-				OR (GETDATE() > hl.startDate AND hl.endDate IS NULL))
-	WHERE en.serviceType = 'P'
-		AND (en.startDate <= GETDATE() AND (en.endDate IS NULL OR en.endDate >= GETDATE()))
-) AS x
-WHERE x.duplicateNumber != 1
+FROM Enrollment AS en
+	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
+	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
+		AND scy.active = 1
+	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
+	INNER JOIN RelatedPair AS rp ON rp.personID1 = en.personID
+		AND rp.guardian = 1
+		AND (GETDATE() BETWEEN rp.startDate AND rp.endDate
+			OR (GETDATE() > rp.startDate AND rp.endDate IS NULL))
+	INNER JOIN [Identity] AS id ON id.personID = rp.personID2
+	INNER JOIN Person AS p ON p.personID = id.personID
+		AND p.currentIdentityID = id.identityID
+	INNER JOIN HouseholdMember AS hm ON hm.personID = rp.personID2
+		AND (GETDATE() BETWEEN hm.startDate AND hm.endDate
+			OR (GETDATE() > hm.startDate AND hm.endDate IS NULL))
+	INNER JOIN Household AS h ON h.householdID = hm.householdID
+	INNER JOIN HouseholdLocation AS hl ON hl.householdID = h.householdID
+		AND hl.mailing = 1
+		AND (GETDATE() BETWEEN hl.startDate AND hl.endDate
+			OR (GETDATE() > hl.startDate AND hl.endDate IS NULL))
+WHERE en.serviceType = 'P'
+	AND (en.startDate <= GETDATE() AND (en.endDate IS NULL OR en.endDate >= GETDATE()))
+GROUP BY id.lastName
+	,id.firstName
+	,rp.personID2
+	,cal.calendarID
+	,sch.comments
+	,cs.[value]
+	,rp.personID1
+HAVING COUNT(*) >= 2
+
 
 
 UNION ALL
@@ -180,6 +179,7 @@ SELECT DISTINCT id.lastName + ', ' + id.firstName AS 'searchableField'
 	,p.personID
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,0 AS 'stateReporting'
 	,0 AS 'alt'
 FROM Enrollment AS en
@@ -187,6 +187,8 @@ FROM Enrollment AS en
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
 		AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 	INNER JOIN RelatedPair AS rp ON rp.personID1 = en.personID
 		AND rp.guardian = 1
 		AND (GETDATE() BETWEEN rp.startDate AND rp.endDate
@@ -221,6 +223,7 @@ SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,p.personID
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,0 AS 'stateReporting'
 	,0 AS 'alt'
 FROM Enrollment AS en
@@ -231,6 +234,8 @@ FROM Enrollment AS en
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
 			AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 	INNER JOIN HouseholdMember AS hm ON hm.personID = en.personID
 		AND (GETDATE() BETWEEN hm.startDate AND hm.endDate
 			OR (GETDATE() > hm.startDate AND hm.endDate IS NULL))
@@ -266,6 +271,7 @@ SELECT DISTINCT id.lastName + ', ' + id.firstName AS 'searchableField'
 	,p.personID
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,0 AS 'stateReporting'
 	,0 AS 'alt'
 FROM Enrollment AS en
@@ -273,6 +279,8 @@ FROM Enrollment AS en
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
 			AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 	INNER JOIN RelatedPair AS rp ON rp.personID1 = en.personID
 	INNER JOIN HouseholdMember AS hm ON hm.personID = rp.personID1
 		AND hm.[private] = 0
@@ -323,6 +331,7 @@ SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,p.personID
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,1 AS 'stateReporting'
 	,0 AS 'alt'
 FROM Enrollment AS en
@@ -330,6 +339,8 @@ FROM Enrollment AS en
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
 			AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 	INNER JOIN [Identity] AS id ON id.personID = en.personID
 	INNER JOIN Person AS p ON p.personID = id.personID
 		AND p.currentIdentityID = id.identityID
@@ -352,6 +363,7 @@ SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,p.personID
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,0 AS 'stateReporting'
 	,0 AS 'alt'
 FROM Enrollment AS en
@@ -359,6 +371,8 @@ FROM Enrollment AS en
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
 			AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 	INNER JOIN [Identity] AS id ON id.personID = en.personID
 	INNER JOIN Person AS p ON p.personID = id.personID
 		AND p.currentIdentityID = id.identityID
@@ -379,32 +393,18 @@ WHERE en.serviceType = 'P'
 UNION ALL
 
 
---This report was consolidated down to a single query, this slot is open for another report
---Error	==========
---Code  || ---- ||
---ST002	==========
-
-
-
-
---Error	=================================
---Code  || Student Incomplete Relation ||
---ST003	=================================
+--Error	===============================
+--Code  || Student No Relation Type  ||
+--ST003	===============================
 SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,'studentNumber' AS 'searchType'
 	,'ST003' AS 'localCode'
 	,'incomplete' AS 'status'
-	,CASE
-		WHEN rp.startDate IS NULL 
-			AND (rp.[name] LIKE 'Mother & Father' OR rp.[name] IS NULL) THEN 'noRelationType, noRelationStartDate'
-		WHEN rp.startDate IS NULL 
-			AND (rp.[name] NOT LIKE 'Mother & Father' OR rp.[name] IS NOT NULL) THEN 'noRelationStartDate'
-		WHEN rp.startDate IS NOT NULL 
-			AND (rp.[name] LIKE 'Mother & Father' OR rp.[name] IS NULL) THEN 'noRelationType'
-	END AS 'type'
+	,'invalidOrNoRelationType' AS 'type'
 	,p.personID
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,0 AS 'stateReporting'
 	,0 AS 'alt'
 FROM Enrollment AS en
@@ -412,14 +412,15 @@ FROM Enrollment AS en
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
 			AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID	
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 	INNER JOIN [Identity] AS id ON id.personID = en.personID
 	INNER JOIN Person AS p ON p.currentIdentityID = id.identityID 
 		AND p.personID = id.personID
 	INNER JOIN RelatedPair AS rp ON rp.personID1 = p.personID
 		AND (rp.endDate IS NULL
-			OR GETDATE() < rp.endDate)
-		AND (rp.startDate IS NULL 
-			OR rp.[name] LIKE 'Mother & Father'
+			OR GETDATE() <= rp.endDate)
+		AND (rp.[name] LIKE 'Mother and Father'
 			OR rp.[name] IS NULL )
 WHERE en.serviceType = 'P'
 	AND (en.startDate <= GETDATE() AND (en.endDate IS NULL OR en.endDate >= GETDATE()))
@@ -431,49 +432,43 @@ UNION ALL
 --Error	=========================
 --Code  || Student No Guardian ||
 --ST004	=========================
-SELECT DISTINCT x.searchableField
-	,x.searchType
-	,x.localCode
-	,x.[status]
-	,x.[type]
-	,x.personID
-	,x.calendarID
-	,x.school
+SELECT DISTINCT p.studentNumber AS 'searchableField'
+	,'studentNumber' AS 'searchType'
+	,'ST004' AS 'localCode'
+	,'error' AS 'status'
+	,'studentNoGuardians' AS 'type'
+	,p.personID
+	,cal.calendarID
+	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,0 AS 'stateReporting'
-	,0 AS 'alt'
-FROM (
-		SELECT DISTINCT p.studentNumber AS 'searchableField'
-			,'studentNumber' AS 'searchType'
-			,'ST004' AS 'localCode'
-			,'error' AS 'status'
-			,'studentNoGuardians' AS 'type'
-			,p.personID
-			,cal.calendarID
-			,sch.comments AS 'school'
-			,0 AS 'stateReporting'
-			,COUNT(*) AS 'alt'
-		FROM Enrollment AS en
-			INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
-				AND cal.schoolID NOT IN (29,31) --Not JDC Schools
-			INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
-				AND scy.active = 1
-			INNER JOIN School AS sch ON sch.schoolID = cal.schoolID	
-			INNER JOIN [Identity] AS id ON id.personID = en.personID
-			INNER JOIN Person AS p ON p.currentIdentityID = id.identityID 
-				AND p.personID = id.personID
-			LEFT JOIN RelatedPair AS rp ON rp.personID1 = p.personID 
-				AND rp.guardian = 1
-				AND (GETDATE() BETWEEN rp.startDate AND rp.endDate
-					OR (GETDATE() > rp.startDate AND rp.endDate IS NULL))
-		WHERE en.serviceType = 'P'
-			AND (en.startDate <= GETDATE() AND (en.endDate IS NULL OR en.endDate >= GETDATE()))
-		GROUP BY id.lastName + ', ' + id.firstName
-			,p.studentNumber
-			,p.personID
-			,cal.calendarID
-			,sch.comments
-		HAVING COUNT(*) = 1
-	) AS x
+	,COUNT(*) AS 'alt'
+FROM Enrollment AS en
+	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
+		AND cal.schoolID NOT IN (29,31) --Not JDC Schools
+	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
+		AND scy.active = 1
+	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
+	INNER JOIN [Identity] AS id ON id.personID = en.personID
+	INNER JOIN Person AS p ON p.currentIdentityID = id.identityID 
+		AND p.personID = id.personID
+	LEFT JOIN RelatedPair AS rp ON rp.personID1 = p.personID 
+		AND (rp.guardian = 1 OR rp.[name] = 'Emancipated')
+		AND (rp.startDate <= GETDATE() AND (rp.endDate IS NULL OR rp.endDate >= GETDATE()))
+WHERE rp.guardian IS NULL
+	AND en.serviceType = 'P'
+	AND (en.startDate <= GETDATE() AND (en.endDate IS NULL OR en.endDate >= GETDATE()))
+GROUP BY id.lastName
+	,id.firstName
+	,p.studentNumber
+	,p.personID
+	,cal.calendarID
+	,sch.comments
+	,cs.[value]
+HAVING COUNT(*) = 1
+
 
 UNION ALL
 
@@ -481,42 +476,38 @@ UNION ALL
 --Error	============================================
 --Code  || Student Multiple Primary Memberships ||
 --ST005	============================================
-SELECT DISTINCT x.searchableField
-	,x.searchType
-	,x.localCode
-	,x.[status]
-	,x.[type]
-	,x.personID
-	,x.calendarID
-	,x.school
+SELECT p.studentNumber AS 'searchableField'
+	,'studentNumber' AS 'searchType'
+	,'ST005' AS 'localCode'
+	,'error' AS 'status'
+	,'studentMultiplePrimaryMembership' AS 'type'
+	,p.personID
+	,cal.calendarID
+	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,0 AS 'stateReporting'
 	,0 AS 'alt'
-FROM (
-	SELECT RANK() OVER (PARTITION BY p.personID ORDER BY hm.modifiedDate, hm.householdID DESC) AS 'duplicateNumber'
-		,p.studentNumber AS 'searchableField'
-		,'studentNumber' AS 'searchType'
-		,'ST005' AS 'localCode'
-		,'error' AS 'status'
-		,'studentMultiplePrimaryMembership' AS 'type'
-		,p.personID
-		,cal.calendarID
-		,sch.comments AS 'school'
-	FROM Enrollment AS en
-		INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
-		INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
-				AND scy.active = 1
-		INNER JOIN School AS sch ON sch.schoolID = cal.schoolID	
-		INNER JOIN [Identity] AS id ON id.personID = en.personID
-		INNER JOIN Person AS p ON p.personID = id.personID
-			AND p.currentIdentityID = id.identityID
-		INNER JOIN HouseholdMember AS hm ON hm.personID = p.personID
-			AND hm.[secondary] = 0
-			AND (GETDATE() BETWEEN hm.startDate AND hm.endDate
-				OR (GETDATE() > hm.startDate AND hm.endDate IS NULL))
-	WHERE en.serviceType = 'P'
+FROM Enrollment AS en
+	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
+	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
+			AND scy.active = 1
+	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
+	INNER JOIN [Identity] AS id ON id.personID = en.personID
+	INNER JOIN Person AS p ON p.personID = id.personID
+		AND p.currentIdentityID = id.identityID
+	INNER JOIN HouseholdMember AS hm ON hm.personID = p.personID
+		AND hm.[secondary] = 0
+		AND (hm.startDate <= GETDATE() AND (hm.endDate IS NULL OR hm.endDate >= GETDATE()))
+WHERE en.serviceType = 'P'
 	AND (en.startDate <= GETDATE() AND (en.endDate IS NULL OR en.endDate >= GETDATE()))
-) AS x
-WHERE x.duplicateNumber != 1
+GROUP BY p.studentNumber
+	,p.personID
+	,cal.calendarID
+	,sch.comments
+	,cs.[value]
+HAVING COUNT(*) >= 2
 
 
 UNION ALL
@@ -525,47 +516,42 @@ UNION ALL
 --Error	========================================
 --Code  || Student Multiple Primary Addresses ||
 --ST006	========================================
-SELECT DISTINCT x.searchableField
-	,x.searchType
-	,x.localCode
-	,x.[status]
-	,x.[type]
-	,x.personID
-	,x.calendarID
-	,x.school
+SELECT p.studentNumber AS 'searchableField'
+	,'studentNumber' AS 'searchType'
+	,'ST006' AS 'localCode'
+	,'error' AS 'status'
+	,'studentMultiplePrimaryAddresses' AS 'type'
+	,p.personID
+	,cal.calendarID
+	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,0 AS 'stateReporting'
 	,0 AS 'alt'
-FROM (
-	SELECT RANK() OVER (PARTITION BY p.personID ORDER BY hl.modifiedDate, hl.addressID DESC) AS 'duplicateNumber'
-		,p.studentNumber AS 'searchableField'
-		,'studentNumber' AS 'searchType'
-		,'ST006' AS 'localCode'
-		,'error' AS 'status'
-		,'studentMultiplePrimaryAddresses' AS 'type'
-		,p.personID
-		,cal.calendarID
-		,sch.comments AS 'school'
-	FROM Enrollment AS en
-		INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
-		INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
-				AND scy.active = 1
-		INNER JOIN School AS sch ON sch.schoolID = cal.schoolID	
-		INNER JOIN [Identity] AS id ON id.personID = en.personID
-		INNER JOIN Person AS p ON p.personID = id.personID
-			AND p.currentIdentityID = id.identityID
-		INNER JOIN HouseholdMember AS hm ON hm.personID = p.personID
-			AND hm.[secondary] = 0
-			AND (GETDATE() BETWEEN hm.startDate AND hm.endDate
-				OR (GETDATE() > hm.startDate AND hm.endDate IS NULL))
-		INNER JOIN Household AS h ON h.householdID = hm.householdID
-		INNER JOIN HouseholdLocation AS hl ON hl.householdID = h.householdID
-			AND hl.[secondary] = 0
-			AND (GETDATE() BETWEEN hl.startDate AND hl.endDate
-				OR (GETDATE() > hl.startDate AND hl.endDate IS NULL))
-	WHERE en.serviceType = 'P'
+FROM Enrollment AS en
+	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
+	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
+			AND scy.active = 1
+	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
+	INNER JOIN [Identity] AS id ON id.personID = en.personID
+	INNER JOIN Person AS p ON p.personID = id.personID
+		AND p.currentIdentityID = id.identityID
+	INNER JOIN HouseholdMember AS hm ON hm.personID = p.personID
+		AND hm.[secondary] = 0
+		AND (hm.startDate <= GETDATE() AND (hm.endDate IS NULL OR hm.endDate >= GETDATE()))
+	INNER JOIN Household AS h ON h.householdID = hm.householdID
+	INNER JOIN HouseholdLocation AS hl ON hl.householdID = h.householdID
+		AND hl.[secondary] = 0
+		AND (hl.startDate <= GETDATE() AND (hl.endDate IS NULL OR hl.endDate >= GETDATE()))
+WHERE en.serviceType = 'P'
 	AND (en.startDate <= GETDATE() AND (en.endDate IS NULL OR en.endDate >= GETDATE()))
-) AS x
-WHERE x.duplicateNumber != 1
+GROUP BY p.studentNumber
+	,p.personID
+	,cal.calendarID
+	,sch.comments
+	,cs.[value]
+HAVING COUNT(*) >= 2
 
 
 UNION ALL
@@ -574,47 +560,42 @@ UNION ALL
 --Error	========================================
 --Code  || Student Multiple Mailing Addresses ||
 --ST007	========================================
-SELECT DISTINCT x.searchableField
-	,x.searchType
-	,x.localCode
-	,x.[status]
-	,x.[type]
-	,x.personID
-	,x.calendarID
-	,x.school
+SELECT p.studentNumber AS 'searchableField'
+	,'studentNumber' AS 'searchType'
+	,'ST007' AS 'localCode'
+	,'warning' AS 'status'
+	,'studentMultipleMailingAddresses' AS 'type'
+	,p.personID
+	,cal.calendarID
+	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,0 AS 'stateReporting'
 	,0 AS 'alt'
-FROM (
-	SELECT RANK() OVER (PARTITION BY p.personID ORDER BY hl.modifiedDate, hl.addressID DESC) AS 'duplicateNumber'
-		,p.studentNumber AS 'searchableField'
-		,'studentNumber' AS 'searchType'
-		,'ST007' AS 'localCode'
-		,'error' AS 'status'
-		,'studentMultipleMailingAddresses' AS 'type'
-		,p.personID
-		,cal.calendarID
-		,sch.comments AS 'school'
-	FROM Enrollment AS en
-		INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
-		INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
-				AND scy.active = 1
-		INNER JOIN School AS sch ON sch.schoolID = cal.schoolID	
-		INNER JOIN [Identity] AS id ON id.personID = en.personID
-		INNER JOIN Person AS p ON p.personID = id.personID
-			AND p.currentIdentityID = id.identityID
-		INNER JOIN HouseholdMember AS hm ON hm.personID = p.personID
-			AND hm.[secondary] = 0
-			AND (GETDATE() BETWEEN hm.startDate AND hm.endDate
-				OR (GETDATE() > hm.startDate AND hm.endDate IS NULL))
-		INNER JOIN Household AS h ON h.householdID = hm.householdID
-		INNER JOIN HouseholdLocation AS hl ON hl.householdID = h.householdID
-			AND hl.mailing = 1
-			AND (GETDATE() BETWEEN hl.startDate AND hl.endDate
-				OR (GETDATE() > hl.startDate AND hl.endDate IS NULL))
-	WHERE en.serviceType = 'P'
+FROM Enrollment AS en
+	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
+	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
+			AND scy.active = 1
+	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
+	INNER JOIN [Identity] AS id ON id.personID = en.personID
+	INNER JOIN Person AS p ON p.personID = id.personID
+		AND p.currentIdentityID = id.identityID
+	INNER JOIN HouseholdMember AS hm ON hm.personID = p.personID
+		AND hm.[secondary] = 0
+		AND (hm.startDate <= GETDATE() AND (hm.endDate IS NULL OR hm.endDate >= GETDATE()))
+	INNER JOIN Household AS h ON h.householdID = hm.householdID
+	INNER JOIN HouseholdLocation AS hl ON hl.householdID = h.householdID
+		AND hl.mailing = 1
+		AND (hl.startDate <= GETDATE() AND (hl.endDate IS NULL OR hl.endDate >= GETDATE()))
+WHERE en.serviceType = 'P'
 	AND (en.startDate <= GETDATE() AND (en.endDate IS NULL OR en.endDate >= GETDATE()))
-) AS x
-WHERE x.duplicateNumber != 1
+GROUP BY p.studentNumber
+	,p.personID
+	,cal.calendarID
+	,sch.comments
+	,cs.[value]
+HAVING COUNT(*) >= 2
 
 
 UNION ALL
@@ -623,42 +604,38 @@ UNION ALL
 --Error	=====================================
 --Code  || Student More Than Two Guardians ||
 --ST008	=====================================
-SELECT DISTINCT x.searchableField
-	,x.searchType
-	,x.localCode
-	,x.[status]
-	,x.[type]
-	,x.personID
-	,x.calendarID
-	,x.school
+SELECT p.studentNumber AS 'searchableField'
+	,'studentNumber' AS 'searchType'
+	,'ST008' AS 'localCode'
+	,'warning' AS 'status'
+	,'studentMoreThanTwoGuardians' AS 'type'
+	,p.personID
+	,cal.calendarID
+	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,0 AS 'stateReporting'
-	,0 AS 'alt'
-FROM (
-	SELECT RANK() OVER (PARTITION BY p.personID ORDER BY p.personID, rp.personID2 DESC) AS 'duplicateNumber'
-		,p.studentNumber AS 'searchableField'
-		,'studentNumber' AS 'searchType'
-		,'ST008' AS 'localCode'
-		,'warning' AS 'status'
-		,'studentMoreThanTwoGuardians' AS 'type'
-		,p.personID
-		,cal.calendarID
-		,sch.comments AS 'school'
-	FROM Enrollment AS en
-		INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
-		INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
-				AND scy.active = 1
-		INNER JOIN School AS sch ON sch.schoolID = cal.schoolID	
-		INNER JOIN [Identity] AS id ON id.personID = en.personID
-		INNER JOIN Person AS p ON p.personID = id.personID
-			AND p.currentIdentityID = id.identityID
-		INNER JOIN RelatedPair AS rp oN rp.personID1 = p.personID
-			AND rp.guardian = 1
-			AND (GETDATE() BETWEEN rp.startDate AND rp.endDate
-				OR (GETDATE() > rp.startDate AND rp.endDate IS NULL))
-	WHERE en.serviceType = 'P'
+	,COUNT(*) AS 'alt'
+FROM Enrollment AS en
+	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
+	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
+			AND scy.active = 1
+	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
+	INNER JOIN [Identity] AS id ON id.personID = en.personID
+	INNER JOIN Person AS p ON p.personID = id.personID
+		AND p.currentIdentityID = id.identityID
+	INNER JOIN RelatedPair AS rp oN rp.personID1 = p.personID
+		AND rp.guardian = 1
+		AND (rp.startDate <= GETDATE() AND (rp.endDate IS NULL OR rp.endDate >= GETDATE()))
+WHERE en.serviceType = 'P'
 	AND (en.startDate <= GETDATE() AND (en.endDate IS NULL OR en.endDate >= GETDATE()))
-) AS x
-WHERE x.duplicateNumber >= 3
+GROUP BY p.studentNumber
+	,p.personID
+	,cal.calendarID
+	,sch.comments
+	,cs.[value]
+HAVING COUNT(*) > 2
 
 
 UNION ALL
@@ -675,20 +652,24 @@ SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,p.personID
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,0 AS 'stateReporting'
 	,0 AS 'alt'
 FROM Enrollment AS en
 	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
 			AND scy.active = 1
-	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID	
+	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 	INNER JOIN [Identity] AS id ON id.personID = en.personID
 	INNER JOIN Person AS p ON p.currentIdentityID = id.identityID
 		AND p.personID = id.personID
 	INNER JOIN RelatedPair AS rp ON p.personID = rp.personID1
 		AND rp.guardian = 1
-		AND (GETDATE() BETWEEN rp.startDate AND rp.endDate
-			OR (GETDATE() > rp.startDate AND rp.endDate IS NULL))
+		AND rp.[name] != 'Emancipated'
+		AND rp.personID1 != rp.personID2
+		AND (rp.startDate <= GETDATE() AND (rp.endDate IS NULL OR rp.endDate >= GETDATE()))
 	INNER JOIN Person AS p2 ON p2.personID = rp.personID2
 	INNER JOIN [Identity] AS id2 ON id2.personID = p2.personID
 		AND id2.identityID = p2.currentIdentityID
@@ -700,41 +681,42 @@ WHERE en.serviceType = 'P'
 UNION ALL
 
 
---DID NOT RECIEVE RE-WRITE ON LAST UPDATE
---Error	========================================
---Code  || Student With Nonhousehold Guardian ||
---ST010	========================================
---
---SELECT DISTINCT e.personID AS 'verificationID',
---	e.personID AS 'searchableField',
---	'ST010' AS 'code',
---	'warning' AS 'status',
---	'search>student>relationships' AS 'location',
---	'studentWithNonhouseholdGuardian' AS 'type',
---	NULL AS 'modifiedByID',
---	NULL AS 'modifiedDate'
---FROM Enrollment AS e
---	INNER JOIN [Identity] AS i ON i.personID = e.personID
---	INNER JOIN Person AS p ON p.currentIdentityID = i.identityID 
---		AND p.personID = i.personID
---	INNER JOIN RelatedPair AS rp ON p.personID = rp.personID1
---		AND rp.guardian = 1
---		AND (GETDATE() BETWEEN rp.startDate AND rp.endDate
---			OR (GETDATE() > rp.startDate AND rp.endDate IS NULL))
---WHERE e.endyear = @eYear
---	AND rp.relatedPairGUID NOT IN (
---		SELECT rp.relatedPairGUID
---		FROM Household AS h
---		INNER JOIN HouseholdMember AS hm ON hm.householdID = h.householdID 
---			AND hm.enddate IS NULL
---		INNER JOIN RelatedPair AS rp ON hm.personID = rp.personID2 
---			AND rp.guardian = 1
---			AND (GETDATE() BETWEEN rp.startDate AND rp.endDate
---				OR (GETDATE() > rp.startDate AND rp.endDate IS NULL)))
+--Error	====================================
+--Code  || Student No Relation Start Date ||
+--ST010	====================================
+SELECT DISTINCT p.studentNumber AS 'searchableField'
+	,'studentNumber' AS 'searchType'
+	,'ST002' AS 'localCode'
+	,'incomplete' AS 'status'
+	,'noRelationStartDate' AS 'type'
+	,p.personID
+	,cal.calendarID
+	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
+	,0 AS 'stateReporting'
+	,0 AS 'alt'
+FROM Enrollment AS en
+	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
+	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
+			AND scy.active = 1
+	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
+	INNER JOIN [Identity] AS id ON id.personID = en.personID
+	INNER JOIN Person AS p ON p.currentIdentityID = id.identityID 
+		AND p.personID = id.personID
+	INNER JOIN RelatedPair AS rp ON rp.personID1 = p.personID
+		AND rp.startDate IS NULL 
+		AND (rp.endDate IS NULL OR rp.endDate >= GETDATE())
+WHERE en.serviceType = 'P'
+	AND (en.startDate <= GETDATE() AND (en.endDate IS NULL OR en.endDate >= GETDATE()))
+
+
+UNION ALL
 
 
 --Error	========================================
---Code  || Student Mulitple Similar Addresses ||
+--Code  || Student Multiple Similar Addresses ||
 --ST011	========================================
 SELECT x.searchableField
 	,x.searchType
@@ -744,8 +726,9 @@ SELECT x.searchableField
 	,x.personID
 	,x.calendarID
 	,x.school
-	,0 AS 'stateReporting'
-	,0 AS 'alt'
+	,x.[range]
+	,x.stateReporting
+	,x.alt
 FROM (
 	SELECT p.studentNumber AS 'searchableField'
 		,'studentNumber' AS 'searchType'
@@ -755,6 +738,7 @@ FROM (
 		,p.personID
 		,cal.calendarID
 		,sch.comments AS 'school'
+		,cs.[value] AS 'range'
 		,a.number
 		,a.street
 		,a.apt
@@ -765,24 +749,24 @@ FROM (
 		INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
 				AND scy.active = 1
 		INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+		INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+			AND cs.attributeID = 618 --618 is the "range" for the school
 		INNER JOIN [Identity] AS id ON id.personID = en.personID
 		INNER JOIN Person AS p ON p.currentIdentityID = id.identityID 
 			AND p.personID = id.personID
 		INNER JOIN HouseholdMember AS hm ON hm.personID = p.personID 
-			AND (GETDATE() BETWEEN hm.startDate AND hm.endDate
-				OR (GETDATE() > hm.startDate AND hm.endDate IS NULL))
+			AND (hm.startDate <= GETDATE() AND (hm.endDate IS NULL OR hm.endDate >= GETDATE()))
 		INNER JOIN Household AS h ON h.householdID = hm.householdID
 		INNER JOIN HouseholdLocation AS hl ON hl.householdID = h.householdID 
-			AND (GETDATE() BETWEEN hl.startDate AND hl.endDate
-				OR (GETDATE() > hl.startDate AND hl.endDate IS NULL))
+			AND (hl.startDate <= GETDATE() AND (hl.endDate IS NULL OR hl.endDate >= GETDATE()))
 		INNER JOIN [Address] AS a ON a.addressID = hl.addressID
 	WHERE en.serviceType = 'P'
 		AND (en.startDate <= GETDATE() AND (en.endDate IS NULL OR en.endDate >= GETDATE()))
-	GROUP BY id.lastName + ', ' + id.firstName
-		,p.studentNumber
+	GROUP BY p.studentNumber
 		,p.personID
 		,cal.calendarID
 		,sch.comments
+		,cs.[value]
 		,a.number
 		,a.street
 		,a.apt
@@ -804,8 +788,9 @@ SELECT x.searchableField
 	,x.personID
 	,x.calendarID
 	,x.school
-	,1 AS 'stateReporting'
-	,0 AS 'alt'
+	,x.[range]
+	,x.stateReporting
+	,x.alt
 FROM (
 	SELECT RANK() OVER (PARTITION BY p.personID ORDER BY en.grade DESC, en.startdate DESC) AS 'priority'
 		,CASE en.grade
@@ -846,11 +831,16 @@ FROM (
 		,p.personID
 		,cal.calendarID
 		,sch.comments AS 'school'
+		,cs.[value] AS 'range'
+		,1 AS 'stateReporting'
+		,0 AS 'alt'
 	FROM Enrollment AS en
 		INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
 		INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
 				AND scy.active = 1
 		INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+		INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+			AND cs.attributeID = 618 --618 is the "range" for the school
 		LEFT JOIN Enrollment AS e2 ON e2.personID = en.personID
 			AND e2.serviceType = 'P'
 			AND e2.endYear = en.endYear - 1
@@ -879,20 +869,29 @@ SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,p.personID
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,1 AS 'stateReporting'
 	,0 AS 'alt'
 FROM Enrollment AS en
 	INNER JOIN Person AS p ON p.personID = en.personID
 	INNER JOIN [Identity] AS id ON id.personID = p.personID
 		AND id.identityID = p.currentIdentityID
+		AND (id.immigrant IS NOT NULL
+			OR id.dateEnteredUS IS NOT NULL)
 	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
 			AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 WHERE en.serviceType = 'P'
 	AND (en.startDate <= GETDATE() AND (en.endDate IS NULL OR en.endDate >= GETDATE()))
-	AND ((id.immigrant = 1 AND (id.birthCountry IS NULL OR id.dateEnteredUS IS NULL))
-		OR (id.dateEnteredUS IS NOT NULL AND id.immigrant IS NULL))
+	AND ((id.immigrant IS NULL OR id.immigrant = 0)
+		OR (id.dateEnteredUS IS NOT NULL 
+			OR id.dateEnteredUSSchool IS NOT NULL
+			OR id.dateEnteredState IS NOT NULL)
+		OR id.homePrimaryLanguage IS NULL
+		OR (id.birthCountry IS NULL OR id.birthCountry = 'US' OR id.birthCountry = ''))
 
 
 UNION ALL
@@ -904,92 +903,45 @@ UNION ALL
 SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,'studentNumber' AS 'searchType'
 	,'ST014' AS 'localCode'
-	,'warning' AS 'status'
+	,'error' AS 'status'
 	,'studentUSBirthWithImmigrationData' AS 'type'
 	,p.personID
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,1 AS 'stateReporting'
 	,0 AS 'alt'
 FROM Enrollment AS en
 	INNER JOIN Person AS p ON p.personID = en.personID
 	INNER JOIN [Identity] AS id ON id.personID = p.personID
 		AND id.identityID = p.currentIdentityID
+		AND id.birthCountry = 'US' 
 	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
 			AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 WHERE en.serviceType = 'P'
 	AND (en.startDate <= GETDATE() AND (en.endDate IS NULL OR en.endDate >= GETDATE()))
-	AND (id.birthCountry = 'US' 
-		AND (id.dateEnteredUS IS NOT NULL 
-			OR id.dateEnteredUSSchool IS NOT NULL
-			OR id.dateEnteredState IS NOT NULL))
+	AND (id.dateEnteredUS IS NOT NULL 
+		OR id.dateEnteredUSSchool IS NOT NULL
+		OR id.dateEnteredState IS NOT NULL)
 
 
 UNION ALL
 
 
---Error	==========================================================
---Code  || Student with Immigration Marked but no Home Langague ||
---ST015	==========================================================
-SELECT DISTINCT p.studentNumber AS 'searchableField'
-	,'studentNumber' AS 'searchType'
-	,'ST015' AS 'localCode'
-	,'incomplete' AS 'status'
-	,'studentImmigrationWithNoHomeLanguage' AS 'type'
-	,p.personID
-	,cal.calendarID
-	,sch.comments AS 'school'
-	,1 AS 'stateReporting'
-	,0 AS 'alt'
-FROM Enrollment AS en
-	INNER JOIN Person AS p ON p.personID = en.personID
-	INNER JOIN [Identity] AS id ON id.personID = p.personID
-		AND id.identityID = p.currentIdentityID
-	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
-	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
-			AND scy.active = 1
-	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
-WHERE en.serviceType = 'P'
-	AND (en.startDate <= GETDATE() AND (en.endDate IS NULL OR en.endDate >= GETDATE()))
-	AND id.immigrant = 1
-	AND id.homePrimaryLanguage IS NULL
+--Error	===============
+--Code  || Open slot ||
+--ST015	===============
 
 
-UNION ALL
 
+--Error	===============
+--Code  || Open slot ||
+--ST016	===============
 
---Error	==============================================================
---Code  || Student without Immigration but Immigration Data Entered ||
---ST016	==============================================================
-SELECT DISTINCT p.studentNumber AS 'searchableField'
-	,'studentNumber' AS 'searchType'
-	,'ST016' AS 'localCode'
-	,'warning' AS 'status'
-	,'studentNoImmigrationWithImmigrationData' AS 'type'
-	,p.personID
-	,cal.calendarID
-	,sch.comments AS 'school'
-	,1 AS 'stateReporting'
-	,0 AS 'alt'
-FROM Enrollment AS en
-	INNER JOIN Person AS p ON p.personID = en.personID
-	INNER JOIN [Identity] AS id ON id.personID = p.personID
-		AND id.identityID = p.currentIdentityID
-	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
-	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
-			AND scy.active = 1
-	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
-WHERE en.serviceType = 'P'
-	AND (en.startDate <= GETDATE() AND (en.endDate IS NULL OR en.endDate >= GETDATE()))
-	AND ((id.immigrant = 0 OR id.immigrant IS NULL)
-		AND id.usCitizen != 'C')
-	AND (id.dateEnteredState IS NOT NULL
-		OR id.birthCountry NOT IN ('US',''))
-
-
-UNION ALL
 
 
 --Error	=====================================
@@ -1003,6 +955,7 @@ SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,p.personID
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,1 AS 'stateReporting'
 	,0 AS 'alt'
 FROM Enrollment AS en
@@ -1013,6 +966,8 @@ FROM Enrollment AS en
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
 			AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 WHERE en.serviceType = 'P'
 	AND (en.startDate <= GETDATE() AND (en.endDate IS NULL OR en.endDate >= GETDATE()))
 	AND (((0 + CONVERT(CHAR(8), GETDATE(), 112) - CONVERT(CHAR(8), id.dateEnteredUS, 112)) / 10000) > 3
@@ -1042,6 +997,7 @@ SELECT DISTINCT id.lastName + ', ' + id.firstName AS 'searchableField'
 	,p.personID
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,0 AS 'stateReporting'
 	,0 AS 'alt'
 FROM Enrollment AS en
@@ -1049,17 +1005,17 @@ FROM Enrollment AS en
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
 			AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 	INNER JOIN RelatedPair AS rp ON rp.personID1 = en.personID
 		AND rp.mailing = 1
-		AND (GETDATE() BETWEEN rp.startDate AND rp.endDate
-			OR (GETDATE() > rp.startDate AND rp.endDate IS NULL))
+		AND (rp.startDate <= GETDATE() AND (rp.endDate IS NULL OR rp.endDate >= GETDATE()))
 	INNER JOIN [Identity] AS id ON id.personID = rp.personID2
 	INNER JOIN Person AS p ON p.currentIdentityID = id.identityID 
 		AND p.personID = id.personID
 	LEFT JOIN HouseholdMember AS hm ON hm.personID = rp.personID2
 		AND hm.[secondary] = 0
-		AND (GETDATE() BETWEEN hm.startDate AND hm.endDate
-			OR (GETDATE() > hm.startDate AND hm.endDate IS NULL))
+		AND (hm.startDate <= GETDATE() AND (hm.endDate IS NULL OR hm.endDate >= GETDATE()))
 WHERE en.serviceType = 'P'
 	AND (en.startDate <= GETDATE() AND (en.endDate IS NULL OR en.endDate >= GETDATE()))
 	AND hm.householdID IS NULL
@@ -1080,6 +1036,7 @@ SELECT DISTINCT id.lastName + ', ' + id.firstName AS 'searchableField'
 	,p.personID
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,0 AS 'stateReporting'
 	,0 AS 'alt'
 FROM Enrollment AS en
@@ -1087,22 +1044,21 @@ FROM Enrollment AS en
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
 			AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 	INNER JOIN RelatedPair AS rp ON rp.personID1 = en.personID
 		AND rp.mailing = 1
-		AND (GETDATE() BETWEEN rp.startDate AND rp.endDate
-			OR (GETDATE() > rp.startDate AND rp.endDate IS NULL))
+		AND (rp.startDate <= GETDATE() AND (rp.endDate IS NULL OR rp.endDate >= GETDATE()))
 	INNER JOIN [Identity] AS id ON id.personID = rp.personID2
 	INNER JOIN Person AS p ON p.currentIdentityID = id.identityID 
 		AND p.personID = id.personID
 	INNER JOIN HouseholdMember AS hm ON hm.personID = rp.personID2
 		AND hm.[secondary] = 0
-		AND (GETDATE() BETWEEN hm.startDate AND hm.endDate
-			OR (GETDATE() > hm.startDate AND hm.endDate IS NULL))
+		AND (hm.startDate <= GETDATE() AND (hm.endDate IS NULL OR hm.endDate >= GETDATE()))
 	INNER JOIN Household AS h ON h.householdID = hm.householdID
 	LEFT JOIN HouseholdLocation AS hl ON hl.householdID = h.householdID 
 		AND hl.mailing = 1
-		AND (GETDATE() BETWEEN hl.startDate AND hl.endDate
-			OR (GETDATE() > hl.startDate AND hl.endDate IS NULL))
+		AND (hl.startDate <= GETDATE() AND (hl.endDate IS NULL OR hl.endDate >= GETDATE()))
 WHERE en.serviceType = 'P'
 	AND (en.startDate <= GETDATE() AND (en.endDate IS NULL OR en.endDate >= GETDATE()))
 	AND hl.householdID IS NULL
@@ -1118,10 +1074,11 @@ SELECT DISTINCT id.lastName + ', ' + id.firstName AS 'searchableField'
 	,'studentRelationName' AS 'searchType'
 	,'RE002' AS 'localCode'
 	,'error' AS 'status'
-	,'relationMessengerContactNoPhoneMask' AS 'type'
+	,'relationMessengerContactNoPhoneEmailMask' AS 'type'
 	,p.personID
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,0 AS 'stateReporting'
 	,0 AS 'alt'
 FROM Enrollment AS en
@@ -1129,10 +1086,11 @@ FROM Enrollment AS en
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
 			AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 	INNER JOIN RelatedPair AS rp ON rp.personID1 = en.personID
 		AND rp.messenger = 1
-		AND (GETDATE() BETWEEN rp.startDate AND rp.endDate
-			OR (GETDATE() > rp.startDate AND rp.endDate IS NULL))
+		AND (rp.startDate <= GETDATE() AND (rp.endDate IS NULL OR rp.endDate >= GETDATE()))
 	INNER JOIN [Identity] AS id ON id.personID = rp.personID2
 	INNER JOIN Person AS p ON p.currentIdentityID = id.identityID 
 		AND p.personID = id.personID
@@ -1164,6 +1122,7 @@ SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,p.personID
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,0 AS 'stateReporting'
 	,te.termID AS 'alt'
 FROM Roster AS rs
@@ -1174,6 +1133,8 @@ FROM Roster AS rs
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
 			AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 	INNER JOIN ScheduleStructure AS ss ON ss.calendarID = cal.calendarID
 	INNER JOIN SectionPlacement AS sp ON sp.sectionID = se.sectionID
 	INNER JOIN Term AS te ON te.termID = sp.termID
@@ -1186,7 +1147,8 @@ GROUP BY studentNumber
 	,p.personID
 	,cal.calendarID
 	,sch.comments
-	,te.termID  
+	,te.termID 
+	,cs.[value]
 HAVING COUNT(*) > 1
 
 
@@ -1204,6 +1166,7 @@ SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,p.personID
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,1 AS 'stateReporting'
 	,1 AS 'alt'
 FROM Enrollment AS en1
@@ -1217,6 +1180,8 @@ FROM Enrollment AS en1
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
 			AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 WHERE en1.startStatus IN ('1C','2A')
 	AND en1.serviceType = 'P'
 	AND (MONTH(en1.startDate) = 8 AND MONTH(en2.endDate) = 5)     
@@ -1236,6 +1201,7 @@ SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,p.personID
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,1 AS 'stateReporting'
 	,1 AS 'alt'
 FROM Enrollment AS en1
@@ -1253,6 +1219,8 @@ FROM Enrollment AS en1
 			AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
 		AND sch.schoolID != 34
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 WHERE en1.startStatus IN ('1C','2A')
 	AND en1.serviceType = 'P'     
 
@@ -1271,6 +1239,7 @@ SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,p.personID
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,1 AS 'stateReporting'
 	,1 AS 'alt'
 FROM Enrollment AS en1
@@ -1283,6 +1252,8 @@ FROM Enrollment AS en1
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
 			AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 WHERE en1.endStatus IN ('2A','2B','2C','2D')
 	AND en1.serviceType = 'P'
 	AND (MONTH(en2.startDate) = 8 AND MONTH(en1.endDate) = 5)     
@@ -1298,10 +1269,11 @@ SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,'studentNumber' AS 'searchType'
 	,'EN005' AS 'localCode'
 	,'warning' AS 'status'
-	,'studentStartCode' AS 'type'
+	,'studentEndCode' AS 'type'
 	,p.personID
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,1 AS 'stateReporting'
 	,1 AS 'alt'
 FROM Enrollment AS en1
@@ -1319,6 +1291,8 @@ FROM Enrollment AS en1
 			AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
 		AND sch.schoolID != 34
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 WHERE en2.endStatus IN ('2A','2B','2C','2D')
 	AND en1.serviceType = 'P'     
 
@@ -1327,7 +1301,7 @@ UNION ALL
 
 
 --Error ======================================= 
---Code  || Enrollment Record with no classes || 
+--Code  || Enrollment Record with no Classes || 
 --EN006 =======================================  
 SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,'studentNumber' AS 'searchType'
@@ -1337,6 +1311,7 @@ SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,p.personID
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,1 AS 'stateReporting'
 	,1 AS 'alt'
 FROM Enrollment AS en
@@ -1348,6 +1323,8 @@ FROM Enrollment AS en
 			AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
 		AND sch.schoolID NOT IN (7,33) -- Exlucde the following HS, LINC
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 WHERE en.serviceType = 'P'
 	AND en.grade NOT IN ('NG','OT')
 	AND en.personID NOT IN (   
@@ -1378,6 +1355,7 @@ SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,p.personID
 	,x.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,1 AS 'stateReporting'
 	,1 AS 'alt'
 FROM (
@@ -1416,7 +1394,9 @@ FROM (
 	INNER JOIN Person AS p ON p.personID = x.personID
 	INNER JOIN [Identity] AS id ON p.personID = id.personID
 		AND id.identityID = p.currentIdentityID
-	INNER JOIN School AS sch ON sch.schoolID = x.calendarID     
+	INNER JOIN School AS sch ON sch.schoolID = x.calendarID
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 
 
 UNION ALL
@@ -1433,6 +1413,7 @@ SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,p.personID
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,1 AS 'stateReporting'
 	,1 AS 'alt'
 FROM Section AS se
@@ -1443,6 +1424,8 @@ FROM Section AS se
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
 		AND scy.active = 1 
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 	INNER JOIN SectionPlacement AS sp ON sp.sectionID = se.sectionID
 		AND sp.trialID = tl.trialID
 	INNER JOIN Term AS te ON te.termID = sp.termID
@@ -1474,10 +1457,11 @@ SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,p.personID
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,1 AS 'stateReporting'
 	,1 AS 'alt'
 FROM Enrollment AS e1 
-FULL OUTER JOIN Enrollment AS e2 ON e2.personID = e1.personID
+	FULL OUTER JOIN Enrollment AS e2 ON e2.personID = e1.personID
 		AND e2.serviceType = 'P'
 		AND e2.endYear = YEAR(GETDATE())
 		AND (GETDATE() BETWEEN e2.startDate AND e2.endDate  
@@ -1486,6 +1470,8 @@ FULL OUTER JOIN Enrollment AS e2 ON e2.personID = e1.personID
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
 		AND scy.active = 1 
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 	INNER JOIN Person AS p ON p.personID = e1.personID
 	INNER JOIN [Identity] AS id ON id.personID = p.personID
 		AND id.[identityID] = p.currentIdentityID
@@ -1499,17 +1485,18 @@ WHERE e1.endYear = YEAR(GETDATE())
 UNION ALL
 
 
---Error =========================== 
---Code  || Enddate No End Status || 
---EN010 ===========================  
+--Error ================================
+--Code  || Enrollment Incomplete Exit || 
+--EN010 ================================
 SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,'studentNumber' AS 'searchType'
 	,'EN010' AS 'localCode'
 	,'error' AS 'status'
-	,'enrollmentEnddateNoEndStatus' AS 'type'
+	,'enrollmentIncompleteExit' AS 'type'
 	,p.personID
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,1 AS 'stateReporting'
 	,1 AS 'alt'
 FROM Enrollment AS en
@@ -1517,27 +1504,30 @@ FROM Enrollment AS en
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
 		AND scy.active = 1 
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 	INNER JOIN Person AS p ON p.personID = en.personID
 	INNER JOIN [Identity] AS id ON id.personID = p.personID
 		AND id.[identityID] = p.currentIdentityID
-WHERE en.endDate IS NOT NULL
-	AND en.endStatus IS NULL     
+WHERE (en.endDate IS NOT NULL AND en.endStatus IS NULL)
+	OR (en.endDate IS NULL AND en.endStatus IS NOT NULL)
 
 
 UNION ALL
 
 
---Error =========================== 
---Code  || End Status No Enddate || 
---EN011 ===========================  
+--Error	=================================
+--Code  || Enrollment Incomplete Start ||
+--EN011	=================================
 SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,'studentNumber' AS 'searchType'
 	,'EN011' AS 'localCode'
 	,'error' AS 'status'
-	,'enrollmentEndStatusNoEnddate' AS 'type'
+	,'enrollmentIncompleteStart' AS 'type'
 	,p.personID
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,1 AS 'stateReporting'
 	,1 AS 'alt'
 FROM Enrollment AS en
@@ -1545,70 +1535,26 @@ FROM Enrollment AS en
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
 		AND scy.active = 1 
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 	INNER JOIN Person AS p ON p.personID = en.personID
 	INNER JOIN [Identity] AS id ON id.personID = p.personID
 		AND id.[identityID] = p.currentIdentityID
-WHERE en.endDate IS NULL
-	AND en.endStatus IS NOT NULL     
+WHERE (en.startDate IS NOT NULL AND en.startStatus IS NULL)
+	OR (en.startDate IS NULL AND en.startStatus IS NOT NULL)
 
 
 UNION ALL
 
 
---Error =============================== 
---Code  || Startdate No Start Status || 
---EN012 ===============================  
-SELECT DISTINCT p.studentNumber AS 'searchableField'
-	,'studentNumber' AS 'searchType'
-	,'EN012' AS 'localCode'
-	,'error' AS 'status'
-	,'enrollmentStartdateNoStartStatus' AS 'type'
-	,p.personID
-	,cal.calendarID
-	,sch.comments AS 'school'
-	,1 AS 'stateReporting'
-	,1 AS 'alt'
-FROM Enrollment AS en
-	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
-	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
-		AND scy.active = 1 
-	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
-	INNER JOIN Person AS p ON p.personID = en.personID
-	INNER JOIN [Identity] AS id ON id.personID = p.personID
-		AND id.[identityID] = p.currentIdentityID
-WHERE en.startDate IS NOT NULL
-	AND en.startStatus IS NULL     
+--Error	===============
+--Code  || Open slot ||
+--EN012	=============== 
+  
 
-
-UNION ALL
-
-
---Error =============================== 
---Code  || Start Status No Startdate || 
---EN013 ===============================  
-SELECT DISTINCT p.studentNumber AS 'searchableField'
-	,'studentNumber' AS 'searchType'
-	,'EN013' AS 'localCode'
-	,'error' AS 'status'
-	,'enrollmentStartStatusNoStartdate' AS 'type'
-	,p.personID
-	,cal.calendarID
-	,sch.comments AS 'school'
-	,1 AS 'stateReporting'
-	,1 AS 'alt'
-FROM Enrollment AS en
-	INNER JOIN Calendar AS cal ON cal.calendarID = en.calendarID
-	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
-		AND scy.active = 1 
-	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
-	INNER JOIN Person AS p ON p.personID = en.personID
-	INNER JOIN [Identity] AS id ON id.personID = p.personID
-		AND id.[identityID] = p.currentIdentityID
-WHERE en.startDate IS NULL
-	AND en.startStatus IS NOT NULL   
-
-
-UNION ALL
+--Error	===============
+--Code  || Open slot ||
+--EN013	=============== 
 
 
 --Error ================================ 
@@ -1622,6 +1568,7 @@ SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,p.personID
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,1 AS 'stateReporting'
 	,1 AS 'alt'
 FROM Enrollment AS en
@@ -1630,6 +1577,8 @@ FROM Enrollment AS en
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
 		AND scy.active = 1 
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 	INNER JOIN Person AS p ON p.personID = en.personID
 	INNER JOIN [Identity] AS id ON id.personID = p.personID
 		AND id.[identityID] = p.currentIdentityID
@@ -1651,6 +1600,7 @@ SELECT DISTINCT p.studentNumber AS 'searchableField'
 	,p.personID
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,1 AS 'stateReporting'
 	,1 AS 'alt'
 FROM Enrollment AS en
@@ -1659,6 +1609,8 @@ FROM Enrollment AS en
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
 		AND scy.active = 1 
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 	INNER JOIN Person AS p ON p.personID = en.personID
 	INNER JOIN [Identity] AS id ON id.personID = p.personID
 		AND id.[identityID] = p.currentIdentityID
