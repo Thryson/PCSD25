@@ -4,7 +4,7 @@ USE pocatello
 -- Author:  <Lopez, Michael>
 -- Modder:  <Lopez, Michael>
 -- Create date: <11/08/2019>
--- Update date: <02/02/2023>
+-- Update date: <02/24/2023>
 -- Description: <Compile all existing curriculum error reports into a single view>
 -- =============================================    
 
@@ -26,6 +26,7 @@ SELECT DISTINCT co.number + '-' + CONVERT(varchar, se.number) AS 'searchableFiel
 	,'incompleteStaffAssignment' AS 'type'
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,1 AS 'stateReporting'
 	,1 AS 'alt'
 FROM Section AS se 
@@ -38,6 +39,8 @@ FROM Section AS se
 		AND scy.active = 1 
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
 		AND sch.schoolID != 34
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 	INNER JOIN SectionStaffHistory AS ssh ON ssh.sectionID = se.sectionID
 WHERE ssh.personID IS NOT NULL
 	AND (ssh.assignmentID IS NULL
@@ -57,6 +60,7 @@ SELECT DISTINCT co.number + '-' + CONVERT(varchar, se.number) AS 'searchableFiel
 	,'noPrimaryStaffAssinged' AS 'type'
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,1 AS 'stateReporting'
 	,1 AS 'alt'
 FROM Section AS se 
@@ -69,6 +73,8 @@ FROM Section AS se
 		AND scy.active = 1 
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
 		AND sch.schoolID != 34
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 	LEFT JOIN SectionStaffHistory AS ssh ON ssh.sectionID = se.sectionID
 		AND ssh.staffType = 'P'
 WHERE ssh.personID IS NULL     
@@ -87,6 +93,7 @@ SELECT DISTINCT id.lastName + ', ' + id.firstName AS 'searchableField'
 	,'sectionStaffMissingEDUID' AS 'type'
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,1 AS 'stateReporting'
 	,1 AS 'alt'
 FROM Section AS se 
@@ -99,6 +106,8 @@ FROM Section AS se
 		AND scy.active = 1 
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
 		AND sch.schoolID != 34
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 	INNER JOIN SectionStaffHistory AS ssh ON ssh.sectionID = se.sectionID
 		AND ssh.staffType = 'P'
 	INNER JOIN Person AS p ON p.personID = ssh.personID
@@ -120,6 +129,7 @@ SELECT DISTINCT co.number + '-' + CONVERT(varchar, se.number) AS 'searchableFiel
 	,'offSiteProviderDataWithOnSiteSection' AS 'type'
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,1 AS 'stateReporting'
 	,1 AS 'alt'
 FROM Section AS se 
@@ -132,6 +142,8 @@ FROM Section AS se
 		AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
 		AND sch.schoolID != 34 --Not Headstart
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 WHERE se.sectionID NOT IN (  
 		SELECT se.sectionID  
 		FROM Section AS se  
@@ -156,6 +168,7 @@ SELECT DISTINCT co.number + '-' + CONVERT(varchar, se.number) AS 'searchableFiel
 	,'CTSSectionProviderStaffMismatch' AS 'type'
 	,cal2.calendarID
 	,sch2.comments AS 'school'
+	,cs.[value] AS 'range'
 	,0 AS 'stateReporting'
 	,1 AS 'alt'
 FROM Section AS se 
@@ -171,6 +184,8 @@ FROM Section AS se
 		AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
 		AND sch.schoolID != 34
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 	INNER JOIN SectionStaffHistory AS ssh ON ssh.sectionID = se.sectionID
 		AND ssh.staffType = 'P'
 	INNER JOIN Person AS p ON p.personID = ssh.personID
@@ -198,6 +213,7 @@ SELECT DISTINCT co.number + '-' + CONVERT(varchar, se.number) AS 'searchableFiel
 	,'CTSSectionMissingProviderInformation' AS 'type'
 	,cal2.calendarID
 	,sch2.comments AS 'school'
+	,cs2.[value] AS 'range'
 	,1 AS 'stateReporting'
 	,1 AS 'alt'
 FROM Section AS se
@@ -215,6 +231,8 @@ FROM Section AS se
 		AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
 		AND sch.schoolID NOT IN (34,35) --SSHS, PVTC
+	INNER JOIN CustomSchool AS cs2 ON cs2.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 	,Calendar AS cal2
 	INNER JOIN SchoolYear AS scy2 ON scy2.endYear = cal2.endYear
 		AND scy2.active = 1
@@ -237,6 +255,7 @@ SELECT DISTINCT co.number + '-' + CONVERT(varchar, se.number) AS 'searchableFiel
 	,'CTSSectionWithProviderSchool' AS 'type'
 	,cal2.calendarID
 	,sch2.comments AS 'school'
+	,cs2.[value] AS 'range'
 	,1 AS 'stateReporting'
 	,1 AS 'alt'
 FROM Section AS se
@@ -254,6 +273,8 @@ FROM Section AS se
 		AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
 		AND sch.schoolID != 34 -- SSHS
+	INNER JOIN CustomSchool AS cs2 ON cs2.schoolID = sch.schoolID
+		AND cs.attributeID = 618 --618 is the "range" for the school
 	,Calendar AS cal2
 	INNER JOIN SchoolYear AS scy2 ON scy2.endYear = cal2.endYear
 		AND scy2.active = 1
@@ -276,6 +297,7 @@ SELECT DISTINCT co.number + '-' + CONVERT(varchar, se.number) AS 'searchableFiel
 	,'sectionWithInactiveCourse' AS 'type'
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,0 AS 'stateReporting'
 	,1 AS 'alt'
 FROM Section AS se
@@ -288,6 +310,8 @@ FROM Section AS se
 		AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
 		AND sch.schoolID != 34     
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 
 
 UNION ALL
@@ -303,6 +327,7 @@ SELECT DISTINCT co.number + '-' + CONVERT(varchar, se.number) AS 'searchableFiel
 	,'sectionNoInstructionalSetting' AS 'type'
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,1 AS 'stateReporting'
 	,1 AS 'alt'
 FROM Section AS se
@@ -315,6 +340,8 @@ FROM Section AS se
 		AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
 		AND sch.schoolID != 34
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 WHERE se.instructionalSetting IS NULL     
 
 
@@ -331,6 +358,7 @@ SELECT DISTINCT co.number + '-' + CONVERT(varchar, se.number) AS 'searchableFiel
 	,'primaryTeacherNotToR' AS 'type'
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,1 AS 'stateReporting'
 	,1 AS 'alt'
 FROM Section AS se
@@ -341,6 +369,8 @@ FROM Section AS se
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
 		AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 	INNER JOIN SectionStaffHistory AS ssh ON ssh.sectionID = se.sectionID
 WHERE ssh.[role] IS NULL
 	AND ssh.staffType = 'P'
@@ -359,6 +389,7 @@ SELECT DISTINCT co.number + '-' + CONVERT(varchar, se.number) AS 'searchableFiel
 	,'CTESectionWithProviderInformation' AS 'type'
 	,cal2.calendarID
 	,sch2.comments AS 'school'
+	,cs2.[value] AS 'range'
 	,1 AS 'stateReporting'
 	,1 AS 'alt'
 FROM Section AS se
@@ -376,6 +407,8 @@ FROM Section AS se
 		AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
 		AND sch.schoolID != 34
+	INNER JOIN CustomSchool AS cs2 ON cs2.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 	,Calendar AS cal2
 	INNER JOIN SchoolYear AS scy2 ON scy2.endYear = cal2.endYear
 		AND scy2.active = 1
@@ -400,6 +433,7 @@ SELECT DISTINCT per.studentNumber + '-' + co.number + '-' + trm.[name] AS 'searc
 	,'sectionExitedWithoutLeaveCode' AS 'type'
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,1 AS 'stateReporting'
 	,1 AS 'alt'
 FROM Roster AS rs
@@ -413,6 +447,8 @@ FROM Roster AS rs
 		AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
 		AND sch.schoolID != 34
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 	INNER JOIN SectionPlacement AS scp ON scp.sectionID = se.sectionID
 	INNER JOIN term AS trm ON trm.termID = scp.termID
 	INNER JOIN Person AS per ON per.personID = rs.personID
@@ -440,13 +476,19 @@ SELECT co.number AS 'searchableField'
 	,'DualCreditMismatch' AS 'type'
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,1 AS 'stateReporting'
 	,1 AS 'alt'
 FROM Course AS co
 	INNER JOIN Calendar AS cal ON cal.calendarID = co.calendarID
+	INNER JOIN ScheduleStructure AS ss ON ss.calendarID = cal.calendarID
+	INNER JOIN Trial AS trl ON trl.structureID = ss.structureID
+		AND trl.active = 1
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
 		AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 	LEFT JOIN CustomCourse AS dci ON dci.courseID = co.courseID
 		AND dci.attributeID = 445
 	LEFT JOIN CustomCourse AS cc ON cc.courseID = co.courseID
@@ -469,16 +511,22 @@ SELECT co.number AS 'searchableField'
 	,'offsiteProviderMistmatch' AS 'type'
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,1 AS 'stateReporting'
 	,1 AS 'alt'
 FROM Section AS se
 	INNER JOIN Course AS co ON co.courseID = se.courseID
 		AND co.active = 1
 	INNER JOIN Calendar AS cal ON cal.calendarID = co.calendarID
+	INNER JOIN ScheduleStructure AS ss ON ss.calendarID = cal.calendarID
+	INNER JOIN Trial AS trl ON trl.structureID = ss.structureID
+		AND trl.active = 1
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
 		AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
 		AND sch.schoolID NOT IN (34,35) --SSHS, PVTC
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 	INNER JOIN CustomCourse AS ps ON ps.courseID = co.courseID
 		AND ps.attributeID = 879
 	LEFT JOIN CustomCourse AS ise ON ise.courseID = co.courseID
@@ -500,16 +548,22 @@ SELECT co.number AS 'searchableField'
 	,'offsiteProviderMistmatch' AS 'type'
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,1 AS 'stateReporting'
 	,1 AS 'alt'
 FROM Section AS se
 	INNER JOIN Course AS co ON co.courseID = se.courseID
 		AND co.active = 1
 	INNER JOIN Calendar AS cal ON cal.calendarID = co.calendarID
+	INNER JOIN ScheduleStructure AS ss ON ss.calendarID = cal.calendarID
+	INNER JOIN Trial AS trl ON trl.structureID = ss.structureID
+		AND trl.active = 1
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
 		AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
 		AND sch.schoolID NOT IN (34,35) --SSHS, PVTC
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 	INNER JOIN CustomCourse AS ise ON ise.courseID = co.courseID
 		AND ise.attributeID = 311
 	LEFT JOIN CustomCourse AS ps ON ps.courseID = co.courseID
@@ -531,15 +585,21 @@ SELECT co.number AS 'searchableField'
 	,'secondaryCourseMissingGradeLevel' AS 'type'
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,1 AS 'stateReporting'
 	,1 AS 'alt'
 FROM Course AS co
 	INNER JOIN Calendar AS cal ON cal.calendarID = co.calendarID
 		AND cal.schoolID IN (15,16,17,18,19,20,21,22)
+	INNER JOIN ScheduleStructure AS ss ON ss.calendarID = cal.calendarID
+	INNER JOIN Trial AS trl ON trl.structureID = ss.structureID
+		AND trl.active = 1
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
 		AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
 		AND sch.schoolID != 34
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 WHERE co.[name] NOT LIKE 'Course %'
 	AND co.active = 1
 	AND co.courseID NOT IN (  
@@ -567,15 +627,21 @@ SELECT co.number AS 'searchableField'
 	,'courseNoInstructionalSetting' AS 'type'
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,1 AS 'stateReporting'
 	,1 AS 'alt'
 FROM Course AS co
 	INNER JOIN Calendar AS cal ON cal.calendarID = co.calendarID
 		AND cal.schoolID IN (15,16,17,18,19,20,21,22)
+	INNER JOIN ScheduleStructure AS ss ON ss.calendarID = cal.calendarID
+	INNER JOIN Trial AS trl ON trl.structureID = ss.structureID
+		AND trl.active = 1
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
 		AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
 		AND sch.schoolID != 34
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 WHERE co.[name] NOT LIKE 'Course %'
 	AND co.active = 1
 	AND co.courseID NOT IN (  
@@ -602,14 +668,20 @@ SELECT co.number AS 'searchableField'
 	,'CTSCourseMissingProvider' AS 'type'
 	,cal2.calendarID
 	,sch2.comments AS 'school'
+	,cs.[value] AS 'range'
 	,1 AS 'stateReporting'
 	,1 AS 'alt'
 FROM Course AS co
 	INNER JOIN Calendar AS cal ON cal.calendarID = co.calendarID
+	INNER JOIN ScheduleStructure AS ss ON ss.calendarID = cal.calendarID
+	INNER JOIN Trial AS trl ON trl.structureID = ss.structureID
+		AND trl.active = 1
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
 		AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
 		AND sch.schoolID NOT IN (34,35) --SSHS, PVTC
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 	INNER JOIN Department AS dep ON dep.departmentID = co.departmentID
 		AND dep.[name] = 'CTS'
 	,Calendar AS cal2
@@ -635,14 +707,20 @@ SELECT co.number AS 'searchableField'
 	,'courseUnknownProvider' AS 'type'
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,1 AS 'stateReporting'
 	,1 AS 'alt'
 FROM Course AS co
 	INNER JOIN Calendar AS cal ON cal.calendarID = co.calendarID
+	INNER JOIN ScheduleStructure AS ss ON ss.calendarID = cal.calendarID
+	INNER JOIN Trial AS trl ON trl.structureID = ss.structureID
+		AND trl.active = 1
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
 		AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
 		AND sch.schoolID != 34
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 WHERE co.providerSchool NOT IN (0565,0607,0608,0660)
 	AND co.active = 1
 
@@ -660,14 +738,20 @@ SELECT co.number AS 'searchableField'
 	,'CTECourseWithProviderInformaiton' AS 'type'
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,1 AS 'stateReporting'
 	,1 AS 'alt'
 FROM Course AS co
 	INNER JOIN Calendar AS cal ON cal.calendarID = co.calendarID
+	INNER JOIN ScheduleStructure AS ss ON ss.calendarID = cal.calendarID
+	INNER JOIN Trial AS trl ON trl.structureID = ss.structureID
+		AND trl.active = 1
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
 		AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
 		AND sch.schoolID != 34
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 	INNER JOIN Department AS dep ON dep.departmentID = co.departmentID
 		AND dep.[name] = 'CTE'
 	,Calendar AS cal2
@@ -696,14 +780,20 @@ SELECT co.number AS 'searchableField'
 	,'courseDoesNotMatchCourseMaster' AS 'type'
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,0 AS 'stateReporting'
 	,1 AS 'alt'
 FROM Course AS co
 	INNER JOIN Calendar AS cal ON cal.calendarID = co.calendarID
+	INNER JOIN ScheduleStructure AS ss ON ss.calendarID = cal.calendarID
+	INNER JOIN Trial AS trl ON trl.structureID = ss.structureID
+		AND trl.active = 1
 	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
 		AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
 		AND sch.schoolID != 34
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 	INNER JOIN Department AS dep ON dep.departmentID = co.departmentID
 	INNER JOIN CourseMaster AS cm ON cm.courseMasterID = co.courseMasterID
 WHERE (co.active = 1 OR cm.active = 1)
@@ -743,6 +833,7 @@ SELECT cm.number AS 'searchableField'
 	,'CourseMasterMissingGradeLevel' AS 'type'
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,1 AS 'stateReporting'
 	,1 AS 'alt'
 FROM CourseMaster AS cm
@@ -751,6 +842,8 @@ FROM CourseMaster AS cm
 		AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
 		AND sch.schoolID = 24 --EDC
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 WHERE cm.[name] NOT LIKE 'Course %'
 	AND cm.active = 1
 	AND cm.catalogID IN (2,3)
@@ -775,6 +868,7 @@ SELECT cm.number AS 'searchableField'
 	,'CTSCourseMasterMissingProvider' AS 'type'
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,1 AS 'stateReporting'
 	,1 AS 'alt'
 FROM CourseMaster AS cm
@@ -783,6 +877,8 @@ FROM CourseMaster AS cm
 		AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
 		AND sch.schoolID = 24 --EDC
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 WHERE cm.honorsCode = 'T'
 	AND cm.department = 'CTS'
 	AND (cm.providerSchool IS NULL OR cm.providerSchoolName IS NULL)
@@ -801,6 +897,7 @@ SELECT cm.number AS 'searchableField'
 	,'courseMasterMissingHonorsCode' AS 'type'
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,0 AS 'stateReporting'
 	,1 AS 'alt'
 FROM CourseMaster AS cm
@@ -809,6 +906,8 @@ FROM CourseMaster AS cm
 		AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
 		AND sch.schoolID = 24 --EDC
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 WHERE cm.active = 1
 	AND cm.stateCode IS NOT NULL
 	AND cm.honorsCode IS NULL
@@ -827,6 +926,7 @@ SELECT cm.number AS 'searchableField'
 	,'courseMasterMissingDepartment' AS 'type'
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,0 AS 'stateReporting'
 	,1 AS 'alt'
 FROM CourseMaster AS cm
@@ -835,6 +935,8 @@ FROM CourseMaster AS cm
 		AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
 		AND sch.schoolID = 24 --EDC
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 WHERE cm.active = 1
 	AND cm.stateCode IS NOT NULL
 	AND cm.department IS NULL
@@ -853,6 +955,7 @@ SELECT cm.number AS 'searchableField'
 	,'courseMasterMissingType' AS 'type'
 	,cal.calendarID
 	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
 	,0 AS 'stateReporting'
 	,1 AS 'alt'
 FROM CourseMaster AS cm
@@ -861,6 +964,8 @@ FROM CourseMaster AS cm
 		AND scy.active = 1
 	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
 		AND sch.schoolID = 24 --EDC
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
 WHERE cm.active = 1
 	AND cm.stateCode IS NOT NULL
 	AND cm.[type] IS NULL
