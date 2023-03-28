@@ -4,7 +4,7 @@ USE pocatello
 -- Author:		<Lopez, Michael>
 -- Modder:		<Lopez, Michael>
 -- Create date: <05/21/2019>
--- Update date: <02/21/2023>
+-- Update date: <03/28/2023>
 -- Description:	<Compile all existing census error reports into a single view>
 -- =============================================
 
@@ -1547,10 +1547,45 @@ WHERE (en.startDate IS NOT NULL AND en.startStatus IS NULL)
 UNION ALL
 
 
---Error	===============
---Code  || Open slot ||
---EN012	=============== 
-  
+ --Error ======================================= 
+--Code  || Section Exited without Leave Code || 
+--EN012 =======================================
+SELECT DISTINCT per.studentNumber + '-' + co.number + '-' + trm.[name] AS 'searchableField'
+	,'studentNumber-CourseNumber-Term' AS 'searchType'
+	,'EN012' AS 'localCode'
+	,'error' AS 'status'
+	,'sectionExitedWithoutLeaveCode' AS 'type'
+	,per.personID
+	,cal.calendarID
+	,sch.comments AS 'school'
+	,cs.[value] AS 'range'
+	,1 AS 'stateReporting'
+	,1 AS 'alt'
+FROM Roster AS rs
+	INNER JOIN Section AS se ON se.sectionID = rs.sectionID
+	INNER JOIN Trial AS tl ON tl.trialID = se.trialID
+		AND tl.active = 1
+	INNER JOIN Course AS co ON co.courseID = se.courseID
+		AND co.active = 1
+	INNER JOIN Calendar AS cal ON cal.calendarID = co.calendarID
+	INNER JOIN SchoolYear AS scy ON scy.endYear = cal.endYear
+		AND scy.active = 1
+	INNER JOIN School AS sch ON sch.schoolID = cal.schoolID
+		AND sch.schoolID != 34
+	INNER JOIN CustomSchool AS cs ON cs.schoolID = sch.schoolID 
+		AND cs.attributeID = 618 --618 is the "range" for the school
+	INNER JOIN SectionPlacement AS scp ON scp.sectionID = se.sectionID
+	INNER JOIN term AS trm ON trm.termID = scp.termID
+	INNER JOIN Person AS per ON per.personID = rs.personID
+	INNER JOIN Enrollment AS en ON en.personID = rs.personID
+		AND en.calendarID = co.calendarID
+WHERE rs.endDate < trm.endDate
+	AND rs.exitReason IS NULL
+	AND rs.endDate !=en.endDate
+
+
+UNION ALL 
+
 
 --Error	===============
 --Code  || Open slot ||
